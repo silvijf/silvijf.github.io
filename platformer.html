@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformer Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #313338;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid black;
+            border-radius: 5px;
+            background-color: #87CEEB;
+        }
+
+        p {
+            font-size: larger;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Platformer Game</h1>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <p>Use A, D and spacebar or arrow keys to move and jump!</p>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const canvasWidth = 800;
+        const canvasHeight = 400;
+
+        const img = document.createElement("img")
+        const player = {
+            x: 50,
+            y: 300,
+            lastx: 50,
+            lasty: 300,
+            width: 30,
+            height: 30,
+            color: "red",
+            speed: 5,
+            dx: 0,
+            dy: 0,
+            gravity: 0.5,
+            jumpStrength: -10,
+            grounded: false,
+            walk: 0,
+            howFar: 0,
+        };
+        let platforms = [
+            { x: 0, y: 370, width: 500, height: 30, color: "green" },
+            { x: 200, y: 250, width: 150, height: 20, color: "green" },
+            { x: 500, y: 180, width: 150, height: 20, color: "green" },
+        ];
+        function drawRect(x, y, width, height, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, height);
+        }
+
+        function goToNextArea() {
+            if (player.howFar == 0) {
+                player.howFar = 1;
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+                platforms = [
+                    { x: 0, y: 370, width: 200, height: 30, color: "green" }, 
+                    { x: 100, y: 250, width: 50, height: 20, color: "green" },
+                    { x: 250, y: 180, width: 75, height: 20, color: "green" },
+                    { x: 400, y: 110, width: 200, height: 20, color: "green" },
+                    { x: 500, y: 100, width: 20, height: 10, color: "red" },
+                ]
+                player.x = 0;
+                const Help = document.createElement("p");
+                Help.innerHTML = "Don't touch kill bricks!";
+                Help.classList.add("Help")
+                document.body.appendChild(Help)
+            } else {
+                document.getElementsByTagName("h1")[0].innerHTML = "YOU MADE IT!"
+                document.getElementsByClassName("Help")[0].innerHTML = "You can now wipe everything out with yourself!"
+                platforms = [{ x: 0, y: 370, width: canvasWidth, height: 30, color: "yellow" }]
+                player.gravity = 0.18;
+            }
+        }
+
+        function movePlayer() {
+            player.lastx = player.x
+            player.lasty = player.y
+            player.x += player.dx;
+            player.y += player.dy;
+
+            if (!player.grounded) {
+                player.dy += player.gravity;
+            }
+
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width / 2 > canvasWidth) goToNextArea();
+            if (player.y > canvasHeight) {
+                resetGame();
+            }
+        }
+
+        function checkCollisions() {
+            player.grounded = false;
+            platforms.forEach(platform => {
+                if (
+                    player.x < platform.x + platform.width &&
+                    player.x + player.width > platform.x &&
+                    player.y + (player.height - 0.5) < platform.y + platform.height &&
+                    player.y + player.height + player.dy >= platform.y
+                ) {
+                    player.y = platform.y - player.height;
+                    player.dy = 0;
+                    player.grounded = true;
+
+                    if (platform.color == "red") resetGame();
+                }
+            });
+        }
+
+        function resetGame() {
+            player.x = 50;
+            player.y = 300;
+            player.dx = 0;
+            player.dy = 0;
+        }
+
+        function drawGame() {
+            platforms.forEach(platform => {
+                drawRect(platform.x, platform.y, platform.width, platform.height, platform.color);
+            });
+        }
+
+        function drawPlayer() {
+
+            if (player.dx < 0 && player.walk < 1) {
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij11.png";
+            console.info(img.src)
+            } else if (player.dx < 0) {
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij10.png";
+            console.info(img.src, 2)
+            } else if (player.dx > 0 && player.walk < 1) {
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij01.png";
+            } else {
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij00.png";
+            }
+
+            if (player.walk == 1.5) player.walk = 0;
+            else player.walk += 0.5;
+
+            ctx.clearRect(player.lastx - 1, player.lasty - 1, player.width + 2, player.height + 2)
+
+            ctx.drawImage(img, player.x, player.y, player.height, player.width)
+        }
+
+        function gameLoop() {
+            movePlayer();
+            checkCollisions();
+            drawPlayer();
+            requestAnimationFrame(gameLoop);
+            drawGame();
+        }
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "d" || event.key === "D" || event.key === "ArrowRight") {
+                player.dx = player.speed;
+            } else if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
+                player.dx = -player.speed;
+            } else if (player.grounded) {
+                player.dy = player.jumpStrength;
+                player.grounded = false;
+            }
+        });
+
+        document.addEventListener("keyup", event => {
+            if (event.key === "a" || event.key === "A" || event.key === "d" || event.key === "D" || event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                player.dx = 0;
+            }
+        });
+
+        gameLoop();
+    </script>
+</body>
+
+</html>
