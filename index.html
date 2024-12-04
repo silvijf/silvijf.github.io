@@ -33,7 +33,6 @@
             position: relative;
             left: 10px;
             width: 360px;
-            cursor: pointer;
             text-decoration: none;
             font-size: 220%;
         }
@@ -63,24 +62,36 @@
             border-radius: 5px;
             width: 150px;
             height: 150px;
-            top: 143px;
-            left: 0px;
             transition: 0.5s;
-            cursor: pointer;
-        }
-
-        .games:hover {
-            width: 160px;
-            height: 160px;
-            top: 138px;
-            left: -5px;
         }
 
         .gameNames {
             position: relative;
-            top: 121px;
-            left: 14px;
             color: white;
+        }
+
+        #platformer {
+            top: 143px;
+            left: 0px;
+        }
+
+        #platformer:hover {
+            top: 138px;
+            left: -5px;
+            width: 160px;
+            height: 160px;
+        }
+
+        #canvas {
+            top: -66.5px;
+            left: 170px;
+        }
+
+        #canvas:hover {
+            top: -71.5px;
+            left: 165px;
+            width: 160px;
+            height: 160px;
         }
     </style>
 </head>
@@ -97,9 +108,15 @@
     <div id="gamesHeader"><i style="position: relative; left: 10px;">GAMES</i></div>
     <a href="/platformer.html">
         <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-            class="games">
+            class="games" id="platformer">
     </a>
-    <p class="gameNames">Platformer Game</p>
+    <p class="gameNames" style="top: 121px; left: 14px;">Platformer Game</p>
+
+    <a href="/canvas.html" style="top: 120px;">
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
+            class="games" id="canvas">
+    </a>
+    <p class="gameNames" style="top: -88px; left: 220px;">Canvas</p>
 </body>
 
 </html>

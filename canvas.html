@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html style="user-select: none;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/logo.ico">
+    <style>
+        body {
+            --slider-color: white;
+            --grab: grab;
+            background-color: black;
+        }
+
+        #yourCanvas {
+            position: absolute;
+            height: 500px;
+            width: 1000px;
+            left: -5px;
+            top: -5px;
+            border: 4px solid white;
+            border-radius: 10px;
+            cursor: crosshair;
+        }
+
+        #daColor {
+            position: relative;
+            top: 500px;
+            border: 5px solid white;
+            border-radius: 5px;
+            background-color: black;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        #size {
+            position: relative;
+            top: 492px;
+            left: 5px;
+            width: 200px;
+            height: 15px;
+            appearance: none;
+            background: #d3d3d3;
+            outline: none;
+            transition: .2s;
+            border-radius: 3px;
+        }
+
+        #size::-webkit-slider-thumb {
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: var(--slider-color);
+            border-radius: 10.5px;
+            cursor: var(--grab);
+        }
+
+        #eraser {
+            position: relative;
+            content: url("https://lh3.googleusercontent.com/pw/AP1GczP9k7iLsO0Ezef_HpxyeQgqwUWMeK2oNSOmgHixKod9xRe5HkcTtwdKmcGLRXYSBRPEFrMdj2f4hMd6sIgDAthBRglEoFV6sHBakR1XpKlXDT8IRvbQn2VH2SX-ptEJdiVyRLRKWY6ph3zePFevrse-=w390-h331-s-no-gm?authuser=0");
+            width: 50px;
+            height: 42px;
+            cursor: pointer;
+        }
+
+        #eraserContainer {
+            position: relative;
+            top: 452px;
+            left: 270px;
+            width: 60px;
+            height: 50px;
+            border-radius: 5px;
+            border: 3px solid white;
+            background-color: white;
+        }
+
+        #eraser:checked {
+            content: url("https://lh3.googleusercontent.com/pw/AP1GczOWcAqJeOgaJLXd4ihsb9But9Z_4gWToMgDhwixkIrKVcS_3oXalSIfoynkOhKkbeXUzlbIutB1-ROsTg4WyqMZUKrhDA0MTTaDUCB-ibXW24wk7U7vZHDsX1E1GQmII-vfnzI5tTA_fSaxGHBMbLRC=w389-h329-s-no-gm?authuser=0");
+        }
+
+        #home {
+            position: absolute;
+            right: 1px;
+            top: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="yourCanvas"></canvas>
+
+    <input type="color" value="#ffffff" id="daColor" title="Verander kleur">
+    <input type="range" value="10" min="5" max="50" id="size" title="Dikte">
+    <div id="eraserContainer">
+        <input type="checkbox" id="eraser">
+    </div>
+    <a href="https://silvijf.github.io">
+        <img id="home"
+            src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home.png">
+    </a>
+    <script>
+        const canvas = document.getElementById("yourCanvas")
+        const ctx = canvas.getContext("2d")
+        const whichColor = document.getElementById("daColor")
+        const size = document.getElementById("size")
+        const eraser = document.getElementById("eraser")
+        const eraserContainer = document.getElementById("eraserContainer")
+        const home = document.getElementById("home")
+        let mousedown = {
+            isTrue: false,
+            x: 0,
+            y: 0,
+        }
+        let theSize = 1;
+
+        canvas.addEventListener("mousedown", (event) => {
+            mousedown = {
+                isTrue: true,
+                x: event.clientX,
+                y: event.clientY,
+            }
+        })
+
+        size.addEventListener("mousedown", () => {
+            document.body.style.setProperty("--grab", "grabbing")
+        })
+        document.addEventListener("mouseup", () => {
+            mousedown.isTrue = false;
+            document.body.style.setProperty("--grab", "grab")
+        })
+
+        size.addEventListener("change", () => {
+            theSize = size.value / 10
+        })
+
+        whichColor.addEventListener("change", () => {
+            if (whichColor.value != "#000000") {
+                document.body.style.backgroundColor = "black";
+                canvas.style.borderColor = "white";
+                whichColor.style.borderColor = "white";
+                whichColor.style.backgroundColor = "black";
+                eraserContainer.style.borderColor = "white";
+                home.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home.png"
+            } else {
+                document.body.style.backgroundColor = "white";
+                canvas.style.borderColor = "black";
+                whichColor.style.borderColor = "black";
+                whichColor.style.backgroundColor = "white"
+                eraserContainer.style.borderColor = "black";
+                home.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home_dark.png"
+            }
+            document.body.style.setProperty("--slider-color", whichColor.value)
+        })
+
+        setInterval(() => {
+            mousedown.isTrue
+            if (mousedown.isTrue) {
+                ctx.fillStyle = whichColor.value
+                if (eraser.checked) {
+                    ctx.clearRect(mousedown.x / (10 / 3), mousedown.y / (10 / 3), theSize, theSize)
+                } else {
+                    ctx.fillRect(mousedown.x / (10 / 3), mousedown.y / (10 / 3), theSize, theSize)
+                }
+            }
+        })
+    </script>
+
+    <script>
+        canvas.addEventListener("mousemove", (event) => {
+            mousedown = {
+                isTrue: mousedown.isTrue,
+                x: event.clientX,
+                y: event.clientY,
+            }
+        })
+
+    </script>
+</body>
+
+</html>
