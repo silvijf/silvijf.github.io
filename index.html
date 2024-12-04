@@ -33,7 +33,16 @@
             position: relative;
             top: -15px;
             left: 10px;
+            width: 360px;
             cursor: pointer;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
         }
 
         #gamesHeader {
@@ -53,7 +62,7 @@
             border-radius: 5px;
             width: 150px;
             height: 150px;
-            top: 140px;
+            top: 143px;
             left: 0px;
             transition: 0.5s;
             cursor: pointer;
@@ -62,8 +71,15 @@
         .games:hover {
             width: 160px;
             height: 160px;
-            top: 135px;
+            top: 138px;
             left: -5px;
+        }
+
+        .gameNames {
+            position: relative;
+            top: 121px;
+            left: 14px;
+            color: white;
         }
     </style>
 </head>
@@ -71,12 +87,18 @@
 <body>
     <div id="topbar">
         <h1 id="welcome">Welcome to Fainer's site!</h1>
-        <img id="Roblox" src="">
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+        </a>
     </div>
 
     <div id="gamesHeader"><i style="position: relative; left: 10px;">GAMES</i></div>
-    <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-        class="games">
+    <a href="/platformer.html">
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
+            class="games">
+    </a>
+    <p class="gameNames">Platformer Game</p>
 </body>
 
 </html>
