@@ -18,6 +18,7 @@
             margin: 0;
             padding: 0;
             background-color: #313338;
+            user-select: none;
         }
 
         #topbar {
@@ -196,10 +197,8 @@
 
             if (player.dx < 0 && player.walk < 1) {
                 img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij11.png";
-                console.info(img.src)
             } else if (player.dx < 0) {
                 img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij10.png";
-                console.info(img.src, 2)
             } else if (player.dx > 0 && player.walk < 1) {
                 img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij01.png";
             } else {
