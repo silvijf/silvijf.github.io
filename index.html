@@ -71,27 +71,34 @@
         }
 
         #platformer {
-            top: 143px;
+            top: 100px;
             left: 0px;
         }
 
         #platformer:hover {
-            top: 138px;
+            top: 95px;
             left: -5px;
             width: 160px;
             height: 160px;
         }
 
         #canvas {
-            top: -66.5px;
+            top: -110px;
             left: 170px;
         }
 
         #canvas:hover {
-            top: -71.5px;
+            top: -115px;
             left: 165px;
             width: 160px;
             height: 160px;
+        }
+
+        #info {
+            position: relative;
+            text-align: right;
+            color: white;
+            top: 130px;
         }
     </style>
 </head>
@@ -106,17 +113,36 @@
     </div>
 
     <div id="gamesHeader"><i style="position: relative; left: 10px;">GAMES</i></div>
+
+    <p id="info">Try right-clicking on a game!</p>
     <a href="/platformer.html">
         <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-            class="games" id="platformer">
+            class="games" id="platformer" oncontextmenu=" return false;" onmouseup="show(event, 'platformer')">
     </a>
-    <p class="gameNames" style="top: 121px; left: 14px;">Platformer Game</p>
+    <p class="gameNames" style="top: 83px; left: 14px;">Platformer Game</p>
 
     <a href="/canvas.html" style="top: 120px;">
         <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-            class="games" id="canvas">
+            class="games" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')">
     </a>
-    <p class="gameNames" style="top: -88px; left: 220px;">Canvas</p>
+    <p class="gameNames" style="top: -125.5px; left: 220px;">Canvas</p>
+
+    <script>
+        const platformer = document.getElementById("platformer")
+        const canvas = document.getElementById("canvas")
+        const info = document.getElementById("info")
+
+        function show(event, which) {
+            console.info(event)
+            if (event.button == 2) {
+                if (which == "platformer") {
+                    info.innerHTML = "Did you know that every keyboard button is jump?"
+                } else if (which == "canvas") {
+                    info.innerHTML = "Try to set the color to #000000!"
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>
