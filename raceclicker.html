@@ -84,6 +84,15 @@
             font-size: larger;
             color: white;
         }
+
+        #clickme {
+            position: absolute;
+            display: none;
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 
@@ -101,11 +110,14 @@
     <button id="start">START</button>
     <p>You are the one at the top!</p>
     <p>Click as much as you can!</p>
+    <img id="clickme" alt="click"
+        src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/CLICK.png">
 
     <script>
         const canvas = document.getElementById("canvas")
         const ctx = canvas.getContext("2d")
         const start = document.getElementById("start")
+        const clickme = document.getElementById("clickme")
 
         let player = {
             x: 0,
@@ -123,11 +135,18 @@
             { x: 0, y: 150, width: 800, height: 20 },
             { x: 0, y: 300, width: 800, height: 20 },
         ]
+
+        let youdontclick = 0;
+
+        let left;
+        let thetop;
+
         const img = document.createElement("img")
         img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Car.png"
 
         start.addEventListener("mouseup", () => {
             start.style.display = "none";
+            start.style.cursor = "default";
             ctx.fillStyle = "green";
             platforms.forEach(platform => {
                 ctx.fillRect(platform.x, platform.y, platform.width, platform.height)
@@ -143,11 +162,45 @@
             ctx.clearRect(enemy.x - 10, enemy.y, player.height, player.width)
             ctx.drawImage(img, enemy.x, enemy.y, player.height, player.width)
             enemy.x += 0.3;
+            if (player.x >= 800 - player.width) {
+                start.innerHTML = "You win!"
+                start.style.width = "250px";
+                start.style.backgroundColor = "#85ff85";
+                start.style.left = "calc(50% - 125px)";
+                start.style.display = "block";
+            } else if (enemy.x >= 800 - player.width) {
+                start.innerHTML = "You lose..."
+                start.style.width = "250px";
+                start.style.left = "calc(50% - 125px)";
+                start.style.display = "block";
+            }
         }
 
         document.addEventListener("mousedown", () => {
-            ctx.clearRect(player.x, player.y, player.height, player.width)
+            ctx.clearRect(player.x - 10, player.y, player.height, player.width)
             player.x += 5;
+            if (Math.random() * 15 <= 1) clickmefunc();
+            if (clickme.style.display == "block") {
+                youdontclick += 1;
+                if (youdontclick == 8) {
+                    clickme.style.display = "none";
+                    youdontclick = 0;
+                }
+            }
+        })
+
+        function clickmefunc() {
+            left = Math.random() * 800 + 100;
+            clickme.style.left = left + "px";
+            thetop = Math.random() * 400 + 55;
+            clickme.style.top = thetop + "px";
+            clickme.style.display = "block";
+        }
+
+        clickme.addEventListener("mouseup", () => {
+            clickme.style.display = "none";
+            player.x += 50;
+            ctx.clearRect(player.x - 60, player.y, player.height, player.width)
         })
     </script>
 </body>

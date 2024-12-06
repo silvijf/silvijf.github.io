@@ -9,9 +9,8 @@
         href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/logo.ico">
     <style>
         body {
-            --slider-color: white;
+            --slider-color: black;
             --grab: grab;
-            background-color: #313338;
         }
 
         #yourCanvas {
@@ -20,7 +19,7 @@
             width: 1000px;
             left: -5px;
             top: -5px;
-            border: 4px solid white;
+            border: 4px solid black;
             border-radius: 10px;
             cursor: crosshair;
         }
@@ -28,9 +27,9 @@
         #daColor {
             position: relative;
             top: 500px;
-            border: 5px solid white;
+            border: 5px solid black;
             border-radius: 5px;
-            background-color: black;
+            background-color: white;
             width: 50px;
             height: 50px;
             cursor: pointer;
@@ -73,7 +72,7 @@
             width: 60px;
             height: 50px;
             border-radius: 5px;
-            border: 3px solid white;
+            border: 3px solid black;
             background-color: white;
         }
 
@@ -92,14 +91,14 @@
 <body>
     <canvas id="yourCanvas"></canvas>
 
-    <input type="color" value="#ffffff" id="daColor" title="Verander kleur">
+    <input type="color" value="#000000" id="daColor" title="Verander kleur">
     <input type="range" value="10" min="5" max="50" id="size" title="Dikte">
     <div id="eraserContainer">
         <input type="checkbox" id="eraser">
     </div>
     <a href="https://silvijf.github.io">
         <img id="home"
-            src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home.png">
+            src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home_dark.png">
     </a>
     <script>
         const canvas = document.getElementById("yourCanvas")
@@ -137,7 +136,7 @@
         })
 
         whichColor.addEventListener("change", () => {
-            if (whichColor.value != "#000000") {
+            if (whichColor.value == "#ffffff") {
                 document.body.style.backgroundColor = "#313338";
                 canvas.style.borderColor = "white";
                 whichColor.style.borderColor = "white";
