@@ -124,6 +124,7 @@
             y: 100,
             width: 50,
             height: 80,
+            started: false,
         }
 
         let enemy = {
@@ -151,8 +152,16 @@
             platforms.forEach(platform => {
                 ctx.fillRect(platform.x, platform.y, platform.width, platform.height)
             })
-
+            player.started = true;
             setInterval(drawPlayers, 1)
+        })
+
+        document.addEventListener("touchstart", () => {
+            document.getElementById("topbar").style.width = "200%";
+            document.getElementsByTagName("p")[0].style.left = "50%";
+            document.getElementsByTagName("p")[1].style.left = "50%";
+            document.getElementsByTagName("h1")[0].style.left = "50%";
+            start.style.left = "75%";
         })
 
         function drawPlayers() {
@@ -177,14 +186,16 @@
         }
 
         document.addEventListener("mousedown", () => {
-            ctx.clearRect(player.x - 10, player.y, player.height, player.width)
-            player.x += 5;
-            if (Math.random() * 15 <= 1) clickmefunc();
-            if (clickme.style.display == "block") {
-                youdontclick += 1;
-                if (youdontclick == 8) {
-                    clickme.style.display = "none";
-                    youdontclick = 0;
+            if (player.started == true) {
+                ctx.clearRect(player.x - 10, player.y, player.height, player.width)
+                player.x += 5;
+                if (Math.random() * 15 <= 1) clickmefunc();
+                if (clickme.style.display == "block") {
+                    youdontclick += 1;
+                    if (youdontclick == 8) {
+                        clickme.style.display = "none";
+                        youdontclick = 0;
+                    }
                 }
             }
         })

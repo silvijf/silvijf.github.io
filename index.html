@@ -40,6 +40,14 @@
         #Roblox {
             position: absolute;
             top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
             right: 5px;
             width: 40px;
             height: 40px;
@@ -121,6 +129,11 @@
         <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
             <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
                 src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
         </a>
     </div>
 
@@ -129,7 +142,8 @@
     <p id="info">Try right-clicking on a game!</p>
     <a href="/platformer">
         <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-            alt="Platformer Game"class="games" id="platformer" oncontextmenu=" return false;" onmouseup="show(event, 'platformer')">
+            alt="Platformer Game" class="games" id="platformer" oncontextmenu=" return false;"
+            onmouseup="show(event, 'platformer')">
     </a>
     <p class="gameNames" style="top: 83px; left: 14px;">Platformer Game</p>
 
@@ -141,7 +155,8 @@
 
     <a href="/raceclicker">
         <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
-            alt="Race clicker" class="games" id="raceclicker" oncontextmenu=" return false;" onmouseup="show(event, 'raceclicker')">
+            alt="Race clicker" class="games" id="raceclicker" oncontextmenu=" return false;"
+            onmouseup="show(event, 'raceclicker')">
     </a>
     <p class="gameNames" style="top: -335px; left: 375px;">Race clicker</p>
 
@@ -162,6 +177,12 @@
                 }
             }
         }
+
+        document.addEventListener("touchstart", () => {
+            document.getElementById("topbar").style.width = "125%";
+            document.getElementById("gamesHeader").style.width = "125%";
+            info.style.visibility = "hidden";
+        })
     </script>
 </body>
 
