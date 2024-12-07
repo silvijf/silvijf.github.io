@@ -174,7 +174,6 @@
             document.getElementsByTagName("p")[0].style.left = "50%";
             document.getElementsByTagName("p")[1].style.left = "50%";
             document.getElementsByTagName("h1")[0].style.left = "50%";
-            start.style.left = "75%";
         })
 
         function drawPlayers() {
@@ -184,17 +183,21 @@
             ctx.clearRect(enemy.x - 10, enemy.y, player.height, player.width)
             ctx.drawImage(img, enemy.x, enemy.y, player.height, player.width)
             enemy.x += 0.3;
-            if (player.x >= 800 - player.width) {
-                start.innerHTML = "You win!"
-                start.style.width = "250px";
-                start.style.backgroundColor = "#85ff85";
-                start.style.left = "calc(50% - 125px)";
-                start.style.display = "block";
-            } else if (enemy.x >= 800 - player.width) {
-                start.innerHTML = "You lose..."
-                start.style.width = "250px";
-                start.style.left = "calc(50% - 125px)";
-                start.style.display = "block";
+            if (player.started) {
+                if (player.x >= 800 - player.width) {
+                    player.started = false;
+                    start.innerHTML = "You win!"
+                    start.style.width = "250px";
+                    start.style.backgroundColor = "#85ff85";
+                    start.style.left = "calc(50% - 125px)";
+                    start.style.display = "block";
+                } else if (enemy.x >= 800 - player.width) {
+                    player.started = false;
+                    start.innerHTML = "You lose..."
+                    start.style.width = "250px";
+                    start.style.left = "calc(50% - 125px)";
+                    start.style.display = "block";
+                }
             }
         }
 
