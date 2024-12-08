@@ -170,10 +170,9 @@
         })
 
         document.addEventListener("touchstart", () => {
-            document.getElementById("topbar").style.width = "200%";
-            document.getElementsByTagName("p")[0].style.left = "50%";
-            document.getElementsByTagName("p")[1].style.left = "50%";
-            document.getElementsByTagName("h1")[0].style.left = "50%";
+            document.getElementById("welcome").innerHTML = "Home"
+            canvas.style.width = "100%";
+            canvas.style.height = canvas.offsetWidth / 2;
         })
 
         function drawPlayers() {
