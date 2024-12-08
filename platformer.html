@@ -162,6 +162,7 @@
             document.getElementsByClassName("arrows")[0].style.display = "block";
             document.getElementsByClassName("arrows")[1].style.display = "block";
             document.getElementsByClassName("arrows")[2].style.display = "block";
+            document.getElementsByTagName("p")[0].innerHTML = "Use the arrows below to move and jump!";
         })
 
         function drawRect(x, y, width, height, color) {
@@ -308,7 +309,6 @@
 
         function touchend() {
             player.dx = 0;
-            console.info(1)
         }
 
         gameLoop();
