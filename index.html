@@ -71,47 +71,32 @@
             width: 150px;
             height: 150px;
             transition: 0.5s;
-        }
-
-        .gameNames {
-            position: relative;
-            color: white;
-        }
-
-        #platformer {
-            top: 100px;
+            top: 0px;
             left: 0px;
         }
 
-        #platformer:hover {
-            top: 95px;
-            left: -5px;
+        .games:hover {
+            top: -5px;
             width: 160px;
             height: 160px;
         }
 
-        #canvas {
-            top: -110px;
-            left: 170px;
+        #gameContainer {
+            display: flex;
+            position: relative;
+            top: 110px;
+        }
+
+        #platformer:hover {
+            left: -5px;
         }
 
         #canvas:hover {
-            top: -115px;
-            left: 165px;
-            width: 160px;
-            height: 160px;
-        }
-
-        #raceclicker {
-            top: -320px;
-            left: 340px;
+            left: 5px !important;
         }
 
         #raceclicker:hover {
-            top: -325px;
-            left: 335px;
-            width: 160px;
-            height: 160px;
+            left: 15px !important;
         }
 
         #info {
@@ -119,6 +104,16 @@
             text-align: right;
             color: white;
             top: 130px;
+        }
+
+        #nameContainer {
+            display: flex;
+            position: relative;
+            top: 95px;
+        }
+
+        #nameContainer p {
+            color: white;
         }
     </style>
 </head>
@@ -138,27 +133,33 @@
     </div>
 
     <div id="gamesHeader"><i style="position: relative; left: 10px;">GAMES</i></div>
-
     <p id="info">Try right-clicking on a game!</p>
-    <a href="/platformer">
-        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-            alt="Platformer Game" class="games" id="platformer" oncontextmenu=" return false;"
-            onmouseup="show(event, 'platformer')">
-    </a>
-    <p class="gameNames" style="top: 83px; left: 14px;">Platformer Game</p>
+    <div id="gameContainer">
 
-    <a href="/canvas">
-        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-            alt="Canvas" class="games" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')">
-    </a>
-    <p class="gameNames" style="top: -125.5px; left: 220px;">Canvas</p>
+        <a href="/platformer">
+            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
+                alt="Platformer Game" class="games" id="platformer" oncontextmenu=" return false;"
+                onmouseup="show(event, 'platformer')">
+        </a>
 
-    <a href="/raceclicker">
-        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
-            alt="Race clicker" class="games" id="raceclicker" oncontextmenu=" return false;"
-            onmouseup="show(event, 'raceclicker')">
-    </a>
-    <p class="gameNames" style="top: -335px; left: 375px;">Race clicker</p>
+
+        <a href="/canvas">
+            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
+                alt="Canvas" class="games" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')" style="left: 10px;">
+        </a>
+
+
+        <a href="/raceclicker">
+            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
+                alt="Race clicker" class="games" id="raceclicker" oncontextmenu=" return false;"
+                onmouseup="show(event, 'raceclicker')"style="left: 20px;">
+        </a>
+    </div>
+    <div id="nameContainer">
+        <p style="position: relative; left: 15px;">Platformer Game</p>
+        <p style="position: relative; left: 87px;">Canvas</p>
+        <p style="position: relative; left: 185px;">Race clicker</p>
+    </div>
 
     <script>
         const platformer = document.getElementById("platformer")
@@ -171,7 +172,7 @@
                 if (which == "platformer") {
                     info.innerHTML = "Did you know that every keyboard button is jump?"
                 } else if (which == "canvas") {
-                    info.innerHTML = "Try to set the color to #000000!"
+                    info.innerHTML = "Try to set the color to #ffffff!"
                 } else if (which == "raceclicker") {
                     info.innerHTML = "Click on clicks, they help you!"
                 }

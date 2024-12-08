@@ -79,6 +79,16 @@
             font-size: larger;
             color: white;
         }
+
+        #arrowContainer {
+            display: flex;
+        }
+
+        .arrows {
+            width: 75px;
+            height: 75px;
+            display: none;
+        }
     </style>
 </head>
 
@@ -99,6 +109,15 @@
     <h1>Platformer Game</h1>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
     <p>Use A, D and spacebar or arrow keys to move and jump!</p>
+
+    <div id="arrowContainer">
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Arrows/Left.png"
+            class="arrows" id="left" oncontextmenu="return false;">
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Arrows/Jump.png"
+            class="arrows" id="jump" style="margin-left: auto; margin-right: auto;" oncontextmenu="return false;">
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Arrows/Right.png"
+            class="arrows" id="right" style="right: 0px;" oncontextmenu="return false;">
+    </div>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
@@ -124,11 +143,26 @@
             walk: 0,
             howFar: 0,
         };
+
+        const left = document.getElementById("left")
+        const jump = document.getElementById("jump")
+        const right = document.getElementById("right")
+
         let platforms = [
             { x: 0, y: 370, width: 500, height: 30, color: "green" },
             { x: 200, y: 250, width: 150, height: 20, color: "green" },
             { x: 500, y: 180, width: 150, height: 20, color: "green" },
         ];
+
+        document.addEventListener("touchstart", () => {
+            document.getElementById("welcome").innerHTML = "Home"
+            canvas.style.width = "100%";
+            canvas.style.height = canvas.offsetWidth / 2;
+            document.getElementsByClassName("arrows")[0].style.display = "block";
+            document.getElementsByClassName("arrows")[1].style.display = "block";
+            document.getElementsByClassName("arrows")[2].style.display = "block";
+        })
+
         function drawRect(x, y, width, height, color) {
             ctx.fillStyle = color;
             ctx.fillRect(x, y, width, height);
@@ -250,6 +284,31 @@
                 player.dx = 0;
             }
         });
+
+        left.addEventListener("touchstart", () => {
+            player.dx = -player.speed;
+        })
+
+        right.addEventListener("touchstart", () => {
+            player.dx = player.speed;
+        })
+
+        jump.addEventListener("touchstart", () => {
+            if (player.grounded) {
+                player.dy = player.jumpStrength;
+                player.grounded = false;
+            }
+
+        })
+
+        document.addEventListener("touchend", touchend)
+
+        document.addEventListener("touchcancel", touchend)
+
+        function touchend() {
+            player.dx = 0;
+            console.info(1)
+        }
 
         gameLoop();
     </script>
