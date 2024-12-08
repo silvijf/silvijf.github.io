@@ -155,7 +155,8 @@
         ];
 
         document.addEventListener("touchstart", () => {
-            document.getElementById("welcome").innerHTML = "Home"
+            document.body.style.overflowX = "hidden";
+            document.getElementById("welcome").innerHTML = "Home";
             canvas.style.width = "100%";
             canvas.style.height = canvas.offsetWidth / 2;
             document.getElementsByClassName("arrows")[0].style.display = "block";
@@ -301,9 +302,9 @@
 
         })
 
-        document.addEventListener("touchend", touchend)
+        right.addEventListener("touchend", touchend)
 
-        document.addEventListener("touchcancel", touchend)
+        left.addEventListener("touchend", touchend)
 
         function touchend() {
             player.dx = 0;
