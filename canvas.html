@@ -123,12 +123,25 @@
             }
         })
 
-        size.addEventListener("mousedown", () => {
-            document.body.style.setProperty("--grab", "grabbing")
+        canvas.addEventListener("touchstart", (event) => {
+            mousedown = {
+                isTrue: true,
+                x: event.touches[0].clientX,
+                y: event.touches[0].clientY,
+            }
         })
+        
         document.addEventListener("mouseup", () => {
             mousedown.isTrue = false;
             document.body.style.setProperty("--grab", "grab")
+        })
+
+        document.addEventListener("touchend", () => {
+            mousedown.isTrue = false;
+        })
+
+        size.addEventListener("mousedown", () => {
+            document.body.style.setProperty("--grab", "grabbing")
         })
 
         size.addEventListener("change", () => {
@@ -165,9 +178,7 @@
                 }
             }
         })
-    </script>
 
-    <script>
         canvas.addEventListener("mousemove", (event) => {
             mousedown = {
                 isTrue: mousedown.isTrue,
