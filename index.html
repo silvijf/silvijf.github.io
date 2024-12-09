@@ -115,6 +115,42 @@
         #nameContainer p {
             color: white;
         }
+
+        .jelln {
+            display: none;
+        }
+
+        #sint {
+            position: absolute;
+            width: 200px;
+            height: 250px;
+            top: 400px;
+            z-index: -1;
+        }
+
+        #jelle {
+            position: absolute;
+            width: 100px;
+            height: 125px;
+            top: 400px;
+            left: 50px;
+            z-index: 1;
+            animation-duration: 8s;
+        }
+
+        #jellntext {
+            background-color: white;
+            position: absolute;
+            top: 350px;
+        }
+
+        @keyframes dejelln {
+            50% {rotate: 0deg;}
+            60% {rotate: 50deg;}
+            70% {rotate: -20deg;}
+            80% {rotate: 20deg; top: 400px; left: 50px;}
+            100% {rotate: -50deg; top: 75%; left: 90%;}
+        }
     </style>
 </head>
 
@@ -145,14 +181,15 @@
 
         <a href="/canvas">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-                alt="Canvas" class="games" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')" style="left: 10px;">
+                alt="Canvas" class="games" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')"
+                style="left: 10px;">
         </a>
 
 
         <a href="/raceclicker">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
                 alt="Race clicker" class="games" id="raceclicker" oncontextmenu=" return false;"
-                onmouseup="show(event, 'raceclicker')"style="left: 20px;">
+                onmouseup="show(event, 'raceclicker')" style="left: 20px;">
         </a>
     </div>
     <div id="nameContainer">
@@ -161,16 +198,26 @@
         <p style="position: relative; left: 185px;">Race clicker</p>
     </div>
 
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ed9VBg41fp4DnQXXyqC8CxSHQvH1a44d0g&s" id="sint"
+        class="jelln">
+    <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle" class="jelln">
+
+    <p id="jellntext" class="jelln">🎵Sint Schimmelkaas, Sint Schimmelkaas, brengt ons vanavond een bezoek🎵</p>
     <script>
         const platformer = document.getElementById("platformer")
         const canvas = document.getElementById("canvas")
         const info = document.getElementById("info")
+        const sint = document.getElementById("sint")
+        const weirdo = document.getElementById("jelle")
+        const jellntext = document.getElementById("jellntext")
+
+        let jelln = 0;
 
         function show(event, which) {
             console.info(event)
             if (event.button == 2) {
                 if (which == "platformer") {
-                    info.innerHTML = "Did you know that every keyboard button is jump?"
+                    info.innerHTML = "Did you know that (almost) every keyboard key is jump?"
                 } else if (which == "canvas") {
                     info.innerHTML = "Try to set the color to #ffffff!"
                 } else if (which == "raceclicker") {
@@ -183,6 +230,29 @@
             document.getElementById("topbar").style.width = "150%";
             document.getElementById("gamesHeader").style.width = "150%";
             info.style.visibility = "hidden";
+        })
+
+        document.addEventListener("keydown", (event) => {
+            if (jelln == 0 && event.key == "j") jelln += 1;
+            else if (jelln == 1 && event.key == "e") jelln += 1;
+            else if (jelln > 1 && jelln < 4 && event.key == "l") jelln += 1;
+            else if (jelln == 4 && event.key == "e") {
+                jelln = 0;
+                document.querySelectorAll(".jelln").forEach(element => {
+                    element.style.display = "block";
+                });
+                weirdo.style.animationName = "dejelln";
+                setTimeout(() => {
+                    jellntext.innerHTML = "🎵 En gooit dan een Jelle in een of andere hoek (koekkoek!)"
+                }, 4000)
+                setTimeout(() => {
+                    document.querySelectorAll(".jelln").forEach(element => {
+                    element.style.display = "none";
+                });
+                }, 8000);
+            } else {
+                jelln = 0;
+            }
         })
     </script>
 </body>
