@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Platformer Game</title>
     <link rel="icon" type="image/x-icon"
-        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/logo.ico">
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
@@ -111,11 +111,11 @@
     <p>Use A, D and spacebar or arrow keys to move and jump!</p>
 
     <div id="arrowContainer">
-        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Arrows/Left.png"
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Arrows/Left.png"
             class="arrows" id="left" oncontextmenu="return false;">
-        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Arrows/Jump.png"
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Arrows/Jump.png"
             class="arrows" id="jump" style="margin-left: auto; margin-right: auto;" oncontextmenu="return false;">
-        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Arrows/Right.png"
+        <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Arrows/Right.png"
             class="arrows" id="right" style="right: 0px;" oncontextmenu="return false;">
     </div>
     <script>
@@ -245,13 +245,13 @@
         function drawPlayer() {
 
             if (player.dx < 0 && player.walk < 1) {
-                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij11.png";
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Platformer_game/Jij11.png";
             } else if (player.dx < 0) {
-                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij10.png";
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Platformer_game/Jij10.png";
             } else if (player.dx > 0 && player.walk < 1) {
-                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij01.png";
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Platformer_game/Jij01.png";
             } else {
-                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jij00.png";
+                img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Platformer_game/Jij00.png";
             }
 
             if (player.walk == 1.5) player.walk = 0;

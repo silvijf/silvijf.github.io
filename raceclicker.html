@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Race clicker</title>
     <link rel="icon" type="image/x-icon"
-        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/logo.ico">
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,7 +124,7 @@
     <p>You are the one at the top!</p>
     <p>Click as much as you can!</p>
     <img id="clickme" alt="click"
-        src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/CLICK.png">
+        src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/CLICK.png">
 
     <script>
         const canvas = document.getElementById("canvas")
@@ -156,7 +156,7 @@
         let thetop;
 
         const img = document.createElement("img")
-        img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Car.png"
+        img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Car.png"
 
         start.addEventListener("mouseup", () => {
             start.style.display = "none";
@@ -176,9 +176,9 @@
         })
 
         function drawPlayers() {
-            img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Car.png"
+            img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Car.png"
             ctx.drawImage(img, player.x, player.y, player.height, player.width)
-            img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Bad_Car.png"
+            img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Bad_Car.png"
             ctx.clearRect(enemy.x - 10, enemy.y, player.height, player.width)
             ctx.drawImage(img, enemy.x, enemy.y, player.height, player.width)
             enemy.x += 0.3;
