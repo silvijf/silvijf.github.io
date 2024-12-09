@@ -9,14 +9,45 @@
         href="https://media.istockphoto.com/id/1357890877/nl/vector/cute-dancing-santa-claus-christmas-vector-illustration.jpg?s=612x612&w=0&k=20&c=Cmjgb4cGWI2Sol3AOoygD7erGWal4Eswt8uhO9pvt_Q=">
 
     <style>
+        body {
+            overflow-x: hidden;
+        }
+
         #tv {
             position: absolute;
             width: 100%;
             left: -1px;
+            z-index: -1;
         }
 
         #santa {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            animation-duration: 5s;
+            animation-timing-function: linear;
+        }
 
+        #audio {
+            display: none;
+        }
+
+        @keyframes fly {
+            0% {
+                top: 0px;
+                left: -100px;
+                rotate: 30deg;
+            }
+
+            50% {
+                top: 200px;
+            }
+
+            100% {
+                top: 0px;
+                left: 100%;
+                rotate: -30deg;
+            }
         }
     </style>
 </head>
@@ -24,16 +55,40 @@
 <body>
     <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/tv.jpg" id="tv">
 
-    <img src="" id="santa">
+    <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa.png"
+        id="santa">
+
+    <audio
+        src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/MerryChristmas.mp3"
+        id="audio"></audio>
 
     <script>
         const tv = document.getElementById("tv")
+        const santa = document.getElementById("santa")
+        const audio = document.getElementById("audio")
 
         tv.style.height = tv.clientWidth / 1792 * 1024
 
         document.addEventListener("mousedown", () => {
-            
+            playit()
         })
+
+        function playit() {
+            if (Math.random() * 10 < 1) {
+                santa.style.display = "block";
+                santa.style.animationName = "fly";
+                audio.play()
+                setTimeout(() => {
+                    santa.style.display = "none";
+                }, 5000);
+            }
+        }
+
+        setInterval(() => {
+            if (Math.random() * 100 < 1) {
+                playit()
+            }
+        }, 1000)
     </script>
 </body>
 
