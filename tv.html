@@ -17,6 +17,7 @@
             position: absolute;
             width: 100%;
             left: -1px;
+            top: -1px;
             z-index: -1;
             cursor: pointer;
         }
@@ -24,13 +25,33 @@
         #santa {
             display: none;
             position: absolute;
-            z-index: 1;
             animation-duration: 5s;
             animation-timing-function: linear;
         }
 
+        #santa2 {
+            position: absolute;
+            width: 285.25px;
+            height: 245.5px;
+            bottom: -30px;
+            left: 50%;
+            display: none;
+            animation-duration: 6s;
+            animation-timing-function: ease-in;
+        }
+
         #audio {
             display: none;
+        }
+
+        @keyframes steal {
+            50% {
+                left: 50%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         @keyframes fly {
@@ -59,14 +80,22 @@
     <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa.png"
         id="santa">
 
+    <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa/santa1.png"
+        id="santa2">
+
     <audio
         src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/MerryChristmas.mp3"
         id="audio"></audio>
 
+
+
     <script>
         const tv = document.getElementById("tv")
         const santa = document.getElementById("santa")
+        const santa2 = document.getElementById("santa2")
         const audio = document.getElementById("audio")
+
+        let image = 1;
 
         tv.style.height = tv.clientWidth / 1792 * 1024
 
@@ -82,13 +111,24 @@
                 setTimeout(() => {
                     santa.style.display = "none";
                 }, 5000);
+            } else if (Math.random() * 9 < 1) {
+                santa2.style.display = "block";
+                santa2.style.animationName = "steal";
+                setInterval(() => {
+                    if (image == 1) santa2.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa/santa2.png";
+                    else if (image == 2) santa2.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa/santa3.png";
+                    else if (image == 3) santa2.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa/santa4.png";
+                    else if (image == 4) {
+                        santa2.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/tv/Santa/santa5.png";
+                        image += -2;
+                    }
+                    image += 1;
+                }, 1000);
             }
         }
 
         setInterval(() => {
-            if (Math.random() * 100 < 1) {
-                playit()
-            }
+            if (Math.random() * 20 < 1) playit();
         }, 1000)
     </script>
 </body>
