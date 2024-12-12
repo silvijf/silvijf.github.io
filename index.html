@@ -53,7 +53,7 @@
             height: 40px;
         }
 
-        #gamesHeader {
+        .header {
             font-family: 'Anton SC';
             position: absolute;
             top: 70px;
@@ -81,21 +81,21 @@
             height: 160px;
         }
 
-        #gameContainer {
+        .itemContainer {
             display: flex;
             position: relative;
             top: 110px;
         }
 
-        #platformer:hover {
+        .item-1:hover {
             left: -5px;
         }
 
-        #canvas:hover {
+        .item-2:hover {
             left: 5px !important;
         }
 
-        #raceclicker:hover {
+        .item-3:hover {
             left: 15px !important;
         }
 
@@ -106,13 +106,13 @@
             top: 130px;
         }
 
-        #nameContainer {
+        .nameContainer {
             display: flex;
             position: relative;
             top: 95px;
         }
 
-        #nameContainer p {
+        .nameContainer p {
             color: white;
         }
 
@@ -168,34 +168,48 @@
         </a>
     </div>
 
-    <div id="gamesHeader"><i style="position: relative; left: 10px;">GAMES</i></div>
+    <div class="header"><i style="position: relative; left: 10px;">GAMES</i></div>
     <p id="info">Try right-clicking on a game!</p>
-    <div id="gameContainer">
-
+    <div class="itemContainer">
         <a href="/platformer">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-                alt="Platformer Game" class="games" id="platformer" oncontextmenu=" return false;"
+                alt="Platformer Game" class="games item-1" id="platformer" oncontextmenu=" return false;"
                 onmouseup="show(event, 'platformer')">
         </a>
 
 
         <a href="/canvas">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-                alt="Canvas" class="games" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')"
+                alt="Canvas" class="games item-2" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')"
                 style="left: 10px;">
         </a>
 
 
         <a href="/raceclicker">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
-                alt="Race clicker" class="games" id="raceclicker" oncontextmenu=" return false;"
+                alt="Race clicker" class="games item-3" id="raceclicker" oncontextmenu=" return false;"
                 onmouseup="show(event, 'raceclicker')" style="left: 20px;">
         </a>
     </div>
-    <div id="nameContainer">
+    <div class="nameContainer">
         <p style="position: relative; left: 15px;">Platformer Game</p>
         <p style="position: relative; left: 87px;">Canvas</p>
         <p style="position: relative; left: 185px;">Race clicker</p>
+    </div>
+
+    <div class="header" style="top: 360px;"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
+
+    <br><br><br><br>
+
+    <div class="itemContainer">
+        <a href="https://polewolf.github.io">
+            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Polewolf.png"
+                alt="Platformer Game" class="games item-1" id="platformer" oncontextmenu=" return false;"
+                onmouseup="show(event, 'platformer')">
+        </a>
+    </div>
+    <div class="nameContainer">
+        <p style="position: relative; left: 1.5px;">Polewolf (half Dutch)</p>
     </div>
 
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ed9VBg41fp4DnQXXyqC8CxSHQvH1a44d0g&s" id="sint"
@@ -228,7 +242,8 @@
 
         document.addEventListener("touchstart", () => {
             document.getElementById("topbar").style.width = "150%";
-            document.getElementById("gamesHeader").style.width = "150%";
+            document.getElementsByClassName("header")[0].style.width = "150%";
+            document.getElementsByClassName("header")[1].style.width = "150%";
             info.style.visibility = "hidden";
         })
 
