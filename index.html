@@ -145,11 +145,29 @@
         }
 
         @keyframes dejelln {
-            50% {rotate: 0deg;}
-            60% {rotate: 50deg;}
-            70% {rotate: -20deg;}
-            80% {rotate: 20deg; top: 400px; left: 50px;}
-            100% {rotate: -50deg; top: 75%; left: 90%;}
+            50% {
+                rotate: 0deg;
+            }
+
+            60% {
+                rotate: 50deg;
+            }
+
+            70% {
+                rotate: -20deg;
+            }
+
+            80% {
+                rotate: 20deg;
+                top: 400px;
+                left: 50px;
+            }
+
+            100% {
+                rotate: -50deg;
+                top: 75%;
+                left: 90%;
+            }
         }
     </style>
 </head>
@@ -180,8 +198,8 @@
 
         <a href="/canvas">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-                alt="Canvas" class="games item-2" id="canvas" oncontextmenu=" return false;" onmouseup="show(event, 'canvas')"
-                style="left: 10px;">
+                alt="Canvas" class="games item-2" id="canvas" oncontextmenu=" return false;"
+                onmouseup="show(event, 'canvas')" style="left: 10px;">
         </a>
 
 
@@ -214,7 +232,8 @@
 
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ed9VBg41fp4DnQXXyqC8CxSHQvH1a44d0g&s" id="sint"
         class="jelln">
-    <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle" class="jelln">
+    <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle"
+        class="jelln">
 
     <p id="jellntext" class="jelln">🎵 Sint Schimmelkaas, Sint Schimmelkaas, brengt ons vanavond een bezoek 🎵</p>
     <script>
@@ -262,11 +281,16 @@
                 }, 4000)
                 setTimeout(() => {
                     document.querySelectorAll(".jelln").forEach(element => {
-                    element.style.display = "none";
-                    jellntext.innerHTML = "🎵 Sint Schimmelkaas, Sint Schimmelkaas, brengt ons vanavond een bezoek 🎵"
-                });
+                        element.style.display = "none";
+                        jellntext.innerHTML = "🎵 Sint Schimmelkaas, Sint Schimmelkaas, brengt ons vanavond een bezoek 🎵"
+                    });
                 }, 8000);
-            } else {
+            } else if (jelln == 0 && event.key == "m") jelln = 10;
+            else if (jelln == 10 && event.key == "c") {
+                window.location.href = "minecraft:"
+                jelln = 0;
+            }
+            else {
                 jelln = 0;
             }
         })
