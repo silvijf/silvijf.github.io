@@ -125,7 +125,7 @@
             width: 200px;
             height: 250px;
             top: 400px;
-            z-index: -1;
+            z-index: 1;
         }
 
         #jelle {
@@ -134,7 +134,7 @@
             height: 125px;
             top: 400px;
             left: 50px;
-            z-index: 1;
+            z-index: 10;
             animation-duration: 8s;
         }
 
@@ -192,21 +192,21 @@
         <a href="/platformer">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
                 alt="Platformer Game" class="games item-1" id="platformer" oncontextmenu=" return false;"
-                onmouseup="show(event, 'platformer')">
+                onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
         </a>
 
 
         <a href="/canvas">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
                 alt="Canvas" class="games item-2" id="canvas" oncontextmenu=" return false;"
-                onmouseup="show(event, 'canvas')" style="left: 10px;">
+                onmouseup="show(event, 'Try to set the color to #ffffff!')" style="left: 10px;">
         </a>
 
 
         <a href="/raceclicker">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
                 alt="Race clicker" class="games item-3" id="raceclicker" oncontextmenu=" return false;"
-                onmouseup="show(event, 'raceclicker')" style="left: 20px;">
+                onmouseup="show(event, 'Click on clicks, they help you!')" style="left: 20px;">
         </a>
     </div>
     <div class="nameContainer">
@@ -223,7 +223,7 @@
         <a href="https://polewolf.github.io">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Polewolf.png"
                 alt="Platformer Game" class="games item-1" id="platformer" oncontextmenu=" return false;"
-                onmouseup="show(event, 'platformer')">
+                onmouseup="show(event, 'This is not really a game, but a site. Well, you can only play games on it...')">
         </a>
     </div>
     <div class="nameContainer">
@@ -246,16 +246,10 @@
 
         let jelln = 0;
 
-        function show(event, which) {
+        function show(event, msg) {
             console.info(event)
             if (event.button == 2) {
-                if (which == "platformer") {
-                    info.innerHTML = "Did you know that (almost) every keyboard key is jump?"
-                } else if (which == "canvas") {
-                    info.innerHTML = "Try to set the color to #ffffff!"
-                } else if (which == "raceclicker") {
-                    info.innerHTML = "Click on clicks, they help you!"
-                }
+                info.innerHTML = msg;
             }
         }
 

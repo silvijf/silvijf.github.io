@@ -7,18 +7,57 @@
     <title>Canvas by Fainer</title>
     <link rel="icon" type="image/x-icon"
         href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
     <style>
         body {
             --slider-color: black;
             --grab: grab;
+            font-family: 'fredoka';
+        }
+
+        #topbar {
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            left: -1px;
+            top: -1px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
         }
 
         #yourCanvas {
             position: absolute;
             height: 500px;
             width: 1000px;
-            left: -5px;
-            top: -5px;
+            left: 5px;
+            top: 50px;
             border: 4px solid black;
             border-radius: 10px;
             cursor: crosshair;
@@ -26,7 +65,7 @@
 
         #daColor {
             position: relative;
-            top: 500px;
+            top: 575px;
             border: 5px solid black;
             border-radius: 5px;
             background-color: white;
@@ -37,7 +76,7 @@
 
         #size {
             position: relative;
-            top: 492px;
+            top: 565px;
             left: 5px;
             width: 200px;
             height: 15px;
@@ -67,7 +106,7 @@
 
         #eraserContainer {
             position: relative;
-            top: 452px;
+            top: 522px;
             left: 270px;
             width: 60px;
             height: 50px;
@@ -79,16 +118,23 @@
         #eraser:checked {
             content: url("https://lh3.googleusercontent.com/pw/AP1GczOWcAqJeOgaJLXd4ihsb9But9Z_4gWToMgDhwixkIrKVcS_3oXalSIfoynkOhKkbeXUzlbIutB1-ROsTg4WyqMZUKrhDA0MTTaDUCB-ibXW24wk7U7vZHDsX1E1GQmII-vfnzI5tTA_fSaxGHBMbLRC=w389-h329-s-no-gm?authuser=0");
         }
-
-        #home {
-            position: absolute;
-            right: 1px;
-            top: 1px;
-        }
     </style>
 </head>
 
 <body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+
     <canvas id="yourCanvas"></canvas>
 
     <input type="color" value="#000000" id="daColor" title="Verander kleur">
@@ -96,10 +142,6 @@
     <div id="eraserContainer">
         <input type="checkbox" id="eraser">
     </div>
-    <a href="https://silvijf.github.io">
-        <img id="home"
-            src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home_dark.png">
-    </a>
     <script>
         const canvas = document.getElementById("yourCanvas")
         const ctx = canvas.getContext("2d")
@@ -107,7 +149,6 @@
         const size = document.getElementById("size")
         const eraser = document.getElementById("eraser")
         const eraserContainer = document.getElementById("eraserContainer")
-        const home = document.getElementById("home")
         let mousedown = {
             isTrue: false,
             x: 0,
@@ -118,16 +159,16 @@
         canvas.addEventListener("mousedown", (event) => {
             mousedown = {
                 isTrue: true,
-                x: event.clientX,
-                y: event.clientY,
+                x: event.offsetX,
+                y: event.offsetY
             }
         })
 
         canvas.addEventListener("touchstart", (event) => {
             mousedown = {
                 isTrue: true,
-                x: event.touches[0].clientX,
-                y: event.touches[0].clientY,
+                x: event.touches[0].offsetX,
+                y: event.touches[0].offsetY,
             }
         })
         
@@ -155,14 +196,12 @@
                 whichColor.style.borderColor = "white";
                 whichColor.style.backgroundColor = "black";
                 eraserContainer.style.borderColor = "white";
-                home.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home.png"
             } else {
                 document.body.style.backgroundColor = "white";
                 canvas.style.borderColor = "black";
                 whichColor.style.borderColor = "black";
                 whichColor.style.backgroundColor = "white"
                 eraserContainer.style.borderColor = "black";
-                home.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Home_dark.png"
             }
             document.body.style.setProperty("--slider-color", whichColor.value)
         })
@@ -182,8 +221,8 @@
         canvas.addEventListener("mousemove", (event) => {
             mousedown = {
                 isTrue: mousedown.isTrue,
-                x: event.clientX,
-                y: event.clientY,
+                x: event.offsetX,
+                y: event.offsetY,
             }
         })
 
