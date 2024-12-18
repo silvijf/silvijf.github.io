@@ -120,11 +120,12 @@
             display: none;
         }
 
-        #sint {
+        #fireplace {
             position: absolute;
             width: 200px;
             height: 250px;
             top: 400px;
+            left: 600px;
             z-index: 1;
         }
 
@@ -135,7 +136,7 @@
             top: 400px;
             left: 50px;
             z-index: 10;
-            animation-duration: 8s;
+            animation-duration: 6s;
         }
 
         #jellntext {
@@ -146,27 +147,17 @@
 
         @keyframes dejelln {
             50% {
-                rotate: 0deg;
-            }
-
-            60% {
-                rotate: 50deg;
-            }
-
-            70% {
-                rotate: -20deg;
-            }
-
-            80% {
-                rotate: 20deg;
                 top: 400px;
                 left: 50px;
             }
 
+            75% {
+                top: 300px;
+            }
+
             100% {
-                rotate: -50deg;
-                top: 75%;
-                left: 90%;
+                top: 420px;
+                left: 630px;
             }
         }
     </style>
@@ -230,12 +221,12 @@
         <p style="position: relative; left: 1.5px;">Polewolf (half Dutch)</p>
     </div>
 
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ed9VBg41fp4DnQXXyqC8CxSHQvH1a44d0g&s" id="sint"
+    <img src="https://www.kuijtkachelsenhaarden.nl/images/productimages/big/img-20240523-173735.jpg" id="fireplace"
         class="jelln">
     <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle"
         class="jelln">
 
-    <p id="jellntext" class="jelln">🎵 Sint Schimmelkaas, Sint Schimmelkaas, brengt ons vanavond een bezoek 🎵</p>
+    <p id="jellntext" class="jelln">🎵 And I need to hang YOU there upon the fireplace 🎵</p>
     <script>
         const platformer = document.getElementById("platformer")
         const canvas = document.getElementById("canvas")
@@ -271,14 +262,10 @@
                 });
                 weirdo.style.animationName = "dejelln";
                 setTimeout(() => {
-                    jellntext.innerHTML = "🎵 En gooit dan een Jelle in een of andere hoek (koekkoek!) 🎵"
-                }, 4000)
-                setTimeout(() => {
                     document.querySelectorAll(".jelln").forEach(element => {
                         element.style.display = "none";
-                        jellntext.innerHTML = "🎵 Sint Schimmelkaas, Sint Schimmelkaas, brengt ons vanavond een bezoek 🎵"
                     });
-                }, 8000);
+                }, 6000);
             } else if (jelln == 0 && event.key == "m") jelln = 10;
             else if (jelln == 10 && event.key == "c") {
                 window.location.href = "minecraft:"
