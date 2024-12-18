@@ -180,21 +180,21 @@
     <div class="header"><i style="position: relative; left: 10px;">GAMES</i></div>
     <p id="info">Try right-clicking on a game!</p>
     <div class="itemContainer">
-        <a href="/platformer">
+        <a href="platformer">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
                 alt="Platformer Game" class="games item-1" id="platformer" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
         </a>
 
 
-        <a href="/canvas">
+        <a href="canvas">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
                 alt="Canvas" class="games item-2" id="canvas" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Try to set the color to #ffffff!')" style="left: 10px;">
         </a>
 
 
-        <a href="/raceclicker">
+        <a href="raceclicker">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
                 alt="Race clicker" class="games item-3" id="raceclicker" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Click on clicks, they help you!')" style="left: 20px;">
@@ -270,7 +270,8 @@
             else if (jelln == 10 && event.key == "c") {
                 window.location.href = "minecraft:"
                 jelln = 0;
-            }
+            } else if (jelln == 0 && event.key == "t") jelln = 20;
+            else if (jelln == 20 && event.key == "v") window.location.href = "tv";
             else {
                 jelln = 0;
             }
