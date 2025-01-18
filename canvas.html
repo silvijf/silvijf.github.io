@@ -98,7 +98,7 @@
 
         #eraser {
             position: relative;
-            content: url("https://lh3.googleusercontent.com/pw/AP1GczP9k7iLsO0Ezef_HpxyeQgqwUWMeK2oNSOmgHixKod9xRe5HkcTtwdKmcGLRXYSBRPEFrMdj2f4hMd6sIgDAthBRglEoFV6sHBakR1XpKlXDT8IRvbQn2VH2SX-ptEJdiVyRLRKWY6ph3zePFevrse-=w390-h331-s-no-gm?authuser=0");
+            content: url("https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Canvas/Eraser1.png");
             width: 50px;
             height: 42px;
             cursor: pointer;
@@ -116,7 +116,7 @@
         }
 
         #eraser:checked {
-            content: url("https://lh3.googleusercontent.com/pw/AP1GczOWcAqJeOgaJLXd4ihsb9But9Z_4gWToMgDhwixkIrKVcS_3oXalSIfoynkOhKkbeXUzlbIutB1-ROsTg4WyqMZUKrhDA0MTTaDUCB-ibXW24wk7U7vZHDsX1E1GQmII-vfnzI5tTA_fSaxGHBMbLRC=w389-h329-s-no-gm?authuser=0");
+            content: url("https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Canvas/Eraser2.png");
         }
     </style>
 </head>
@@ -137,10 +137,10 @@
 
     <canvas id="yourCanvas"></canvas>
 
-    <input type="color" value="#000000" id="daColor" title="Verander kleur">
-    <input type="range" value="10" min="5" max="50" id="size" title="Dikte">
+    <input type="color" value="#000000" id="daColor" title="Change color">
+    <input type="range" value="10" min="5" max="50" id="size" title="Change size">
     <div id="eraserContainer">
-        <input type="checkbox" id="eraser">
+        <input type="checkbox" id="eraser" title="Eraser">
     </div>
     <script>
         const canvas = document.getElementById("yourCanvas")
