@@ -128,8 +128,9 @@
         const canvasHeight = 400;
 
         setTimeout(() => {
-            const img = document.getElementById("iframe").contentWindow.document.getElementById("yourCanvas")
-
+            setInterval(() => {
+                const img = document.getElementById("iframe").contentWindow.document.getElementById("yourCanvas")
+            }, 100)
             const player = {
                 x: 50,
                 y: 300,
