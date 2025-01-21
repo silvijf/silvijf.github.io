@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html style="user-select: none;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas by Fainer</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
+    <style>
+        body {
+            --slider-color: black;
+            --grab: grab;
+            font-family: 'fredoka';
+        }
+
+        #topbar {
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            left: -1px;
+            top: -1px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #yourCanvas {
+            position: absolute;
+            height: 500px;
+            width: 1000px;
+            left: 5px;
+            top: 50px;
+            border: 4px solid black;
+            border-radius: 10px;
+            cursor: crosshair;
+        }
+
+        #daColor {
+            position: relative;
+            top: 575px;
+            border: 5px solid black;
+            border-radius: 5px;
+            background-color: white;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        #size {
+            position: relative;
+            top: 565px;
+            left: 5px;
+            width: 200px;
+            height: 15px;
+            appearance: none;
+            background: #d3d3d3;
+            outline: none;
+            transition: .2s;
+            border-radius: 3px;
+        }
+
+        #size::-webkit-slider-thumb {
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: var(--slider-color);
+            border-radius: 10.5px;
+            cursor: var(--grab);
+        }
+
+        #eraser {
+            position: relative;
+            content: url("https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Canvas/Eraser1.png");
+            width: 50px;
+            height: 42px;
+            cursor: pointer;
+        }
+
+        #eraserContainer {
+            position: relative;
+            top: 522px;
+            left: 270px;
+            width: 60px;
+            height: 50px;
+            border-radius: 5px;
+            border: 3px solid black;
+            background-color: white;
+        }
+
+        #eraser:checked {
+            content: url("https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Canvas/Eraser2.png");
+        }
+    </style>
+</head>
+
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+
+    <canvas id="yourCanvas"></canvas>
+
+    <input type="color" value="#000000" id="daColor" title="Change color">
+    <input type="range" value="10" min="5" max="50" id="size" title="Change size">
+    <div id="eraserContainer">
+        <input type="checkbox" id="eraser" title="Eraser">
+    </div>
+    <script>
+        const canvas = document.getElementById("yourCanvas")
+        const ctx = canvas.getContext("2d")
+        const whichColor = document.getElementById("daColor")
+        const size = document.getElementById("size")
+        const eraser = document.getElementById("eraser")
+        const eraserContainer = document.getElementById("eraserContainer")
+        let mousedown = {
+            isTrue: false,
+            x: 0,
+            y: 0,
+        }
+        let theSize = 1;
+
+        canvas.addEventListener("mousedown", (event) => {
+            mousedown = {
+                isTrue: true,
+                x: event.offsetX,
+                y: event.offsetY
+            }
+        })
+
+        canvas.addEventListener("touchstart", (event) => {
+            mousedown = {
+                isTrue: true,
+                x: event.touches[0].offsetX,
+                y: event.touches[0].offsetY,
+            }
+        })
+        
+        document.addEventListener("mouseup", () => {
+            mousedown.isTrue = false;
+            document.body.style.setProperty("--grab", "grab")
+        })
+
+        document.addEventListener("touchend", () => {
+            mousedown.isTrue = false;
+        })
+
+        size.addEventListener("mousedown", () => {
+            document.body.style.setProperty("--grab", "grabbing")
+        })
+
+        size.addEventListener("change", () => {
+            theSize = size.value / 10
+        })
+
+        whichColor.addEventListener("change", () => {
+            if (whichColor.value == "#ffffff") {
+                document.body.style.backgroundColor = "#313338";
+                canvas.style.borderColor = "white";
+                whichColor.style.borderColor = "white";
+                whichColor.style.backgroundColor = "black";
+            } else {
+                document.body.style.backgroundColor = "white";
+                canvas.style.borderColor = "black";
+                whichColor.style.borderColor = "black";
+                whichColor.style.backgroundColor = "white"
+            }
+            document.body.style.setProperty("--slider-color", whichColor.value)
+        })
+
+        setInterval(() => {
+            mousedown.isTrue
+            if (mousedown.isTrue) {
+                ctx.fillStyle = whichColor.value
+                if (eraser.checked) {
+                    ctx.clearRect(mousedown.x / (10 / 3), mousedown.y / (10 / 3), theSize, theSize)
+                } else {
+                    ctx.fillRect(mousedown.x / (10 / 3), mousedown.y / (10 / 3), theSize, theSize)
+                }
+            }
+        })
+
+        canvas.addEventListener("mousemove", (event) => {
+            mousedown = {
+                isTrue: mousedown.isTrue,
+                x: event.offsetX,
+                y: event.offsetY,
+            }
+        })
+
+    </script>
+</body>
+
+</html>
