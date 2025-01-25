@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-    <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fainer</title>
@@ -89,29 +90,35 @@
             scale: 1.1;
         }
     </style>
-    </head>
-    <body>
-        <div id="topbar">
-            <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
-            <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
-                <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
-                    src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
-    
-            </a>
-            <a href="https://www.youtube.com/@s38bw123" target="_blank">
-                <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
-                    src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
-            </a>
-        </div>
-        <h1><b>404</b></h1>
+</head>
 
-        <p>I don't believe this is the page you're looking for...</p>
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
 
-        <a href="../"><button>Back to home</button></a>
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+    <h1><b>404</b></h1>
 
-        <script>
-            if (Math.random() > 0.9) document.getElementsByTagName("h1")[0].innerHTML = "40- Why are you even here?"
-            else if (Math.random() > 0.9) document.getElementsByTagName("h1")[0].innerHTML = "What were these numbers again? 4? 0? 4?"
-        </script>
-    </body>
+    <p>I don't believe this is the page you're looking for...</p>
+
+    <a href="../"><button>Back to home</button></a>
+
+    <script>
+        if (Math.random() > 0.9) document.getElementsByTagName("h1")[0].innerHTML = "40- Why are you even here?"
+        else if (Math.random() > 0.9) document.getElementsByTagName("h1")[0].innerHTML = "What were these numbers again? 4? 0? 4?"
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key == " " || event.key == "Enter") { window.location.href = "../" }
+        })
+    </script>
+</body>
+
 </html>
