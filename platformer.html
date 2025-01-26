@@ -154,7 +154,7 @@
             { x: 500, y: 180, width: 150, height: 20, color: "green" },
         ];
 
-        document.addEventListener("touchstart", () => {
+        if (navigator.maxTouchPoints > 0) {
             document.body.style.overflowX = "hidden";
             document.getElementById("welcome").innerHTML = "Home";
             canvas.style.width = "100%";
@@ -163,7 +163,7 @@
             document.getElementsByClassName("arrows")[1].style.display = "block";
             document.getElementsByClassName("arrows")[2].style.display = "block";
             document.getElementsByTagName("p")[0].innerHTML = "Use the arrows below to move and jump!";
-        })
+        }
 
         function drawRect(x, y, width, height, color) {
             ctx.fillStyle = color;

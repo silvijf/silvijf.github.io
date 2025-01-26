@@ -119,9 +119,7 @@
             if (event.key == " " || event.key == "Enter") { window.location.href = "../" }
         })
 
-        document.addEventListener("touchstart", () => {
-            document.getElementById("welcome").innerHTML = "Home"
-        })
+        if (navigator.maxTouchPoints > 0) document.getElementById("welcome").innerHTML = "Home";
     </script>
 </body>
 

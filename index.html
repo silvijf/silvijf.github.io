@@ -244,12 +244,12 @@
             }
         }
 
-        document.addEventListener("touchstart", () => {
+        if (navigator.maxTouchPoints > 0) {
             document.getElementById("topbar").style.width = "150%";
             document.getElementsByClassName("header")[0].style.width = "150%";
             document.getElementsByClassName("header")[1].style.width = "150%";
             info.style.visibility = "hidden";
-        })
+        }
 
         document.addEventListener("keydown", (event) => {
             if (jelln == 0 && event.key == "j") jelln += 1;

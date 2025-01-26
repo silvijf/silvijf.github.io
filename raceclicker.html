@@ -169,11 +169,11 @@
             setInterval(drawPlayers, 1)
         })
 
-        document.addEventListener("touchstart", () => {
+        if (navigator.maxTouchPoints > 0) {
             document.getElementById("welcome").innerHTML = "Home"
             canvas.style.width = "100%";
             canvas.style.height = canvas.offsetWidth / 2;
-        })
+        }
 
         function drawPlayers() {
             img.src = "https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Race_clicker/Car.png"
