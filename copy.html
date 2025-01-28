@@ -157,5 +157,18 @@
         const isMobile = navigator.userAgentData.mobile;
 
         if (isMobile) document.getElementById("topbar").style.width = "175%";
+
+        setInterval(() => {
+            if (screen.width < 563) {
+                document.querySelectorAll(".morethanone").forEach(element => {
+                    element.style.left = "0px"
+                });
+            } else {
+                document.querySelectorAll(".morethanone").forEach(element => {
+                    element.style.left = "-33px"
+                });
+            }
+        }, 200)
     </script>
+
 </html>
