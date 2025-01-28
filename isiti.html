@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is it I?</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka';
+            overflow-x: hidden;
+            background-color: #313338;
+        }
+
+        #topbar {
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            left: -1px;
+            top: -1px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        i {
+            font-family: 'Anton SC';
+            font-size: 350%;
+            color: white;
+            position: absolute;
+            top: 40px;
+            left: 0px;
+        }
+
+        input {
+            position: relative;
+            top: 200px;
+            left: 10px;
+            font-size: 150%;
+            width: 20px;
+            text-align: center;
+            border: 5px solid black;
+            border-radius: 5px;
+        }
+
+        #go {
+            position: relative;
+            background-color: #ffad66;
+            top: 170px;
+            left: 50px;
+            width: 30px;
+            border: 2px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #output {
+            position: absolute;
+            top: 170px;
+            left: 500px;
+            color: white;
+            font-size: 200%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+
+    <i>Is it I?</i>
+
+    <input type="text" maxlength="1">
+    <div id="go">GO!</div>
+    <h3 id="output"></h3>
+
+    <script>
+        const go = document.getElementById("go")
+        const input = document.getElementsByTagName("input")[0]
+        const output = document.getElementById("output")
+
+        go.addEventListener("click", isiti)
+        input.addEventListener("keydown", (event) => { if (event.key == "Enter") isiti(); })
+
+        function isiti() {
+            if (input.value.toUpperCase() == "I") output.innerHTML = "It is an i!"
+            else if (input.value.toUpperCase() == "L") output.innerHTML = "It is an L!"
+            else if (input.value == "|") output.innerHTML = "It is |, That thing above the backslash"
+            else if (input.value == "1") output.innerHTML = "It is a one!"
+            else output.innerHTML = "That's not an l, I, | or 1!"
+        }
+    </script>
+
+</html>
