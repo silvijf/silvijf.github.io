@@ -104,7 +104,7 @@
         }
 
         #copy {
-            filter:contrast(1.3)
+            filter: contrast(1.3)
         }
 
         #info {
@@ -250,6 +250,7 @@
         const sint = document.getElementById("sint")
         const weirdo = document.getElementById("jelle")
         const jellntext = document.getElementById("jellntext")
+        const isMobile = navigator.userAgentData.mobile;
 
         let jelln = 0;
 
@@ -260,7 +261,8 @@
             }
         }
 
-        if (navigator.maxTouchPoints > 0) {
+
+        if (isMobile) {
             document.getElementById("topbar").style.width = "150%";
             document.getElementsByClassName("header")[0].style.width = "150%";
             document.getElementsByClassName("header")[1].style.width = "150%";

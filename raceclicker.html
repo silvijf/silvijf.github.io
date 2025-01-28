@@ -169,7 +169,9 @@
             setInterval(drawPlayers, 1)
         })
 
-        if (navigator.maxTouchPoints > 0) {
+        const isMobile = navigator.userAgentData.mobile;
+
+        if (isMobile) {
             document.getElementById("welcome").innerHTML = "Home"
             canvas.style.width = "100%";
             canvas.style.height = canvas.offsetWidth / 2;
