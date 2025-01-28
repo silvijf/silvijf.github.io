@@ -153,5 +153,9 @@
             let text = document.getElementsByTagName("input")[num].value
             navigator.clipboard.writeText(text)
         }
+
+        const isMobile = navigator.userAgentData.mobile;
+
+        if (isMobile) document.getElementById("topbar").style.width = "175%";
     </script>
 </html>
