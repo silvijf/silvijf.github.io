@@ -113,6 +113,16 @@
             border: 2px solid black;
             border-radius: 5px;
         }
+
+        #copied {
+            position: relative;
+            width: 55px;
+            left: 560px;
+            border-radius: 5px;
+            background-color: #ddffff;
+            transition: 500ms;
+            opacity: 0;
+        }
     </style>
 </head>
 
@@ -148,10 +158,22 @@
     <img class="copy" onclick="copy(4)"
         src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Copy_hub/Copy.png">
 
+    <div id="copied">Copied!</div>
+
     <script>
+        const copied = document.getElementById("copied")
+
         function copy(num) {
             let text = document.getElementsByTagName("input")[num].value
             navigator.clipboard.writeText(text)
+            let height = num * 61 - 201
+            if (screen.width > 563) {
+                copied.style.opacity = "1";
+                copied.style.top = height + "px";
+                setTimeout(() => {
+                    copied.style.opacity = "0";
+                }, 2000)
+            }
         }
 
         const isMobile = navigator.userAgentData.mobile;
