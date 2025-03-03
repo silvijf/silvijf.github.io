@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #text {
+            font-size: 30vw;
+            font-family: 'Montserrat'
+        }
+    </style>
+</head>
+
+<body>
+    <p id="text">NOPE</p>
+
+    <script>
+        const strings = ["NOPE", "YES", "WHY", "WOW", ":3"]
+
+
+        try {
+            var string = window.location.href.split("?")[1]
+        } catch (error) {
+            var string = "NOPE"
+        }
+
+        const text = document.getElementById("text")
+
+        if (strings[string] != undefined) {
+            text.innerHTML = strings[string]
+            document.title = strings[string]
+        } else {
+            if (string != undefined) {
+                text.innerHTML = string.toUpperCase()
+                document.title = string.toUpperCase()
+            } else {
+                document.title = "NOPE"
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
