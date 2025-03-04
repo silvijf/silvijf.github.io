@@ -32,7 +32,7 @@
 
     <script>
         const strings = ["NOPE", "YES", "WHY", "WOW", ":3"]
-
+        const text = document.getElementById("text")
 
         try {
             var string = window.location.href.split("?")[1]
@@ -40,15 +40,15 @@
             var string = "NOPE"
         }
 
-        const text = document.getElementById("text")
-
         if (strings[string] != undefined) {
             text.innerHTML = strings[string]
             document.title = strings[string]
         } else {
             if (string != undefined) {
-                text.innerHTML = string.toUpperCase()
-                document.title = string.toUpperCase()
+                text.innerHTML = decodeURIComponent(string.toUpperCase())
+                document.title = decodeURIComponent(string.toUpperCase())
+                if (decodeURIComponent(string).length > 7) text.style.fontSize = "8vw"
+                else if (decodeURIComponent(string).length > 4) text.style.fontSize = "20vw"
             } else {
                 document.title = "NOPE"
             }
