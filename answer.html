@@ -42,10 +42,7 @@
 
         const text = document.getElementById("text")
 
-        if string == "fisch" {
-            text.innerHTML = "JESSE"
-            document.title = "JESSE"
-        } else if (strings[string] != undefined) {
+        if (strings[string] != undefined) {
             text.innerHTML = strings[string]
             document.title = strings[string]
         } else {
