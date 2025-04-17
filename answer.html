@@ -45,8 +45,8 @@
             document.title = strings[string]
         } else {
             if (string != undefined) {
-                text.innerHTML = decodeURIComponent(string.replace("+", " ").toUpperCase())
-                document.title = decodeURIComponent(string.replace("+", " ").toUpperCase())
+                text.innerHTML = decodeURIComponent(string.replaceAll("+", " ").toUpperCase())
+                document.title = decodeURIComponent(string.replaceAll("+", " ").toUpperCase())
                 if (decodeURIComponent(string).length > 7) text.style.fontSize = "8vw"
                 else if (decodeURIComponent(string).length > 4) text.style.fontSize = "20vw"
             } else {
