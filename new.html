@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fainer</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka';
+            background-color: #f0f0ff
+        }
+
+        #topbar {
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            left: -1px;
+            top: -1px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+            z-index: 100;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #text {
+            background: linear-gradient(to right, #ffd359, #e8a264);
+            position: absolute;
+            display: flex;
+            width: 100%;
+            height: 100px;
+            left: -1px;
+            top: 30px;
+            border-radius: 10px;
+            font-size: larger;
+        }
+
+        .space {
+                visibility: hidden;
+                width: 5px;
+                height: 45px;
+                left: -1px;
+                top: -1px;
+            }
+
+        a[gradient] {
+            background: linear-gradient(to right, #1300c3, #003b4b);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        a[nostyle] {
+            color: black;
+            text-decoration: none;
+        }
+
+        #items {
+            position: relative;
+            top: 125px;
+        }
+
+        .itemlink {
+            position: relative;
+            padding: 5px;
+        }
+
+        .item {
+            border-radius: 10px;
+            border: 3px solid black;
+            height: 60px;
+            line-height: 60px;
+            width: 40%;
+            font-size: 200%;
+            text-align: center;
+            transition: 0.5s cubic-bezier(0, 0, 0, 1.1);
+            overflow: hidden;
+        }
+
+        .item:hover {
+            width: 60%;
+            height: 200px;
+
+            & .info {
+                display: block;
+                width: 80%;
+                left: 20%;
+                height: 50px;
+            }
+
+            & .icon {
+                height: 50%;
+            }
+        }
+
+        .info {
+            position: relative;
+            display: none;
+            width: 0;
+            height: 0;
+            transition: 0.5s cubic-bezier(0, 0, 0, 1.5);
+            font-size: 80%;
+            line-height: normal;
+
+            &[small] {
+                font-size: 70%;
+            }
+        }
+
+        .icon {
+            position: absolute;
+            left: -100%;
+            height: 40%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1.5px solid black;
+            border-radius: 10px;
+            &[first] {
+                left: 100%;
+            }
+        }
+
+        #footer {
+            background-color: black;
+            position: absolute;
+            left: -10px;
+            width: 100%;
+            height: 100px;
+            color: white;
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+    <div id="text">
+        <div class="space"></div><span large><br>Hello, I'm Fainer. I like to make games and stuff in Python. Here you can find the
+            games. Enjoy!
+            <br><br><span>Also check out
+                <a href="https://polewolf.github.io" target="_blank" gradient>Polewolf's site</a>.</span></span>
+    </div>
+
+    <div id="items">
+        <a href="/platformer" class="itemlink" nostyle>
+            <div class="item" style="background: linear-gradient(to right, #ff8b51, #ffd817,#40e0d0);">
+                Platformer Game
+                <div class="info" small>You are a guy with super kicking legs. You will notice. But you are stranded in
+                    a world with a blue background.
+                    Luckily you find platforms. You are the Platformer! You can move with A, D and arrow keys. Every
+                    other key is jump!
+                </div>
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Copy.png"
+                    class="icon" first>
+            </div>
+        </a>
+        <a href="/canvas" class="itemlink" nostyle>
+            <div class="item"
+                style="background: linear-gradient(to right, white, red,orange,yellow,rgb(100, 255, 100),rgb(100, 100, 255), indigo,violet);">
+                Canvas
+                <div class="info">Here you can draw stuff. To get more smooth draws, draw slower. Why don't you try to
+                    set the color to #ffffff?
+                </div>
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
+                    class="icon">
+            </div>
+        </a>
+        <a href="/raceclicker" class="itemlink" nostyle>
+            <div class="item" style="background: linear-gradient(to right, #00c9ff, #92fe9d);">
+                Race clicker
+                <div class="info" small>Be ready, because a super clicking car experience is waiting on you! Tip: use
+                    every
+                    click key you have! (If you have a touchpad, it may have 2 or 3.) This game may be hard is you just
+                    have 1 click button. Oh, and click on clicks. They help you!</div>
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race clicker.png"
+                    class="icon">
+            </div>
+        </a>
+        <a href="/copy" class="itemlink" nostyle>
+            <div class="item" style="background: linear-gradient(to right, #a1ffce, #faffd1);">
+                Copy Hub
+                <div class="info">If you want to copy something, and then copy something else, and then want to copy the
+                    first one, you can use this tool! Did you know that you can use CTRL + Z and CTRL + Y?</div>
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Copy.png"
+                    class="icon">
+            </div>
+        </a>
+        <a href="/isiti" class="itemlink" nostyle>
+            <div class="item" style="background: linear-gradient(to right, #ef4949, #5da2db);">
+                Is it I?
+                <div class="info">Is it I? Is it l? Is it |? Is it 1? You can test it with this tool. Just copy it and
+                    paste it in the box. Do you know what | would be (without looking at what you just read)?</div>
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/isiti.png"
+                    class="icon">
+            </div>
+        </a>
+    </div> 
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <footer>
+        <div id="footer">
+            <div class="space" style="width: 20px;"></div>
+            DM @s1lvijf38 on Discord for feedback about the new look!
+        </div>
+    </footer>
+
+</body>
+
+</html>
