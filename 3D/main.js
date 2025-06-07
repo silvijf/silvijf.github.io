@@ -1,40 +1,74 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.165.0/examples/jsm/loaders/GLTFLoader.js'; // Importeer de GLTFLoader
+import { OrbitControls } from 'https://unpkg.com/three@0.165.0/examples/jsm/controls/OrbitControls.js'; // Optioneel: Voor makkelijk camera bewegen
 
 // 1. Scène aanmaken
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xabcdef); // Een achtergrondkleur voor betere zichtbaarheid
 
-// 2. Camera aanmaken (PerspectiveCamera)
-// fov (field of view): Hoeveel van de scène zichtbaar is (in graden)
-// aspect: Breedte / Hoogte van het render-oppervlak
-// near: Objecten dichterbij dan deze waarde worden niet gerenderd
-// far: Objecten verder weg dan deze waarde worden niet gerenderd
+// 2. Camera aanmaken
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5; // Plaats de camera 5 eenheden naar achteren
+camera.position.set(0, 1.5, 3); // Plaats de camera iets hoger en verder
 
 // 3. Renderer aanmaken
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight); // Stel de grootte van de renderer in
-document.body.appendChild(renderer.domElement); // Voeg de renderer toe aan de HTML body
+const renderer = new THREE.WebGLRenderer({ antialias: true }); // antialias voor gladdere randen
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-// 4. Geometrie aanmaken (kubus)
-const geometry = new THREE.BoxGeometry(1, 1, 1); // Breedte, hoogte, diepte van de kubus
+// Optioneel: OrbitControls voor makkelijk camera besturen
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Zorgt voor een 'vloeiender' gevoel
+controls.dampingFactor = 0.25;
 
-// 5. Materiaal aanmaken (groen basis materiaal)
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Hexadecimale kleurcode
+// Voeg licht toe! Modellen hebben licht nodig om zichtbaar te zijn
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Zacht algemeen licht
+scene.add(ambientLight);
 
-// 6. Mesh aanmaken (combinatie van geometrie en materiaal)
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube); // Voeg de kubus toe aan de scène
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Gericht licht (zonlicht)
+directionalLight.position.set(5, 5, 5).normalize();
+scene.add(directionalLight);
 
-// 7. Animatie loop
+// Variabele om het geladen model in op te slaan
+let loadedModel;
+
+// Initialiseer de GLTFLoader
+const loader = new GLTFLoader();
+
+// Laad het GLTF-model
+loader.load(
+    // pad naar je model
+    'bleu.glb', // Zorg dat dit bestand in dezelfde map staat als je main.js en index.html
+
+    // on successful load
+    function (gltf) {
+        loadedModel = gltf.scene;
+        loadedModel.scale.set(0.5, 0.5, 0.5); // Pas de schaal aan indien nodig
+        scene.add(loadedModel);
+        console.log('Model succesvol geladen!', loadedModel);
+    },
+    // on progress
+    function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% geladen');
+    },
+    // on error
+    function (error) {
+        console.error('Fout bij het laden van het model:', error);
+    }
+);
+
+
+// Animatie loop
 function animate() {
-    requestAnimationFrame(animate); // Zorgt ervoor dat de functie opnieuw wordt aangeroepen voor de volgende frame
+    requestAnimationFrame(animate);
 
-    // Roteer de kubus
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    // Als het model geladen is, kun je het roteren of animeren
+    if (loadedModel) {
+        // Voorbeeld: roteer het geladen model
+        // loadedModel.rotation.y += 0.005;
+    }
 
-    renderer.render(scene, camera); // Render de scène met de camera
+    controls.update(); // Update de OrbitControls
+    renderer.render(scene, camera);
 }
 
 // Start de animatie
