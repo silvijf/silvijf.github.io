@@ -37,7 +37,7 @@ const loader = new GLTFLoader();
 // Laad het GLTF-model
 loader.load(
     // pad naar je model
-    'bleu.glb', // Zorg dat dit bestand in dezelfde map staat als je main.js en index.html
+    './bleu.glb', // Zorg dat dit bestand in dezelfde map staat als je main.js en index.html
 
     // on successful load
     function (gltf) {
