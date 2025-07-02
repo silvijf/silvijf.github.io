@@ -7,7 +7,7 @@
     <title>Canvas by Fainer</title>
     <link rel="icon" type="image/x-icon"
         href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
     <style>
@@ -149,36 +149,43 @@
         const size = document.getElementById("size")
         const eraser = document.getElementById("eraser")
         const eraserContainer = document.getElementById("eraserContainer")
-        let mousedown = {
-            isTrue: false,
+        let mouse = {
+            down: false,
+            x: 0,
+            y: 0,
+        }
+        let previousMouse = {
+            down: false,
             x: 0,
             y: 0,
         }
         let theSize = 1;
 
         canvas.addEventListener("mousedown", (event) => {
-            mousedown = {
-                isTrue: true,
+            mouse = {
+                down: true,
                 x: event.offsetX,
                 y: event.offsetY
             }
         })
 
         canvas.addEventListener("touchstart", (event) => {
-            mousedown = {
-                isTrue: true,
+            mouse = {
+                down: true,
                 x: event.touches[0].offsetX,
                 y: event.touches[0].offsetY,
             }
         })
-        
+
         document.addEventListener("mouseup", () => {
-            mousedown.isTrue = false;
+            mouse.down = false;
+            previousMouse.down = false;
             document.body.style.setProperty("--grab", "grab")
         })
 
         document.addEventListener("touchend", () => {
-            mousedown.isTrue = false;
+            previousMouse.down = false;
+            mouse.down = false;
         })
 
         size.addEventListener("mousedown", () => {
@@ -205,20 +212,34 @@
         })
 
         setInterval(() => {
-            mousedown.isTrue
-            if (mousedown.isTrue) {
+            if (mouse.down) {
                 ctx.fillStyle = whichColor.value
+                ctx.strokeStyle = whichColor.value
                 if (eraser.checked) {
-                    ctx.clearRect(mousedown.x / (10 / 3), mousedown.y / (10 / 3), theSize, theSize)
+                    ctx.clearRect(mouse.x / (10 / 3), mouse.y / (10 / 3), theSize, theSize)
                 } else {
-                    ctx.fillRect(mousedown.x / (10 / 3), mousedown.y / (10 / 3), theSize, theSize)
+                    if (previousMouse.down) {
+                        ctx.beginPath()
+                        ctx.moveTo(previousMouse.x / (10 / 3), previousMouse.y / (10 / 3))
+                        ctx.lineTo(mouse.x / (10 / 3), mouse.y / (10 / 3))
+                        ctx.lineWidth = theSize
+                        ctx.stroke()
+                    }
+                    else {
+                        ctx.fillRect(mouse.x / (10 / 3), mouse.y / (10 / 3), theSize, theSize)
+                    }
+                }
+                previousMouse = {
+                    down: mouse.down,
+                    x: mouse.x,
+                    y: mouse.y
                 }
             }
         })
 
         canvas.addEventListener("mousemove", (event) => {
-            mousedown = {
-                isTrue: mousedown.isTrue,
+            mouse = {
+                down: mouse.down,
                 x: event.offsetX,
                 y: event.offsetY,
             }
