@@ -303,8 +303,8 @@
             timeBetween = Math.round((Date.now() / 60000) - visit)
             if (timeBetween == 0) msgAgo.innerHTML = "for the first time in a few seconds!"
             else if (timeBetween < 60) msgAgo.innerHTML = `...for the first time in ${timeBetween} minutes!`;
-            else if (timeBetween < 1440) msgAgo.innerHTML = `...for the first time in ${round(timeBetween / 60)} hours!`
-            else msgAgo.innerHTML = `...for the first time in ${round(timeBetween / 1440)} days!`
+            else if (timeBetween < 1440) msgAgo.innerHTML = `...for the first time in ${Math.round(timeBetween / 60)} hours!`
+            else msgAgo.innerHTML = `...for the first time in ${Math.round(timeBetween / 1440)} days!`
         } else {
             msgHeader.innerHTML = "Welcome to my site!"
             msgAgo.innerHTML = "I forgot if you came here before..."
