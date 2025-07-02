@@ -63,9 +63,14 @@
             cursor: crosshair;
         }
 
-        #daColor {
+        #inputscontainer {
             position: relative;
             top: 575px;
+            display: flex;
+        }
+
+        #daColor {
+            position: relative;
             border: 5px solid black;
             border-radius: 5px;
             background-color: white;
@@ -76,7 +81,7 @@
 
         #size {
             position: relative;
-            top: 565px;
+            top: 15px;
             left: 5px;
             width: 200px;
             height: 15px;
@@ -85,6 +90,7 @@
             outline: none;
             transition: .2s;
             border-radius: 3px;
+            padding-left: 20px;
         }
 
         #size::-webkit-slider-thumb {
@@ -106,8 +112,7 @@
 
         #eraserContainer {
             position: relative;
-            top: 522px;
-            left: 270px;
+            left: 20px;
             width: 60px;
             height: 50px;
             border-radius: 5px;
@@ -117,6 +122,95 @@
 
         #eraser:checked {
             content: url("https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Canvas/Eraser2.png");
+        }
+
+        #save,
+        #load {
+            position: relative;
+            left: 40px;
+            width: 60px;
+            height: 50px;
+            border-radius: 5px;
+            border: 3px solid black;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        #load {
+            left: 60px;
+        }
+
+        #msgbox {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: #76a4d6;
+            border: 2px solid black;
+            border-radius: 15px;
+            font-size: 130%;
+            display: none;
+        }
+
+        #msgheader,
+        #msgago {
+            position: relative;
+            padding-left: 10px;
+            padding-right: 50px;
+            top: -10px;
+        }
+
+        #close,
+        #closebutton {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 300ms;
+        }
+
+        #closebutton:hover~#close {
+            fill: #f02e2e !important;
+        }
+
+        #closebutton {
+            z-index: 500;
+        }
+
+        #buttoncontainer {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .msgbuttons {
+            position: relative;
+            width: 180px;
+            height: 60px;
+            right: 10px;
+            bottom: 10px;
+            border: 3px solid black;
+            border-radius: 10px;
+            font-family: 'Fredoka';
+            font-size: x-large;
+            cursor: pointer;
+            transition: 300ms;
+
+            &:hover {
+                transform: scale(1.15);
+            }
+        }
+
+        #one {
+            background-color: #ddffdd;
+        }
+
+        #two {
+            background-color: #ddddff;
         }
     </style>
 </head>
@@ -136,11 +230,27 @@
     </div>
 
     <canvas id="yourCanvas"></canvas>
+    <div id="inputscontainer">
+        <input type="color" value="#000000" id="daColor" title="Change color">
+        <input type="range" value="10" min="5" max="50" id="size" title="Change size">
+        <div id="eraserContainer">
+            <input type="checkbox" id="eraser" title="Eraser">
+        </div>
+        <button id="save">Save</button>
+        <button id="load">Load</button>
+    </div>
 
-    <input type="color" value="#000000" id="daColor" title="Change color">
-    <input type="range" value="10" min="5" max="50" id="size" title="Change size">
-    <div id="eraserContainer">
-        <input type="checkbox" id="eraser" title="Eraser">
+    <div id="msgbox">
+        <div id="closebutton"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" id="close">
+            <path
+                d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+        </svg>
+        <h3 id="msgheader">Which slot would you like to save this in?</h3>
+        <div id="buttoncontainer">
+            <button class="msgbuttons" id="one">Slot 1</button>
+            <button class="msgbuttons" id="two">Slot 2</button>
+        </div>
     </div>
     <script>
         const canvas = document.getElementById("yourCanvas")
@@ -149,6 +259,14 @@
         const size = document.getElementById("size")
         const eraser = document.getElementById("eraser")
         const eraserContainer = document.getElementById("eraserContainer")
+        const msgBox = document.getElementById("msgbox")
+        const save = document.getElementById("save")
+        const load = document.getElementById("load")
+        const msgHeader = document.getElementById("msgheader")
+        const closeButton = document.getElementById("closebutton")
+        const slotOne = document.getElementById("one")
+        const slotTwo = document.getElementById("two")
+
         let mouse = {
             down: false,
             x: 0,
@@ -160,6 +278,44 @@
             y: 0,
         }
         let theSize = 1;
+
+        var which = 1
+
+        save.addEventListener("click", () => showMsg(1))
+        load.addEventListener("click", () => showMsg(2))
+        closeButton.addEventListener("click", hideMsg)
+
+        slotOne.addEventListener("click", () => saveCanvas(1))
+        slotTwo.addEventListener("click", () => saveCanvas(2))
+
+        function showMsg(Which) {
+            msgbox.style.display = "block"
+            if (Which == 2) {
+                which = 2
+                msgHeader.innerHTML = "Which slot would you like to load?"
+            } else which = 1
+        }
+
+        function hideMsg() {
+            msgBox.style.display = "none";
+        }
+
+        function saveCanvas(slot) {
+            hideMsg()
+            if (which == 1) {
+                let dataURL = canvas.toDataURL("image/png")
+                if (slot == 1) {
+                    localStorage.setItem("slot1", dataURL)
+                } else {
+                    localStorage.setItem("slot2", dataURL)
+                }
+            } else {
+                const img = new Image()
+                img.addEventListener("load", () => ctx.drawImage(img, 0, 0))
+                if (slot == 1) img.src = localStorage.getItem("slot1")
+                else img.src = localStorage.getItem("slot2")
+            }
+        }
 
         canvas.addEventListener("mousedown", (event) => {
             mouse = {
@@ -240,8 +396,8 @@
         canvas.addEventListener("mousemove", (event) => {
             mouse = {
                 down: mouse.down,
-                x: event.offsetX,
-                y: event.offsetY,
+                x: Math.round(event.offsetX) + 0.5,
+                y: Math.round(event.offsetY) + 0.5,
             }
         })
 
