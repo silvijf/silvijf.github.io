@@ -299,13 +299,13 @@
 
         let visit = localStorage.getItem("visit")
 
-        if (visit) {
+        if (visit != null) {
             timeBetween = Math.round((Date.now() / 60000) - visit)
             console.log(timeBetween)
             if (timeBetween == 0) msgAgo.innerHTML = "for the first time in a few seconds!"
-            else if (timeBetween < 60) msgAgo.innerHTML = `...for the first time in ${timeBetween} minute(s)!`;
-            else if (timeBetween < 1440) msgAgo.innerHTML = `...for the first time in ${timeBetween / 60} hour(s)!`
-            else msgAgo.innerHTML = `...for the first time in ${timeBetween / 1440} day(s)!`
+            else if (timeBetween < 60) msgAgo.innerHTML = `...for the first time in ${timeBetween} minutes!`;
+            else if (timeBetween < 1440) msgAgo.innerHTML = `...for the first time in ${timeBetween / 60} hours!`
+            else msgAgo.innerHTML = `...for the first time in ${timeBetween / 1440} days!`
         } else {
             msgHeader.innerHTML = "Welcome!"
         }
