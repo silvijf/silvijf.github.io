@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -105,6 +106,46 @@
             color: white;
         }
 
+        #msgbox {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: #76a4d6;
+            border: 2px solid black;
+            border-radius: 10px;
+            font-size: 130%;
+        }
+
+        #msgheader,
+        #msgago {
+            position: relative;
+            padding-left: 10px;
+            padding-right: 50px;
+            top: -10px;
+        }
+
+        #close,
+        #closebutton {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 300ms;
+        }
+
+        #closebutton:hover ~ #close {
+            fill: #f02e2e !important;
+        }
+
+        #closebutton {
+            z-index: 500;
+        }
+
         .jelln {
             display: none;
         }
@@ -198,8 +239,8 @@
 
         <a href="isiti">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/isiti.png"
-                alt="Is it I?" class="games bg" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Not sure if it is an I? You are about to find out!')" style="left: 40px;">
+                alt="Is it I?" class="games bg" oncontextmenu=" return false;" onmouseup="show(event, 'I.')"
+                style="left: 40px;">
         </a>
     </div>
     <div class="nameContainer">
@@ -210,7 +251,7 @@
         <p style="position: relative; left: 380px;">Is it I?</p>
     </div>
 
-    <div class="header" style="top: 360px;"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
+    <div class="header" stylfe="top: 360px;"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
 
     <br><br><br><br>
 
@@ -225,6 +266,17 @@
         <p style="position: relative; left: 15px;">Polewolf (Dutch)</p>
     </div>
 
+    <div id="msgbox">
+        <div id="closebutton" onclick="msgbox.style.display = 'none'"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+            id="close" >
+            <path
+                d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+        </svg>
+        <h3 id="msgheader">Welcome to my site...</h3>
+        <p id="msgago">Loading...</p>
+    </div>
+
     <img src="https://www.kuijtkachelsenhaarden.nl/images/productimages/big/img-20240523-173735.jpg" id="fireplace"
         class="jelln">
     <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle"
@@ -235,12 +287,34 @@
         const platformer = document.getElementById("platformer")
         const canvas = document.getElementById("canvas")
         const info = document.getElementById("info")
-        const sint = document.getElementById("sint")
         const weirdo = document.getElementById("jelle")
         const jellntext = document.getElementById("jellntext")
-        const isMobile = navigator.userAgentData.mobile;
+        const isMobile = navigator.userAgentData.mobile
+        const msgbox = document.getElementById("msgbox")
+        const msgHeader = document.getElementById("msgheader")
+        const msgAgo = document.getElementById("msgago")
+
 
         let jelln = 0;
+
+        let visit = localStorage.getItem("visit")
+
+        if (visit) {
+            timeBetween = Math.round((Date.now() / 60000) - visit)
+            console.log(timeBetween)
+            if (timeBetween == 0) msgAgo.innerHTML = "for the first time in a few seconds!"
+            else if (timeBetween < 60) msgAgo.innerHTML = `...for the first time in ${timeBetween} minute(s)!`;
+            else if (timeBetween < 1440) msgAgo.innerHTML = `...for the first time in ${timeBetween / 60} hour(s)!`
+            else msgAgo.innerHTML = `...for the first time in ${timeBetween / 1440} day(s)!`
+        } else {
+            msgHeader.innerHTML = "Welcome!"
+        }
+
+        setInterval(setVisit, 1000)
+        setVisit()
+        function setVisit() {
+            localStorage.setItem("visit", Date.now() / 60000)
+        }
 
         function show(event, msg) {
             if (event.button == 2) {
