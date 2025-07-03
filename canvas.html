@@ -290,10 +290,14 @@
 
         function showMsg(Which) {
             msgbox.style.display = "block"
-            if (Which == 2) {
+            if (Which == 1) {
+                which = 1
+                msgHeader.innerHTML = "Which slot would you like to save this in?"
+            }
+            else {
                 which = 2
                 msgHeader.innerHTML = "Which slot would you like to load?"
-            } else which = 1
+            }
         }
 
         function hideMsg() {
