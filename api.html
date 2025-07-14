@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<head>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNJOnNxcXKsbE4-eg0F_vrIiUX_hctfg0",
+            authDomain: "silvijfgame.firebaseapp.com",
+            databaseURL: "https://silvijfgame-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "silvijfgame",
+            storageBucket: "silvijfgame.firebasestorage.app",
+            messagingSenderId: "30964750848",
+            appId: "1:30964750848:web:6deab74f639ffbe8f596e5",
+            measurementId: "G-0B68N4XXQL"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const checkboxes = document.getElementsByClassName("checkbox")
+
+        async function updateCheckboxes() {
+            let checkboxesRef = ref(database, 'checkboxes')
+            await set(checkboxesRef, {
+                boxes: [
+                    checkboxes[0].checked,
+                    checkboxes[1].checked,
+                    checkboxes[2].checked
+                ]
+            })
+        }
+
+        for (let i = 0; i < 3; i++) {
+            checkboxes[i].addEventListener("change", updateCheckboxes)
+        }
+
+        function listen() {
+            let checkboxesRef = ref(database, 'checkboxes/boxes')
+            onValue(checkboxesRef, (snapshot) => {
+                const data = snapshot.val()
+                if (data) {
+                    for (let i = 0; i < 3; i++) {
+                        checkboxes[i].checked = data[[i]]
+                    }
+                } else {
+                    updateCheckboxes()
+                }
+            })
+        }
+        listen()
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fainer</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka';
+            overflow-x: hidden;
+            background-color: #313338;
+        }
+
+        #topbar {
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            left: -1px;
+            top: -1px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #container {
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+    </style>
+
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+        <div id="container">
+            <input type="checkbox" class="checkbox" id="one">
+            <input type="checkbox" class="checkbox" id="two">
+            <input type="checkbox" class="checkbox" id="three">
+        </div>
+    </div>
+</body>
+</head>
