@@ -4,7 +4,7 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getDatabase, ref, get, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,37 +25,74 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        const checkboxes = document.getElementsByClassName("checkbox")
+        const startText = document.getElementById("start")
 
-        async function updateCheckboxes() {
-            let checkboxesRef = ref(database, 'checkboxes')
-            await set(checkboxesRef, {
-                boxes: [
-                    checkboxes[0].checked,
-                    checkboxes[1].checked,
-                    checkboxes[2].checked
-                ]
-            })
-        }
-
-        for (let i = 0; i < 3; i++) {
-            checkboxes[i].addEventListener("change", updateCheckboxes)
-        }
+        var thisScreen
 
         function listen() {
-            let checkboxesRef = ref(database, 'checkboxes/boxes')
-            onValue(checkboxesRef, (snapshot) => {
+            let screensRef = ref(database, 'screens')
+            onValue(screensRef, (snapshot) => {
                 const data = snapshot.val()
                 if (data) {
-                    for (let i = 0; i < 3; i++) {
-                        checkboxes[i].checked = data[[i]]
+                    if (data[thisScreen] == "green") {
+                        document.body.style.backgroundColor = "green"
                     }
                 } else {
-                    updateCheckboxes()
+
                 }
             })
         }
-        listen()
+
+        async function click() {
+            let screensRef = ref(database, 'screens/' + thisScreen)
+            await set(screensRef, 'justclicked')
+            document.body.style.backgroundColor = "#313338"
+        }
+
+        document.body.addEventListener("click", click)
+
+        function listenToStart() {
+            let screensRef = ref(database, 'screens/count')
+            onValue(screensRef, (snapshot) => {
+                const data = snapshot.val()
+                if (data) {
+                    if (data == "starting") {
+                        startText.innerHTML = "3"
+                        setTimeout(() => {
+                            startText.innerHTML = "2"
+                        }, 1000)
+                        setTimeout(() => {
+                            startText.innerHTML = "1"
+                        }, 2000)
+                        setTimeout(() => {
+                            startText.style.display = "none"
+                            listen()
+                        }, 3000)
+                    } else if (data == 1) {
+                        startText.innerHTML = "Ready to start!"
+                    } else if (data == 2) {
+                        
+                    }
+                }
+            })
+        }
+
+        async function addScreenNumber() {
+            let screensRef = ref(database, 'screens/count')
+            await get(screensRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val()
+                        set(screensRef, data + 1)
+                        thisScreen = data
+                    } else {
+                        startText.innerHTML = "Start the host first!"
+                    }
+                })
+        }
+
+        addScreenNumber()
+        listenToStart()
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,9 +146,14 @@
         }
 
         #container {
+            position: absolute;
             display: flex;
-            gap: 10px;
-            position: relative;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 500%;
+            height: 100%;
+            width: 100%;
         }
     </style>
 
@@ -127,11 +169,10 @@
             <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
                 src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
         </a>
-        <div id="container">
-            <input type="checkbox" class="checkbox" id="one">
-            <input type="checkbox" class="checkbox" id="two">
-            <input type="checkbox" class="checkbox" id="three">
-        </div>
+    </div>
+
+    <div id="container">
+        <p id="start">1 more screen needed...</p>
     </div>
 </body>
 </head>

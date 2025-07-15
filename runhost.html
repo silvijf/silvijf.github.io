@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<head>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, get, set, update, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNJOnNxcXKsbE4-eg0F_vrIiUX_hctfg0",
+            authDomain: "silvijfgame.firebaseapp.com",
+            databaseURL: "https://silvijfgame-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "silvijfgame",
+            storageBucket: "silvijfgame.firebasestorage.app",
+            messagingSenderId: "30964750848",
+            appId: "1:30964750848:web:6deab74f639ffbe8f596e5",
+            measurementId: "G-0B68N4XXQL"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const startText = document.getElementById("start")
+
+        var screens = 1
+        var players = 1
+
+        const colors = ['green', 'blue', 'red']
+
+        var currentScreens = []
+
+        var started = false
+
+        async function setScreens() {
+            let screensRef = ref(database, 'screens')
+            currentScreens = []
+            for (let i = 0; i < screens; i++) {
+                currentScreens[i] = "none"
+            }
+            for (let i = 0; i < players; i++) {
+                currentScreens[Math.floor(Math.random() * screens)] = "green"
+
+            }
+            await set(screensRef, currentScreens)
+        }
+
+        async function updateScreens(num) {
+            let screensRef = ref(database, 'screens')
+            await get(screensRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        set(ref(database, 'screens/' + String(num[0])), 'none')
+                        const data = snapshot.val()
+                        const freeScreens = Object.keys(data).filter(key => data[key] === 'none');
+                        const newScreen = freeScreens[Math.floor(Math.random() * freeScreens.length)]
+                        console.log(freeScreens, newScreen, data)
+                        set(ref(database, 'screens/' + newScreen), 'green')
+                    }
+                })
+        }
+
+        function listen() {
+            let screensRef = ref(database, 'screens')
+            onValue(screensRef, (snapshot) => {
+                const data = snapshot.val()
+                if (data[1]) {
+                    if (Object.values(data).some(value => String(value).startsWith("justclicked"))) {
+                        updateScreens(Object.keys(data).filter(k => String(data[k]).startsWith('justclicked')))
+                    }
+                    if (data[0] == "green") {
+                        document.body.style.backgroundColor = "green"
+                    }
+                } else {
+                    setScreens()
+                }
+            })
+        }
+
+        async function click() {
+            let screensRef = ref(database, 'screens/' + 0)
+            updateScreens(['0'])
+            document.body.style.backgroundColor = "#313338"
+        }
+
+        async function broadcastStart() {
+            let screensRef = ref(database, 'screens/count')
+            await set(screensRef, "starting")
+        }
+
+        function start() {
+            console.log("starting")
+            document.body.removeEventListener("click", start)
+            started = true
+            document.body.addEventListener("click", click)
+            broadcastStart()
+            startText.innerHTML = "3"
+            setTimeout(() => {
+                startText.innerHTML = "2"
+            }, 1000)
+            setTimeout(() => {
+                startText.innerHTML = "1"
+            }, 2000)
+            setTimeout(() => {
+                startText.style.display = "none"
+                listen()
+            }, 3000)
+
+        }
+
+        let screensRef = ref(database, 'screens/count')
+
+        onValue(screensRef, (snapshot) => {
+            if (!started) {
+                const data = snapshot.val()
+                if (data) {
+                    if (data > 1) {
+                        screens = data
+                        startText.innerHTML = "Click to start!"
+                        document.body.addEventListener("click", start)
+                    }
+                }
+            }
+        })
+
+        async function setScreenNumber() {
+            let screensRef = ref(database, 'screens/count')
+            await set(screensRef, 1)
+        }
+
+        setScreenNumber()
+
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fainer</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka';
+            overflow-x: hidden;
+            background-color: #313338;
+        }
+
+        #topbar {
+            position: absolute;
+            width: 100%;
+            height: 45px;
+            left: -1px;
+            top: -1px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #container {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 500%;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+
+    <div id="container">
+        <p id="start">1 more screen needed...</p>
+    </div>
+</body>
+</head>
