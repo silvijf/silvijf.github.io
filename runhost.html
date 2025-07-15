@@ -83,8 +83,13 @@
 
         async function click() {
             let screensRef = ref(database, 'screens/' + 0)
-            updateScreens(['0'])
-            document.body.style.backgroundColor = "#313338"
+            get(screensRef)
+                .then((snapshot) => {
+                    if (snapshot.val() != 'none' && snapshot.val() != 'justclicked') {
+                        updateScreens(['0'])
+                        document.body.style.backgroundColor = "#313338"
+                    }
+                })
         }
 
         async function broadcastStart() {
