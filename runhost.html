@@ -37,8 +37,10 @@
         var started = false
 
         async function setScreens() {
+            console.log(screens)
             let screensRef = ref(database, 'screens')
             currentScreens = []
+            
             for (let i = 0; i < screens; i++) {
                 currentScreens[i] = "none"
             }
@@ -113,7 +115,10 @@
             setTimeout(() => {
                 startText.style.display = "none"
                 listen()
+
             }, 3000)
+            console.log('yay')
+            setScreens()
 
         }
 
