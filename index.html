@@ -319,7 +319,11 @@
         const info = document.getElementById("info")
         const weirdo = document.getElementById("jelle")
         const jellntext = document.getElementById("jellntext")
+        try {
         const isMobile = navigator.userAgentData.mobile
+        } finally {
+            const isMobile = false
+        }
         const msgBox = document.getElementById("msgbox")
         const msgHeader = document.getElementById("msgheader")
         const closebutton = document.getElementById("closebutton")
