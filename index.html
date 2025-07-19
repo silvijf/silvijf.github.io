@@ -319,10 +319,11 @@
         const info = document.getElementById("info")
         const weirdo = document.getElementById("jelle")
         const jellntext = document.getElementById("jellntext")
+        let isMobile
         try {
-        const isMobile = navigator.userAgentData.mobile
-        } finally {
-            const isMobile = false
+            isMobile = navigator.userAgentData.mobile
+        } catch (err) {
+            isMobile = false
         }
         const msgBox = document.getElementById("msgbox")
         const msgHeader = document.getElementById("msgheader")
