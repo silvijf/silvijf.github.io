@@ -539,6 +539,11 @@
             }
         })
 
+        if (isMobile) {
+            aboutme.style.display = "none"
+            aboutmeExpand.style.display = "none"
+        }
+
         aboutmeExpand.addEventListener("click", () => {
             if (expanded) {
                 aboutmeExpand.style.animationDirection = "reverse"
