@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=keyboard_arrow_up" />
     <style>
         body {
             font-family: 'Fredoka';
@@ -168,6 +170,95 @@
             bottom: 125px;
         }
 
+        @keyframes expandbutton {
+            from {
+                right: 0px;
+            }
+
+            to {
+                right: 100px;
+            }
+        }
+
+        @keyframes expand {
+            from {
+                right: -120px;
+            }
+
+            to {
+                right: -20px;
+            }
+        }
+
+        @keyframes expandicon {
+            from {
+                transform: rotate(-90deg);
+            }
+
+            to {
+                transform: rotate(90deg);
+            }
+        }
+
+        .expand-button {
+            animation: expandbutton 0.3s cubic-bezier(0, 0.88, 0.88, 1.33);
+        }
+
+        .expand {
+            animation: expand 0.3s cubic-bezier(0, 0.88, 0.88, 1.33);
+        }
+
+        .expand-icon {
+            animation: expandicon 0.3s
+        }
+
+        #aboutme-expand {
+            position: absolute;
+            background-color: #062056;
+            top: 42.5%;
+            min-height: 5%;
+            max-height: 20%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            width: 25px;
+            right: 0px;
+            cursor: pointer;
+            border: 2px solid black;
+        }
+
+        #aboutme-expand span {
+            position: relative;
+            transform: rotate(-90deg);
+            display: inline-block;
+            color: white;
+            white-space: nowrap;
+            right: 42.5px;
+            bottom: -2px;
+        }
+
+        #aboutme-icon {
+            position: relative;
+            bottom: -7.5px;
+        }
+
+        #aboutme {
+            border-radius: 10px;
+            position: absolute;
+            background-color: #051f55;
+            height: 50%;
+            top: 25%;
+            width: 120px;
+            right: -120px;
+            color: white;
+        }
+
+        .language {
+            border: 2px solid black;
+            line-height: 1.6;
+            padding-top: -2px;
+            padding-bottom: -2px;
+        }
+
         .jelln {
             display: none;
         }
@@ -307,6 +398,23 @@
         <p id="msgago">Loading...</p>
     </div>
 
+    <div id="aboutme-expand">
+        <span>
+            <p class="material-symbols-outlined" id="aboutme-icon">keyboard_arrow_up</p>
+            About me
+        </span>
+    </div>
+    <div id="aboutme">
+        Hi, I'm Fainer! <br>
+        Languages:
+        <span class="language">HTML</span>, <br>
+        <span class="language">CSS</span>,
+        <span class="language">JS</span>,
+        <span class="language">Python</span>, <br>
+        <span class="language">Dutch</span> and
+        <span class="language">English</span>
+    </div>
+
     <img src="https://www.kuijtkachelsenhaarden.nl/images/productimages/big/img-20240523-173735.jpg" id="fireplace"
         class="jelln">
     <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle"
@@ -331,13 +439,17 @@
         const infoButton = document.getElementById("infobutton")
         const cookieDisclaimer = document.getElementById("cookiedisclaimer")
         const msgAgo = document.getElementById("msgago")
-
+        const aboutmeExpand = document.getElementById("aboutme-expand")
+        const aboutme = document.getElementById("aboutme")
+        const aboutmeIcon = document.getElementById("aboutme-icon")
 
         var jelln = 0;
 
         var visit = localStorage.getItem("visit")
         var infoOn = false
         var dontHide = false
+
+        var expanded = false
 
         if (visit != null) {
             timeBetween = Math.round((Date.now() / 60000) - visit)
@@ -425,6 +537,39 @@
             else {
                 jelln = 0;
             }
+        })
+
+        aboutmeExpand.addEventListener("click", () => {
+            if (expanded) {
+                aboutmeExpand.style.animationDirection = "reverse"
+                aboutme.style.animationDirection = "reverse"
+                aboutmeIcon.style.animationDirection = "reverse"
+                aboutmeExpand.classList.add("expand-button")
+                aboutme.classList.add("expand")
+                aboutmeIcon.classList.add("expand-icon")
+                aboutmeExpand.style.right = "0px"
+                aboutme.style.right = "-120px"
+                aboutmeIcon.style.transform = "rotate(0deg)"
+                expanded = false
+
+            } else {
+                aboutmeExpand.style.animationDirection = "normal"
+                aboutme.style.animationDirection = "normal"
+                aboutmeIcon.style.animationDirection = "normal"
+                aboutmeExpand.classList.add("expand-button")
+                aboutme.classList.add("expand")
+                aboutmeIcon.classList.add("expand-icon")
+                aboutmeExpand.style.right = "100px"
+                aboutme.style.right = "-20px"
+                aboutmeIcon.style.transform = "rotate(180deg)"
+                expanded = true
+            }
+        })
+
+        aboutmeExpand.addEventListener("animationend", () => {
+            aboutmeExpand.classList.remove("expand-button")
+            aboutme.classList.remove("expand")
+            aboutmeIcon.classList.remove("expand-icon")
         })
     </script>
 </body>
