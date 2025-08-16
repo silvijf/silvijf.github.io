@@ -169,7 +169,12 @@
             setInterval(drawPlayers, 1)
         })
 
-        const isMobile = navigator.userAgentData.mobile;
+        let isMobile
+        try {
+            isMobile = navigator.userAgentData.mobile
+        } catch (err) {
+            isMobile = false
+        }
 
         if (isMobile) {
             document.getElementById("welcome").innerHTML = "Home"

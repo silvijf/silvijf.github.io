@@ -154,7 +154,13 @@
             { x: 500, y: 180, width: 150, height: 20, color: "green" },
         ];
 
-        const isMobile = navigator.userAgentData.mobile;
+        let isMobile
+        try {
+            isMobile = navigator.userAgentData.mobile;
+        } catch (err) {
+            isMobile = false
+        }
+        
 
         if (isMobile) {
             document.body.style.overflowX = "hidden";
