@@ -34,10 +34,12 @@
         const strings = ["NOPE", "YES", "WHY", "WOW", "HI", "PLS", ":3"]
         const text = document.getElementById("text")
 
-        try {
-            var string = window.location.href.split("?")[1]
-        } catch (error) {
-            var string = "NOPE"
+        let index = window.location.href.indexOf("?")
+        if (index != -1) {
+            var string = window.location.href.substring(index + 1)
+        }
+        else {
+            var sting = strings[0]
         }
 
         if (strings[string] != undefined) {
