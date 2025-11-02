@@ -33,7 +33,7 @@
     }
 
     #output {
-      width: 50%;
+      width: 49.6%;
       max-width: 80%;
       height: 50px;
       max-height: 300px;
@@ -41,9 +41,12 @@
 
     #list {
       display: flex;
+      flex-wrap: wrap;
+      width: 50%;
+      gap: 10px;
     }
 
-    #list>div {
+    #list>div, #sort {
       background-color: #e3d9d5;
       border: 2px solid black;
       border-radius: 100px;
@@ -55,7 +58,11 @@
       transition: 300ms;
     }
 
-    #list>div:hover {
+    #sort {
+      width: 48.35%;
+    }
+
+    #list>div:hover, #sort:hover {
       background-color: #ef5858;
     }
 
@@ -76,12 +83,14 @@
     <input type="number" id="order">
   </div>
   <textarea id="output" readonly></textarea>
+  <div id="sort">Sorteren</div>
   <div id="list"></div>
   <script>
     const input = document.getElementById("input")
     const order = document.getElementById("order")
     const outputarea = document.getElementById("output")
     const list = document.getElementById("list")
+    const sort = document.getElementById("sort")
 
     var output = []
     defaultValue = ".main-menu{display: grid}"
@@ -110,13 +119,14 @@
         let newEl = document.createElement("div")
         newEl.innerText = `${input.value}: ${order.value}`
         newEl.menuText = lowerCase
+        newEl.order = order.value
         closebutton = document.createElement("div")
         closebutton.classList.add("material-symbols-outlined")
         closebutton.innerText = "close"
         newEl.appendChild(closebutton)
         newEl.addEventListener("click", (event) => {
           for (i = 0; i < output.length; i++) {
-            if (output[i][i] == event.currentTarget.menuText) {
+            if (output[i][0] == event.currentTarget.menuText) {
               output.splice(i, 1)
               event.currentTarget.remove()
             }
@@ -127,6 +137,7 @@
         updateOutput()
         input.value = ""
         order.value = ""
+        input.focus()
       }
     }
 
@@ -135,6 +146,12 @@
     })
     order.addEventListener("keydown", (event) => {
       if (event.key == "Enter") submit()
+    })
+
+    sort.addEventListener("click", () => {
+      let children = Array.from(list.children)
+      children.sort((x, y) => x.order - y.order)
+      list.append(...children)
     })
   </script>
 </body>
