@@ -2,36 +2,124 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fainer</title>
-    <link rel="icon" type="image/x-icon"
-        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fainer</title>
+  <link rel="icon" type="image/x-icon"
+    href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=keyboard_arrow_up" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=close" />
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    #container {
+      display: grid;
+      width: 50%;
+      column-gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    #input {
+      grid-row: 2;
+      grid-column: 1;
+    }
+
+    #order {
+      grid-row: 2;
+      grid-column: 2;
+    }
+
+    #output {
+      max-width: 80%;
+      max-height: 300px;
+    }
+
+    #list {
+      display: flex;
+    }
+
+    #list>div {
+      background-color: #e3d9d5;
+      border: 2px solid black;
+      border-radius: 100px;
+      padding: 10px;
+      padding-top: 5.5px;
+      padding-bottom: 4.5px;
+      display: flex;
+      cursor: pointer;
+      transition: 300ms;
+    }
+
+    #list>div:hover {
+      background-color: #ef5858;
+    }
+
+    .material-symbols-outlined {
+      width: 23px;
+      height: 23px;
+      font-size: 25px;
+      margin-top: -2px;
+    }
+  </style>
 </head>
 
 <body>
-  <input type="text" id="input">
-  <input type="number" id="order">
+  <div id="container">
+    <p id="namehelp">Name of list item:</p>
+    <input type="text" id="input">
+    <p id="orderhelp">Order:</p>
+    <input type="number" id="order">
+  </div>
   <textarea id="output" readonly></textarea>
+  <div id="list"></div>
   <script>
     const input = document.getElementById("input")
     const order = document.getElementById("order")
     const outputarea = document.getElementById("output")
+    const list = document.getElementById("list")
 
-    var output = ".main-menu{display: grid;}"
-    outputarea.value = output
-    
+    var output = []
+    defaultValue = ".main-menu{display: grid}"
+    outputarea.value = defaultValue
+
+    function updateOutput() {
+      let outputValue = ""
+      for (i = 0; i < output.length; i++) {
+          outputValue += `li:has(> #menu-${output[i][0]}){grid-row: ${output[i][1]}}`
+      }
+      outputarea.value = defaultValue + outputValue
+    }
+
     function submit() {
-      output += `li:has(> #menu-${input.value.toLowerCase()}){grid-row: ${order.value}}`
-      outputarea.value = output
-      input.value = ""
-      order.value = ""
+      if (input.value != "" && order.value != "") {
+        lowerCase = input.value.toLowerCase()
+
+        output.push([lowerCase, order.value])
+        
+        let newEl = document.createElement("div")
+        newEl.innerText = `${lowerCase}: ${order.value}`
+        newEl.menuText = lowerCase
+        closebutton = document.createElement("div")
+        closebutton.classList.add("material-symbols-outlined")
+        closebutton.innerText = "close"
+        newEl.appendChild(closebutton)
+        newEl.addEventListener("click", (event) => {
+          for (i = 0; i < output.length; i++) {
+            if (output[i].includes(event.currentTarget.menuText)) {
+              output.splice(i, 1)
+              event.currentTarget.remove()
+            }
+          }
+          updateOutput()
+        })
+        list.appendChild(newEl)
+        updateOutput()
+        input.value = ""
+        order.value = ""
+      }
     }
 
     input.addEventListener("keydown", (event) => {
