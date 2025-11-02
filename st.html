@@ -78,9 +78,9 @@
 <body>
   <div id="container">
     <p id="namehelp">Naam van menu-item:</p>
-    <input type="text" id="input">
+    <input type="text" id="input" placeholder="Vandaag">
     <p id="orderhelp">Op welke plek moet die komen?</p>
-    <input type="number" id="order">
+    <input type="number" id="order" placeholder="(Volgende)">
   </div>
   <textarea id="output" readonly></textarea>
   <div id="sort">Sorteren</div>
@@ -96,6 +96,8 @@
     defaultValue = ".main-menu{display: grid}"
     outputarea.value = defaultValue
 
+    var previous = 0
+
     function updateOutput() {
       let outputValue = ""
       for (i = 0; i < output.length; i++) {
@@ -105,8 +107,9 @@
     }
 
     function submit() {
-      if (input.value != "" && order.value != "") {
+      if (input.value != "") {
         lowerCase = input.value.toLowerCase()
+        if (order.value == "") order.value = previous + 1
         if (lowerCase == "start") lowerCase = "vandaag"
         for (i = 0; i < output.length; i++) {
           if (output[i][0] == lowerCase) {
@@ -135,8 +138,10 @@
         })
         list.appendChild(newEl)
         updateOutput()
+        previous = Number(order.value)
         input.value = ""
         order.value = ""
+        order.placeholder = `(Volgende: ${previous + 1})`
         input.focus()
       }
     }
