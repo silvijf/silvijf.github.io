@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fainer</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=keyboard_arrow_up" />
+</head>
+
+<body>
+  <input type="text" id="input">
+  <input type="number" id="order">
+  <textarea id="output" readonly></textarea>
+  <script>
+    const input = document.getElementById("input")
+    const order = document.getElementById("order")
+    const outputarea = document.getElementById("output")
+
+    var output = ".main-menu{display: grid;}"
+    outputarea.value = output
+    
+    function submit() {
+      output += `li:has(> #menu-${input.value.toLowerCase()}){grid-row: ${order.value}}`
+      outputarea.value = output
+      input.value = ""
+      order.value = ""
+    }
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key == "Enter") submit()
+    })
+    order.addEventListener("keydown", (event) => {
+      if (event.key == "Enter") submit()
+    })
+  </script>
+</body>
