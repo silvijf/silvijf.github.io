@@ -33,7 +33,9 @@
     }
 
     #output {
+      width: 50%;
       max-width: 80%;
+      height: 50px;
       max-height: 300px;
     }
 
@@ -68,9 +70,9 @@
 
 <body>
   <div id="container">
-    <p id="namehelp">Name of list item:</p>
+    <p id="namehelp">Naam van menu-item:</p>
     <input type="text" id="input">
-    <p id="orderhelp">Order:</p>
+    <p id="orderhelp">Op welke plek moet die komen?</p>
     <input type="number" id="order">
   </div>
   <textarea id="output" readonly></textarea>
@@ -88,7 +90,7 @@
     function updateOutput() {
       let outputValue = ""
       for (i = 0; i < output.length; i++) {
-          outputValue += `li:has(> #menu-${output[i][0]}){grid-row: ${output[i][1]}}`
+        outputValue += `li:has(> #menu-${output[i][0]}){grid-row: ${output[i][1]}}`
       }
       outputarea.value = defaultValue + outputValue
     }
@@ -96,11 +98,17 @@
     function submit() {
       if (input.value != "" && order.value != "") {
         lowerCase = input.value.toLowerCase()
-
+        if (lowerCase == "start") lowerCase = "vandaag"
+        for (i = 0; i < output.length; i++) {
+          if (output[i][0] == lowerCase) {
+            output.splice(i, 1)
+            list.children[i].remove()
+          }
+        }
         output.push([lowerCase, order.value])
-        
+
         let newEl = document.createElement("div")
-        newEl.innerText = `${lowerCase}: ${order.value}`
+        newEl.innerText = `${input.value}: ${order.value}`
         newEl.menuText = lowerCase
         closebutton = document.createElement("div")
         closebutton.classList.add("material-symbols-outlined")
@@ -108,7 +116,7 @@
         newEl.appendChild(closebutton)
         newEl.addEventListener("click", (event) => {
           for (i = 0; i < output.length; i++) {
-            if (output[i].includes(event.currentTarget.menuText)) {
+            if (output[i][i] == event.currentTarget.menuText) {
               output.splice(i, 1)
               event.currentTarget.remove()
             }
