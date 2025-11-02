@@ -40,6 +40,8 @@
     }
 
     #list {
+      position: relative;
+      top: 5px;
       display: flex;
       flex-wrap: wrap;
       width: 50%;
@@ -59,7 +61,14 @@
     }
 
     #sort {
+      margin-bottom: 10px;
       width: 48.35%;
+    }
+
+    .separator {
+      width: 50%;
+      height: 0;
+      border-top: 1px solid black;
     }
 
     #list>div:hover, #sort:hover {
@@ -84,6 +93,7 @@
   </div>
   <textarea id="output" readonly></textarea>
   <div id="sort">Sorteren</div>
+  <div class="separator"></div>
   <div id="list"></div>
   <script>
     const input = document.getElementById("input")
