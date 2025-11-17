@@ -207,6 +207,7 @@
         const iframeDoc = iframe.contentWindow.document
         const consoleEl = document.getElementById("console")
         const play = document.getElementById("play")
+        const youwon = document.getElementById("youwon")
 
         var levels = [
             `<p>function callWin() {</p><p class="tab">win()</p><p>}</p><br><textarea rows="1" cols="7"></textarea>`
@@ -260,7 +261,7 @@
 
         setInterval(() => {
             if (iframe.contentWindow.won) {
-                console.log("Won")
+                youwon.style.display = "block"
             }
         }, 100)
 
