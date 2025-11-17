@@ -82,12 +82,6 @@
             scale: 1.1;
         }
 
-        .itemContainer {
-            display: flex;
-            position: relative;
-            top: 110px;
-        }
-
         .bg {
             filter: contrast(1.3)
         }
@@ -99,14 +93,16 @@
             top: 130px;
         }
 
-        .nameContainer {
-            display: flex;
+        .itemContainer {
+            display: grid;
             position: relative;
             top: 95px;
         }
 
-        .nameContainer p {
+        .title {
             color: white;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #msgbox {
@@ -324,70 +320,67 @@
     <div class="header"><i style="position: relative; left: 10px;">GAMES AND TOOLS</i></div>
     <p id="info" oncontextmenu="return false;" onmouseup="show(event, 'Try right-clicking on a logo!')">Try
         right-clicking on a logo!</p>
-    <div class="itemContainer">
-        <a href="platformer">
+    <div class="itemContainer" style="width: 1000px;">
+        <a href="platformer" style="grid-column: 1; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
                 alt="Platformer Game" class="games" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
         </a>
 
-        <a href="jspuzzles">
+        <a href="jspuzzles" style="grid-column: 2; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/JS puzzles.png"
                 alt="JS Puzzles" class="games" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Only for starting developers! But also for you :)')">
         </a>
 
-        <a href="canvas">
+        <a href="canvas" style="grid-column: 3; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
                 alt="Canvas" class="games" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Try to set the color to #ffffff!')">
         </a>
 
 
-        <a href="raceclicker">
+        <a href="raceclicker" style="grid-column: 4; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
                 alt="Race clicker" class="games" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Click on clicks, they help you!')">
         </a>
 
-        <a href="copy">
+        <a href="copy" style="grid-column: 5; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Copy.png"
                 alt="Copy hub" class="games bg" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Did you know that you can use CTRL + Z?')">
         </a>
 
-        <a href="isiti">
+        <a href="isiti" style="grid-column: 6; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/isiti.png"
                 alt="Is it I?" class="games bg" oncontextmenu=" return false;" onmouseup="show(event, 'I.')">
         </a>
-    </div>
-    <div class="nameContainer">
-        <p style="position: relative; left: 15px;">Platformer Game</p>
-        <p style="position: relative; left: 87px;">Canvas</p>
-        <p style="position: relative; left: 185px;">Race clicker</p>
-        <p style="position: relative; left: 271px;">Copy hub</p>
-        <p style="position: relative; left: 380px;">Is it I?</p>
+        <p class="title" style="grid-column: 1; grid-row: 2">Platformer Game</p>
+        <p class="title" style="grid-column: 2; grid-row: 2">JS Puzzles</p>
+        <p class="title" style="grid-column: 3; grid-row: 2">Canvas</p>
+        <p class="title" style="grid-column: 4; grid-row: 2">Race Clicker</p>
+        <p class="title" style="grid-column: 5; grid-row: 2">Copy Hub</p>
+        <p class="title" style="grid-column: 6; grid-row: 2">Is it I?</p>
     </div>
 
     <div class="header" style="top: 360px;"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
 
     <br><br><br><br>
 
-    <div class="itemContainer">
-        <a href="https://polewolf.github.io" target="_blank">
+    <div class="itemContainer" style="width: 200px;">
+        <a href="https://polewolf.github.io" target="_blank" style="grid-column: 1; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Polewolf.png"
                 alt="Polewolf's Site" class="games" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Did you know that you can also left-click on this logo?')">
         </a>
-        <a href="https://jippie.github.io" target="_blank">
+        <a href="https://jippie.github.io" target="_blank" style="grid-column: 2; grid-row: 1">
             <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Jippie.png"
                 alt="Jippie's Site" class="games" oncontextmenu=" return false;"
                 onmouseup="show(event, 'Polewolfs new site. Work in progress!')">
         </a>
-    </div>
-    <div class="nameContainer">
-        <p style="position: relative; left: 15px;">Polewolf (Dutch)</p>
-        <p style="position: relative; left: 76px;">Jippie (Dutch)</p>
+        <p class="title" style="grid-column: 1; grid-row: 2">Polewolf (Dutch)</p>
+        <p class="title" style="grid-column: 2; grid-row: 2">Jippie (Dutch)</p>
     </div>
 
     <div id="msgbox">
