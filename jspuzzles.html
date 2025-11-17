@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fainer</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=play_circle" />
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Fredoka';
+            overflow-x: hidden;
+            background-color: #313338;
+            height: 95%;
+        }
+
+        @media only screen and (max-width: 600px) {
+            body {
+                display: none;
+            }
+        }
+
+        #topbar {
+            position: relative;
+            width: calc(100% + 12px);
+            height: 45px;
+            left: -8px;
+            top: -8px;
+            background-color: black;
+            box-shadow: 5px 0px 5px;
+        }
+
+        #welcome {
+            color: white;
+            position: relative;
+            left: 10px;
+            width: 360px;
+            text-decoration: none;
+            font-size: 220%;
+        }
+
+        #Roblox {
+            position: absolute;
+            top: 3px;
+            right: 50px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #YT {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        #blockContainer {
+            position: relative;
+            display: flex;
+            height: 50%;
+        }
+
+        .block {
+            position: relative;
+            width: 45%;
+            height: 70%;
+            border-radius: 10px;
+            border: 5px solid black;
+            margin: 2.5%;
+            padding: 10px;
+            padding-top: 0px;
+            background: white;
+        }
+
+        .header {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            left: 0px;
+            background-color: black;
+            color: white;
+        }
+
+        iframe {
+            position: absolute;
+            height: calc(100% - 30px);
+            width: 100%;
+            left: 0px;
+            top: 30px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        #play {
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            padding: 2px;
+            background-color: #3AB846;
+            border-radius: 5px;
+            border: 2px solid black;
+            width: 200px;
+            height: 50px;
+            font-size: 50px;
+            font-family: sans-serif;
+            cursor: pointer
+        }
+
+        #play span {
+            font-size: inherit;
+        }
+
+        #input {
+            position: relative;
+            width: 90%;
+            height: 300px;
+            border-radius: 10px;
+            border: 5px solid black;
+            margin: 2.5%;
+            padding: 10px;
+            padding-top: 0px;
+            background: white;
+            display: block;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        p.tab {
+            margin-left: 10px;
+        }
+
+        #youwon {
+            /*display: none;*/
+            position: absolute;
+            text-align: center;
+            width: 500px;
+            height: 200px;
+            top: 50%;
+            left: calc(50% - 250px);
+            background-color: black;
+            border-radius: 10px;
+            color: white;
+            font-size: xx-large;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="topbar">
+        <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
+        <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
+            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+                src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
+
+        </a>
+        <a href="https://www.youtube.com/@s38bw123" target="_blank">
+            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
+        </a>
+    </div>
+    <div id="blockContainer">
+        <div id="graphical" class="block">
+            <div class="header">Graphical output (what you see)</div>
+            <iframe src="about:blank" id="iframe"></iframe>
+        </div>
+        <div id="console" class="block">
+            <div class="header">Console</div>
+            <br><br>
+        </div>
+    </div>
+
+    <button id="play">
+        <span class="material-symbols-outlined">play_circle</span>
+        <p>PLAY</p>
+    </button>
+
+    <div id="input">
+        Loading level...
+    </div>
+
+    <div id="youwon">You won!<br>More levels soon!</div>
+
+    <script>
+        const input = document.getElementById("input")
+        const iframe = document.getElementById("iframe")
+        const iframeDoc = iframe.contentWindow.document
+        const consoleEl = document.getElementById("console")
+        const play = document.getElementById("play")
+
+        var levels = [
+            `<p>function callWin() {</p><p class="tab">win()</p><p>}</p><br><textarea rows="1" cols="7"></textarea>`
+        ]
+
+        var levelCodes = [[`function callWin() {win("lemonjuice")};`, "0"]]
+        var winFunc = `;function win(arg) {if (arg  === "lemonjuice") window.won = true; else console.warn("You can't call win()!")}`
+
+        function load() {
+            iframeDoc.head.innerHTML = ""
+            iframe.contentWindow.won = false
+            input.innerHTML = levels[level]
+        }
+
+        play.addEventListener("click", () => {
+            iframeDoc.head.innerHTML = ""
+            let newScript = iframeDoc.createElement("script")
+            let code = [...levelCodes[level]]
+            for (i = 0; i < code.length; i++) {
+                try {
+                    code[code.indexOf(String(i))] = document.getElementsByTagName("textarea")[i].value
+                } catch (err) { }
+            }
+            code.push(winFunc)
+            newScript.text = code.join("")
+            iframeDoc.head.appendChild(newScript)
+        })
+
+        iframe.contentWindow.console = {
+            log: (...args) => {
+                let newLog = document.createElement("p")
+                newLog.innerText = [...args]
+                consoleEl.appendChild(newLog)
+            },
+            warn: (...args) => {
+                let newLog = document.createElement("p")
+                newLog.innerText = [...args]
+                newLog.style.color = "orange"
+                consoleEl.appendChild(newLog)
+            },
+            error: (...args) => {
+                let newLog = document.createElement("p")
+                newLog.innerText = [...args]
+                newLog.style.color = "red"
+                consoleEl.appendChild(newLog)
+            }
+        }
+
+        var level = localStorage.getItem("level")
+        if (!level) localStorage.setItem("level", 0)
+
+        setInterval(() => {
+            if (iframe.contentWindow.won) {
+                console.log("Won")
+            }
+        }, 100)
+
+        load()
+    </script>
+</body>
