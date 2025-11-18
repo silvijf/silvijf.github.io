@@ -143,7 +143,9 @@
         }
 
         textarea {
-            resize: none;
+            resize: vertical;
+            max-width: 100%;
+            max-height: 100px;
         }
 
         p {
@@ -214,7 +216,7 @@
         const youwon = document.getElementById("youwon")
 
         var levels = [
-            `<p>function callWin() {</p><p class="tab">win()</p><p>}</p><br><textarea rows="1" cols="7"></textarea>`
+            `<p>function callWin() {</p><p class="tab">win()</p><p>}</p><br><textarea rows="1" cols="10"></textarea>`
         ]
 
         var levelCodes = [[`function callWin() {win("lemonjuice")};`, "0"]]
@@ -224,20 +226,14 @@
             iframeDoc.head.innerHTML = ""
             iframe.contentWindow.won = false
             input.innerHTML = levels[level]
-            setTimeout(() => {
-                let textareas = document.getElementsByTagName("textarea")
-                console.log(textareas[0])
-                for (i = 0; i < textareas.length; i++) {
-                    console.log(i)
-                    console.log(textareas[i])
-                    console.log(textareas[i].value)
-                    console.log(textareas[i][value])
-                    textareas[i].addEventListener("input", () => {
-                        if (textareas[i].value.length < 10) textareas[i].cols = 10
-                        else textareas[i].cols = textareas[i].value.length
-                    })
-                }
-            }, 1000)
+            let textareas = document.getElementsByTagName("textarea")
+            for (i = 0; i < textareas.length; i++) {
+                textareas[i].addEventListener("input", () => {
+                    let target = event.currentTarget
+                    if (target.value.length < 10) target.cols = 10
+                    else target.cols = target.value.length
+                })
+            }
         }
 
         play.addEventListener("click", () => {
@@ -279,7 +275,7 @@
             localStorage.setItem("JSLevel", 0)
             level = 0
         }
-            
+
         setInterval(() => {
             if (iframe.contentWindow.won) {
                 youwon.style.display = "block"
