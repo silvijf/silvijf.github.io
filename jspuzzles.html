@@ -25,12 +25,6 @@
             height: 95%;
         }
 
-        @media only screen and (max-width: 600px) {
-            body {
-                display: none;
-            }
-        }
-
         #topbar {
             position: relative;
             width: calc(100% + 12px);
@@ -64,6 +58,24 @@
             right: 5px;
             width: 40px;
             height: 40px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            #blockContainer {
+                flex-direction: column;
+            }
+
+            #youwon {
+                left: 5% !important;
+            }
+            
+            .block, #play, #next, #youwon {
+                width: 90% !important;
+            }
+
+            #next {
+                font-size: xx-large !important;
+            }
         }
 
         #blockContainer {
@@ -245,6 +257,7 @@
         const play = document.getElementById("play")
         const youwon = document.getElementById("youwon")
         const next = document.getElementById("next")
+        const welcome = document.getElementById("welcome")
 
         var levels = [
             `<p>function callWin() {</p><p class="tab">win();</p><p>};</p><br><textarea rows="1" cols="10"></textarea>`,
@@ -256,6 +269,9 @@
             [`let x =`, "0", `; function callWin() {if (x == 5) win()};`, "1"]
         ]
         var winFunc = `;function win(arg) {console.succes("You won!"); window.won = true;}`
+
+        const mobile = navigator.userAgentData.mobile
+        if (mobile) welcome.innerText = "Home"
 
         function load() {
             iframeDoc.head.innerHTML = ""
