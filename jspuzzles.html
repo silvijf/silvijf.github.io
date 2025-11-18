@@ -103,16 +103,22 @@
             border: none;
         }
 
-        #console {
+        #consoleContent {
+            position: absolute;
             overflow: auto;
+            display: flex;
+            flex-direction: column;
+            top: 30px;
+            height: calc(100% - 30px);
         }
 
-        #console span {
+        #consoleContent span {
             white-space: normal;
             word-break: break-word;
         }
 
-        #play {
+        #play,
+        #next {
             position: relative;
             align-items: center;
             justify-content: center;
@@ -123,14 +129,16 @@
             background-color: #3AB846;
             border-radius: 5px;
             border: 2px solid black;
-            width: 200px;
             height: 50px;
             font-size: 50px;
             font-family: sans-serif;
-            cursor: pointer
+            color: black;
+            cursor: pointer;
+            width: 400px;
+            text-wrap: nowrap;
         }
 
-        #play span {
+        #play span, #next span {
             font-size: inherit;
         }
 
@@ -149,10 +157,18 @@
         }
 
         textarea {
+            position: relative;
             resize: vertical;
             max-width: 100%;
             min-height: 22px;
             max-height: 500px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            scale: 0.9;
+            bottom: -5px;
+            box-sizing: border-box;
+            border-radius: 1px;
+            border-bottom: 1px solid rgb(118, 118, 118);
         }
 
         p {
@@ -199,7 +215,8 @@
         </div>
         <div id="console" class="block">
             <div class="header">Console</div>
-            <br><br>
+            <div id="consoleContent">
+            </div>
         </div>
     </div>
 
@@ -212,22 +229,33 @@
         Loading level...
     </div>
 
-    <div id="youwon">You won!<br>More levels soon!</div>
+    <div id="youwon">You won!
+        <div id="next">
+            <span class="material-symbols-outlined">play_circle</span>
+            <br>
+            <p>NEXT LEVEL</p>
+        </div>
+    </div>
 
     <script>
         const input = document.getElementById("input")
         const iframe = document.getElementById("iframe")
         const iframeDoc = iframe.contentWindow.document
-        const consoleEl = document.getElementById("console")
+        const consoleEl = document.getElementById("consoleContent")
         const play = document.getElementById("play")
         const youwon = document.getElementById("youwon")
+        const next = document.getElementById("next")
 
         var levels = [
-            `<p>function callWin() {</p><p class="tab">win()</p><p>}</p><br><textarea rows="1" cols="10"></textarea>`
+            `<p>function callWin() {</p><p class="tab">win();</p><p>};</p><br><textarea rows="1" cols="10"></textarea>`,
+            `<p>let x = <textarea rows="1" cols="10"></textarea>;</p><p>function callWin() {</p><p class="tab">if (x === 5) win()</p><p>};</p> <textarea rows="1" cols="10"></textarea>`
         ]
 
-        var levelCodes = [[`function callWin() {win("lemonjuice")};`, "0"]]
-        var winFunc = `;function win(arg) {if (arg  === "lemonjuice") window.won = true; else console.warn("You can't call win()!")}`
+        var levelCodes = [
+            [`function callWin() {win()};`, "0"],
+            [`let x =`, "0", `; function callWin() {if (x == 5) win()};`, "1"]
+        ]
+        var winFunc = `;function win(arg) {console.succes("You won!"); window.won = true;}`
 
         function load() {
             iframeDoc.head.innerHTML = ""
@@ -252,13 +280,19 @@
             iframeDoc.head.innerHTML = ""
             let newScript = iframeDoc.createElement("script")
             let code = [...levelCodes[level]]
-            for (i = 0; i < code.length; i++) {
-                try {
-                    code[code.indexOf(String(i))] = document.getElementsByTagName("textarea")[i].value
-                } catch (err) { }
-            }
-            code.push(winFunc)
-            newScript.text = code.join("")
+            let allTextAreas = document.querySelectorAll("textarea")
+            const winCalled = Array.from(allTextAreas).some((element => {
+                return element.value.includes("win(")
+            }))
+            if (!winCalled) {
+                for (i = 0; i < code.length; i++) {
+                    try {
+                        code[code.indexOf(String(i))] = document.getElementsByTagName("textarea")[i].value
+                    } catch (err) { }
+                }
+                code.push(winFunc)
+                newScript.text = code.join("")
+            } else newScript.text = `console.warn("You can't call win()!")`
             iframeDoc.head.appendChild(newScript)
         })
 
@@ -266,6 +300,12 @@
             log: (...args) => {
                 let newLog = document.createElement("span")
                 newLog.innerText = [...args]
+                consoleEl.appendChild(newLog)
+            },
+            succes: (...args) => {
+                let newLog = document.createElement("span")
+                newLog.innerText = [...args]
+                newLog.style.color = "green"
                 consoleEl.appendChild(newLog)
             },
             warn: (...args) => {
@@ -282,8 +322,9 @@
             }
         }
 
-        var level = localStorage.getItem("JSLevel")
-        if (!level) {
+        let lvl = localStorage.getItem("JSLevel")
+        if (lvl) var level = String(localStorage.getItem("JSLevel"))
+        else {
             localStorage.setItem("JSLevel", 0)
             level = 0
         }
@@ -298,8 +339,19 @@
         setInterval(() => {
             if (iframe.contentWindow.won) {
                 youwon.style.display = "block"
+                if (level == levels.length - 1) {
+                    next.style.display = "none"
+                    youwon.innerHTML = "You won!<br>But there may come more levels..."
+                }
             }
         }, 100)
+
+        next.addEventListener("click", () => {
+            youwon.style.display = "none"
+            level += 1
+            localStorage.setItem("JSLevel", level)
+            load()
+        })
 
         load()
     </script>
