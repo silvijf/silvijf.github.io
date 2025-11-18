@@ -103,6 +103,10 @@
             border: none;
         }
 
+        #graphical {
+            overflow: auto;
+        }
+
         #play {
             position: relative;
             align-items: center;
@@ -220,6 +224,13 @@
             iframeDoc.head.innerHTML = ""
             iframe.contentWindow.won = false
             input.innerHTML = levels[level]
+            let textareas = document.getElementsByTagName("textarea")
+            for (i = 0; i < textareas.length; i++) {
+                textareas[i].addEventListener("input", () => {
+                    if (textareas[i].value.length < 10) textareas[i].cols = 10
+                    else textareas[i].cols = textareas[i].value.length
+                })
+            }
         }
 
         play.addEventListener("click", () => {
