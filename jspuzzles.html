@@ -274,7 +274,8 @@
         if (mobile) welcome.innerText = "Home"
 
         function load() {
-            iframeDoc.head.innerHTML = ""
+            consoleEl.innerHTML = ""
+            iframeDoc.innerHTML = ""
             iframe.contentWindow.won = false
             input.innerHTML = levels[level]
             let textareas = document.getElementsByTagName("textarea")
