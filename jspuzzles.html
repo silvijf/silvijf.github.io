@@ -107,6 +107,11 @@
             overflow: auto;
         }
 
+        #console span {
+            white-space: normal;
+            word-break: break-word;
+        }
+
         #play {
             position: relative;
             align-items: center;
@@ -140,12 +145,14 @@
             padding-top: 0px;
             background: white;
             display: block;
+            overflow: auto;
         }
 
         textarea {
             resize: vertical;
             max-width: 100%;
-            max-height: 100px;
+            min-height: 22px;
+            max-height: 500px;
         }
 
         p {
@@ -252,18 +259,18 @@
 
         iframe.contentWindow.console = {
             log: (...args) => {
-                let newLog = document.createElement("p")
+                let newLog = document.createElement("span")
                 newLog.innerText = [...args]
                 consoleEl.appendChild(newLog)
             },
             warn: (...args) => {
-                let newLog = document.createElement("p")
+                let newLog = document.createElement("span")
                 newLog.innerText = [...args]
                 newLog.style.color = "orange"
                 consoleEl.appendChild(newLog)
             },
             error: (...args) => {
-                let newLog = document.createElement("p")
+                let newLog = document.createElement("span")
                 newLog.innerText = [...args]
                 newLog.style.color = "red"
                 consoleEl.appendChild(newLog)
@@ -274,6 +281,13 @@
         if (!level) {
             localStorage.setItem("JSLevel", 0)
             level = 0
+        }
+
+        iframe.contentWindow.onerror = (...args) => {
+            let newLog = document.createElement("span")
+            newLog.innerText = `${args[0]} (at line ${args[2]})`
+            newLog.style.color = "red"
+            consoleEl.appendChild(newLog)
         }
 
         setInterval(() => {
