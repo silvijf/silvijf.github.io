@@ -257,8 +257,11 @@
         }
 
         var level = localStorage.getItem("level")
-        if (!level) localStorage.setItem("level", 0)
-
+        if (!level) {
+            localStorage.setItem("level", 0)
+            level = 0
+        }
+            
         setInterval(() => {
             if (iframe.contentWindow.won) {
                 youwon.style.display = "block"
