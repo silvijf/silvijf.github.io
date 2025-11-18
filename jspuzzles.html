@@ -226,8 +226,9 @@
             input.innerHTML = levels[level]
             setTimeout(() => {
                 let textareas = document.getElementsByTagName("textarea")
-                console.log(textareas)
+                console.log(textareas[0])
                 for (i = 0; i < textareas.length; i++) {
+                    console.log(i)
                     textareas[i].addEventListener("input", () => {
                         if (textareas[i].value.length < 10) textareas[i].cols = 10
                         else textareas[i].cols = textareas[i].value.length
