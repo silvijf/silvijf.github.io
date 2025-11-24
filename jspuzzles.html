@@ -68,8 +68,11 @@
             #youwon {
                 left: 5% !important;
             }
-            
-            .block, #play, #next, #youwon {
+
+            .block,
+            #play,
+            #next,
+            #youwon {
                 width: 90% !important;
             }
 
@@ -150,7 +153,8 @@
             text-wrap: nowrap;
         }
 
-        #play span, #next span {
+        #play span,
+        #next span {
             font-size: inherit;
         }
 
@@ -251,8 +255,9 @@
 
     <script>
         const input = document.getElementById("input")
-        const iframe = document.getElementById("iframe")
-        const iframeDoc = iframe.contentWindow.document
+        const graphical = document.getElementById("graphical")
+        var iframe = document.getElementById("iframe")
+        var iframeDoc = iframe.contentWindow.document
         const consoleEl = document.getElementById("consoleContent")
         const play = document.getElementById("play")
         const youwon = document.getElementById("youwon")
@@ -275,8 +280,16 @@
 
         function load() {
             consoleEl.innerHTML = ""
-            iframeDoc.innerHTML = ""
+
+            const newIframe = document.createElement("iframe")
+            iframe.removeAttribute("id")
+            newIframe.id = "iframe"
+            newIframe.src = "about:blank"
+            graphical.replaceChild(newIframe, iframe)
+            iframe = newIframe
             iframe.contentWindow.won = false
+            setErrors()
+
             input.innerHTML = levels[level]
             let textareas = document.getElementsByTagName("textarea")
             for (i = 0; i < textareas.length; i++) {
@@ -294,7 +307,16 @@
         }
 
         play.addEventListener("click", () => {
-            iframeDoc.head.innerHTML = ""
+            const newIframe = document.createElement("iframe")
+            iframe.removeAttribute("id")
+            newIframe.id = "iframe"
+            newIframe.src = "about:blank"
+            graphical.replaceChild(newIframe, iframe)
+            iframe = newIframe
+            iframeDoc = iframe.contentWindow.document
+            iframe.contentWindow.won = false
+            setErrors()
+            
             let newScript = iframeDoc.createElement("script")
             let code = [...levelCodes[level]]
             let allTextAreas = document.querySelectorAll("textarea")
@@ -313,31 +335,42 @@
             iframeDoc.head.appendChild(newScript)
         })
 
-        iframe.contentWindow.console = {
-            log: (...args) => {
+        function setErrors() {
+            iframe.contentWindow.console = {
+                log: (...args) => {
+                    let newLog = document.createElement("span")
+                    newLog.innerText = [...args]
+                    consoleEl.appendChild(newLog)
+                },
+                succes: (...args) => {
+                    let newLog = document.createElement("span")
+                    newLog.innerText = [...args]
+                    newLog.style.color = "green"
+                    consoleEl.appendChild(newLog)
+                },
+                warn: (...args) => {
+                    let newLog = document.createElement("span")
+                    newLog.innerText = [...args]
+                    newLog.style.color = "orange"
+                    consoleEl.appendChild(newLog)
+                },
+                error: (...args) => {
+                    let newLog = document.createElement("span")
+                    newLog.innerText = [...args]
+                    newLog.style.color = "red"
+                    consoleEl.appendChild(newLog)
+                }
+            }
+
+            iframe.contentWindow.onerror = (...args) => {
                 let newLog = document.createElement("span")
-                newLog.innerText = [...args]
-                consoleEl.appendChild(newLog)
-            },
-            succes: (...args) => {
-                let newLog = document.createElement("span")
-                newLog.innerText = [...args]
-                newLog.style.color = "green"
-                consoleEl.appendChild(newLog)
-            },
-            warn: (...args) => {
-                let newLog = document.createElement("span")
-                newLog.innerText = [...args]
-                newLog.style.color = "orange"
-                consoleEl.appendChild(newLog)
-            },
-            error: (...args) => {
-                let newLog = document.createElement("span")
-                newLog.innerText = [...args]
+                newLog.innerText = `${args[0]} (at line ${args[2]})`
                 newLog.style.color = "red"
                 consoleEl.appendChild(newLog)
             }
         }
+
+
 
         let lvl = localStorage.getItem("JSLevel")
         if (lvl) var level = String(localStorage.getItem("JSLevel"))
@@ -346,14 +379,8 @@
             level = 0
         }
 
-        iframe.contentWindow.onerror = (...args) => {
-            let newLog = document.createElement("span")
-            newLog.innerText = `${args[0]} (at line ${args[2]})`
-            newLog.style.color = "red"
-            consoleEl.appendChild(newLog)
-        }
-
         setInterval(() => {
+            console.log(iframe.contentWindow.won)
             if (iframe.contentWindow.won) {
                 youwon.style.display = "block"
                 if (level == levels.length - 1) {
