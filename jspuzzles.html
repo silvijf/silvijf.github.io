@@ -372,15 +372,13 @@
 
 
 
-        let lvl = localStorage.getItem("JSLevel")
-        if (lvl) var level = String(localStorage.getItem("JSLevel"))
-        else {
+        var level = localStorage.getItem("JSLevel")
+        if (!levels[level]) {
             localStorage.setItem("JSLevel", 0)
             level = 0
         }
 
         setInterval(() => {
-            console.log(iframe.contentWindow.won)
             if (iframe.contentWindow.won) {
                 youwon.style.display = "block"
                 if (level == levels.length - 1) {
