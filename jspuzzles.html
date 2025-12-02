@@ -266,14 +266,16 @@
 
         var levels = [
             `<p>function callWin() {</p><p class="tab">win();</p><p>};</p><br><textarea rows="1" cols="10"></textarea>`,
-            `<p>let x = <textarea rows="1" cols="10"></textarea>;</p><p>function callWin() {</p><p class="tab">if (x === 5) win()</p><p>};</p> <textarea rows="1" cols="10"></textarea>`
+            `<p>let x = <textarea rows="1" cols="10"></textarea>;</p><p>function callWin() {</p><p class="tab">if (x === 5) win()</p><p>};</p> <textarea rows="1" cols="10"></textarea>`,
+            `<p>function callWin() {</p><p class="tab">win()</p><p>};</p><p>let el = document.createElement("button");</p><p>el.innerText = "Click me!";</p><p>el.addEventListener("click", () => {</p><p class="tab"><textarea rows="1" cols="10"></textarea></p>});</p><p>document.body.appendChild(el)</p>`
         ]
 
         var levelCodes = [
             [`function callWin() {win()};`, "0"],
-            [`let x =`, "0", `; function callWin() {if (x == 5) win()};`, "1"]
+            [`let x =`, "0", `; function callWin() {if (x == 5) win()};`, "1"],
+            [`function callWin() {win()}; let el = document.createElement("button"); el.innerText = "Click me!"; el.addEventListener("click", () => {`, "0", `}); document.body.appendChild(el)`]
         ]
-        var winFunc = `;function win(arg) {console.succes("You won!"); window.won = true;}`
+        var winFunc = `;function win() {console.succes("You won!"); window.won = true;}`
 
         const mobile = navigator.userAgentData.mobile
         if (mobile) welcome.innerText = "Home"
@@ -364,7 +366,7 @@
 
             iframe.contentWindow.onerror = (...args) => {
                 let newLog = document.createElement("span")
-                newLog.innerText = `${args[0]} (at line ${args[2]})`
+                newLog.innerText = `${args[0]}`
                 newLog.style.color = "red"
                 consoleEl.appendChild(newLog)
             }
