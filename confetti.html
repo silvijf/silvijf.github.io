@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Confetti!</title>
+    <style>
+      html, body {
+        height: 95%;
+      }
+
+      body {
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        transform: skew(var(--skew)) rotateX(var(--rotateX)) rotateY(var(--rotateY)) rotateZ(var(--rotateZ));
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      var confettis = []
+      var calledAnimate = false
+
+      function animate() {
+        for (let i = 0; i < confettis.length; i++) {
+          let confetti = confettis[i]
+          if (confetti["bottom"] >= 1) {
+            confetti["el"].style.bottom = `${confetti["bottom"]}%`
+            confetti["bottom"] += confetti["gravity"] / 200
+            confetti["gravity"] -= 1
+            confetti["rotatedX"] += confetti["rotateX"]
+            confetti["rotatedY"] += confetti["rotateY"]
+            confetti["rotatedZ"] += confetti["rotateX"]
+            confetti["el"].style.setProperty("--rotateX", `${confetti["rotatedX"]}deg`)
+            confetti["el"].style.setProperty("--rotateY", `${confetti["rotatedY"]}deg`)
+            confetti["el"].style.setProperty("--rotateZ", `${confetti["rotatedZ"]}deg`)
+            confetti["el"].style.left = `${confetti["lefted"]}%`
+            confetti["lefted"] += confetti["left"]
+          } else {
+            confetti["el"].remove()
+            confettis.splice(i, 1)
+          }
+        }
+      }
+
+      function createConfetti() {
+        const el = document.createElement("div")
+        el.classList.add("confetti")
+        let lefted = Math.floor(Math.random() * 100)
+        el.style.left = `${lefted}%`
+        el.style.bottom = "1%"
+        el.style.backgroundColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`
+        el.style.setProperty("--skew", `${Math.floor(Math.random() * 120 - 60)}deg`)
+        el.style.filter = `blur(${Math.floor(Math.random() * 2)}px)`
+        document.body.appendChild(el)
+        confettis.push({
+          el: el,
+          gravity: Math.floor(Math.random() * 150 + 50),
+          bottom: 1,
+          rotateX: Math.random() * 10 - 5,
+          rotateY: Math.random() * 10 - 5,
+          rotateZ: Math.random() * 10 - 5,
+          rotatedX: 0,
+          rotatedY: 0,
+          rotatedZ: 0,
+          left: Math.random() * 0.2 - 0.1,
+          lefted: lefted
+        })
+      }
+
+      function start() {
+        for (let i = 0; i < 500; i++) createConfetti()
+        
+        if (!calledAnimate) {
+          calledAnimate = true
+          setInterval(() => {
+          requestAnimationFrame(animate)
+        }, 5)
+        }
+        
+      }
+      document.body.addEventListener("click", start)
+    </script>
+  </body>
+</html>
