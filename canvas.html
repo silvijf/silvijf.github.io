@@ -322,6 +322,7 @@
         }
 
         canvas.addEventListener("mousedown", (event) => {
+            event.preventDefault()
             mouse = {
                 down: true,
                 x: event.offsetX,
@@ -330,10 +331,11 @@
         })
 
         canvas.addEventListener("touchstart", (event) => {
+            event.preventDefault()
             mouse = {
                 down: true,
-                x: event.touches[0].offsetX,
-                y: event.touches[0].offsetY,
+                x: event.touches[0].clientX - 5,
+                y: event.touches[0].clientY - 50,
             }
         })
 
@@ -348,7 +350,7 @@
             mouse.down = false;
         })
 
-        size.addEventListener("mousedown", () => {
+        size.addEventListener("click", () => {
             document.body.style.setProperty("--grab", "grabbing")
         })
 
@@ -398,10 +400,20 @@
         })
 
         canvas.addEventListener("mousemove", (event) => {
+            event.preventDefault()
             mouse = {
                 down: mouse.down,
                 x: Math.round(event.offsetX) + 0.5,
                 y: Math.round(event.offsetY) + 0.5,
+            }
+        })
+
+        canvas.addEventListener("touchmove", (event) => {
+            event.preventDefault()
+            mouse = {
+                down: true,
+                x: event.touches[0].clientX - 5,
+                y: event.touches[0].clientY - 50,
             }
         })
 
