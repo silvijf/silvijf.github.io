@@ -27,7 +27,6 @@
       z-index: 1000;
       background-color: white;
       opacity: 1;
-      display: none;
       transition: opacity 1s;
     }
 
@@ -241,8 +240,9 @@
 
       params = new URLSearchParams(window.location.search)
       if (params.get("blur") == "true") {
-        effect.css("display", "block")
         effect.animate({"opacity": "0"})
+      } else {
+        effect.css("display", "none")
       }
 
       function updateElements() {

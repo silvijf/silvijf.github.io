@@ -7,7 +7,6 @@
     <title>Fainer</title>
     <link rel="icon" type="image/x-icon"
         href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Fredoka&display=swap" rel="stylesheet">
@@ -169,44 +168,36 @@
 
         @keyframes expandbutton {
             from {
-                right: 0px;
+                right: 100px;
             }
 
             to {
-                right: 100px;
+                right: 105%;
             }
         }
 
         @keyframes expand {
             from {
-                right: -120px;
+                height: 50%;
+                top: 25%;
+                width: 120px;
+                right: -100%;
             }
 
             to {
+                height: 100%;
+                top: 0%;
+                width: 105%;
                 right: -20px;
             }
         }
 
-        @keyframes expandicon {
-            from {
-                transform: rotate(-90deg);
-            }
-
-            to {
-                transform: rotate(90deg);
-            }
-        }
-
         .expand-button {
-            animation: expandbutton 0.3s cubic-bezier(0, 0.88, 0.88, 1.33);
+            animation: expandbutton 1s;
         }
 
         .expand {
-            animation: expand 0.3s cubic-bezier(0, 0.88, 0.88, 1.33);
-        }
-
-        .expand-icon {
-            animation: expandicon 0.3s
+            animation: expand 1s;
         }
 
         #aboutme-expand {
@@ -221,6 +212,7 @@
             right: 0px;
             cursor: pointer;
             border: 2px solid black;
+            animation-fill-mode: forwards;
         }
 
         #aboutme-expand span {
@@ -241,19 +233,13 @@
         #aboutme {
             border-radius: 10px;
             position: absolute;
-            background-color: #051f55;
+            background-color: white;
             height: 50%;
             top: 25%;
             width: 120px;
             right: -120px;
             color: white;
-        }
-
-        .language {
-            border: 2px solid black;
-            line-height: 1.6;
-            padding-top: -2px;
-            padding-bottom: -2px;
+            animation-fill-mode: forwards;
         }
 
         .jelln {
@@ -408,16 +394,7 @@
             About me
         </span>
     </div>
-    <div id="aboutme">
-        Hi, I'm Fainer! <br>
-        Languages:
-        <span class="language">HTML</span>, <br>
-        <span class="language">CSS</span>,
-        <span class="language">JS</span>,
-        <span class="language">Python</span>, <br>
-        <span class="language">Dutch</span> and
-        <span class="language">English</span>
-    </div>
+    <div id="aboutme"></div>
 
     <img src="https://www.kuijtkachelsenhaarden.nl/images/productimages/big/img-20240523-173735.jpg" id="fireplace"
         class="jelln">
@@ -549,36 +526,12 @@
         }
 
         aboutmeExpand.addEventListener("click", () => {
-            if (expanded) {
-                aboutmeExpand.style.animationDirection = "reverse"
-                aboutme.style.animationDirection = "reverse"
-                aboutmeIcon.style.animationDirection = "reverse"
-                aboutmeExpand.classList.add("expand-button")
-                aboutme.classList.add("expand")
-                aboutmeIcon.classList.add("expand-icon")
-                aboutmeExpand.style.right = "0px"
-                aboutme.style.right = "-120px"
-                aboutmeIcon.style.transform = "rotate(0deg)"
-                expanded = false
-
-            } else {
-                aboutmeExpand.style.animationDirection = "normal"
-                aboutme.style.animationDirection = "normal"
-                aboutmeIcon.style.animationDirection = "normal"
-                aboutmeExpand.classList.add("expand-button")
-                aboutme.classList.add("expand")
-                aboutmeIcon.classList.add("expand-icon")
-                aboutmeExpand.style.right = "100px"
-                aboutme.style.right = "-20px"
-                aboutmeIcon.style.transform = "rotate(180deg)"
-                expanded = true
-            }
+            aboutmeExpand.classList.add("expand-button")
+            aboutme.classList.add("expand")
         })
 
         aboutmeExpand.addEventListener("animationend", () => {
-            aboutmeExpand.classList.remove("expand-button")
-            aboutme.classList.remove("expand")
-            aboutmeIcon.classList.remove("expand-icon")
+            window.location.href = "about.html?blur=true"
         })
     </script>
 </body>
