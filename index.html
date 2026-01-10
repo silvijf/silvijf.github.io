@@ -534,7 +534,8 @@
             window.location.href = "about.html?blur=true"
             aboutmeExpand.style.animationFillMode = "none";
             setTimeout(() => {
-            aboutme.style.animationFillMode = "none";
+                aboutmeExpand.classList.remove("expand-button")
+                aboutme.classList.remove("expand")
             }, 100)
         })
     </script>
