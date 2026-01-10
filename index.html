@@ -532,6 +532,10 @@
 
         aboutmeExpand.addEventListener("animationend", () => {
             window.location.href = "about.html?blur=true"
+            aboutmeExpand.style.animationFillMode = "none";
+            setTimeout(() => {
+            aboutme.style.animationFillMode = "none";
+            }, 100)
         })
     </script>
 </body>
