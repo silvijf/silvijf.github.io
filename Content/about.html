@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>About Fainer</title>
+  <link rel="icon" type="image/x-icon"
+    href="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/logo.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      background-color: #212328;
+      font-family: 'Montserrat' !important;
+      overflow-x: hidden;
+      height: 2400px;
+    }
+
+    .item {
+      padding-top: 150px;
+      position: relative;
+      width: 100%;
+    }
+
+    .left {
+      transform: rotate(-10deg);
+      padding-left: 40px;
+    }
+
+    .right {
+      transform: rotate(10deg);
+    }
+
+    #one {
+      background-color: rgb(57, 175, 205);
+      height: 400px;
+      font-size: 200px;
+      top: -50px;
+      z-index: 100;
+      word-break: keep-all;
+    }
+
+    #two {
+      background-color: rgb(222, 113, 54);
+      height: 200px;
+      font-size: xx-large;
+      z-index: 99;
+      top: 50px;
+      text-align: center;
+    }
+
+    #langs {
+      background-color: black;
+      color: white;
+      margin-left: auto;
+      margin-right: auto;
+      width: 80%;
+      text-align: center;
+      border-radius: 30px;
+      scale: 0.1;
+      filter: blur(45px);
+      top: -200px;
+    }
+
+    #languages {
+      display: grid;
+      width: 100%;
+      justify-content: center;
+    }
+
+    #languages div {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      border: 3px solid gray;
+      border-radius: 5px;
+      margin: 10px;
+    }
+
+    #languages img {
+      width: 50px;
+      height: 50px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 5px;
+      border-radius: 5px;
+    }
+
+    #languages p {
+      position: relative;
+      bottom: -10px;
+    }
+
+    .slide {
+      position: relative;
+      border-radius: 30px;
+      padding-left: 50px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      padding-right: 50px;
+      margin-top: 70px;
+      width: 60%;
+    }
+
+    .slide p {
+      color: white;
+      margin-top: auto;
+      margin-bottom: auto;
+      position: relative;
+      font-size: x-large;
+    }
+
+    #learning {
+      background-color: rgb(74, 137, 74);
+      left: -100%;
+    }
+
+    #working-on {
+      background-color: #42baaa;
+    }
+
+    #footer {
+      position: absolute;
+      display: flex;
+      justify-content: space-around;
+      padding-top: 200px;
+      top: 2050px;
+      background-color: black;
+      width: calc(100% + 5px);
+      left: -5px;
+      height: 500px;
+      color: white;
+      border-top-left-radius: 100%;
+      border-top-right-radius: 100%;
+      filter: blur(300px);
+      transition: filter 1s, top 2s;
+    }
+
+    #footer.show {
+      top: 1900px;
+      filter: blur(0px);
+    }
+
+    #footer p {
+      position: relative;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #footer img {
+      width: 50px;
+      height: 50px;
+      padding: 20px;
+    }
+
+    #footer span {
+      position: relative;
+      height: 80%;
+      border-right: 1px solid white;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+</head>
+
+<body>
+  <div class="item left" id="one"><b>About&nbsp;Fainer</b></div>
+  <div class="item right" id="two">Hello, I'm Fainer!</div>
+  <div class="item" id="langs">
+    <p>Skills and technologies:</p>
+    <div id="languages">
+      <div style="grid-column: 1; grid-row: 2"><img src="https://silvijf.github.io/Content/about/html5.png">
+        <p>HTML</p>
+      </div>
+      <div style="grid-column: 2; grid-row: 2"><img src="https://silvijf.github.io/Content/about/css3.png">
+        <p>CSS</p>
+      </div>
+      <div style="grid-column: 3; grid-row: 2"><img src="https://silvijf.github.io/Content/about/js.png">
+        <p>JS</p>
+      </div>
+      <div style="grid-column: 4; grid-row: 2"><img src="https://silvijf.github.io/Content/about/jquery.png">
+        <p>jQuery</p>
+      </div>
+      <div style="grid-column: 5; grid-row: 2"><img src="https://silvijf.github.io/Content/about/python.jpeg">
+        <p>Python</p>
+      </div>
+    </div>
+  </div>
+  <div id="learning" class="slide">
+    <p>Loading...</p>
+  </div>
+  <div id="working-on" class="slide">
+    <p>Loading...</p>
+  </div>
+  <div id="footer">
+    <div>
+      <a href="https://github.com/silvijf" target="_blank" title="Go to my GitHub">
+        <img src="https://silvijf.github.io/Content/about/github.png">
+      </a>
+    </div>
+    <span></span>
+    <div>
+      <p>Bye!</p>
+    </div>
+    <span></span>
+    <div>
+      <a href="https://silvijf.github.io" target="_blank" title="Go to my site">
+        <img src="https://silvijf.github.io/Content/logo.jpg">
+      </a>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      const langs = $("#langs")
+      const learning = $("#learning")
+      const learningText = $("#learning p")
+      const workingOn = $("#working-on")
+      const workingOnText = $("#working-on p")
+      const footer = $("#footer")
+      function updateElements() {
+        console.log(document.documentElement.scrollTop);
+        let scroll = document.documentElement.scrollTop;
+        let scaleLangs = (scroll - 350) / 350;
+        if (scaleLangs < 0) scaleLangs = 0;
+        if (scaleLangs > 1) scaleLangs = 1;
+        let blurLangs = (700 - (scroll)) / 400 * 15;
+        if (blurLangs < 0) blurLangs = 0;
+        let topLangs = -200 + (scroll - 350) / 350 * 200;
+        if (topLangs < -200) topLangs = -200;
+        if (topLangs > 0) topLangs = 0;
+        langs.css({
+          "scale": scaleLangs,
+          "filter": `blur(${blurLangs}px)`,
+          "top": `${topLangs}px`
+        });
+        let leftLearning = (scroll - 1000) * 4;
+        if (leftLearning > 100) leftLearning = 100;
+        learning.css("left", `${leftLearning}px`);
+        let rightWorkingOn = (scroll - 1300) * 4;
+        if (rightWorkingOn > -500) rightWorkingOn = -500;
+        workingOn.css("right", `${rightWorkingOn}px`);
+        if (scroll > 1700) {
+          footer.addClass("show")
+        }
+      }
+      document.addEventListener("scroll", updateElements);
+
+      $.get("https://raw.githubusercontent.com/silvijf/silvijf/refs/heads/main/readme.md", (data, status) => {
+        if (status == "success") {
+          let startIndex = data.indexOf("🌱");
+          let endIndex = data.indexOf("\n", startIndex);
+          learningText.html(marked.parse(data.substring(startIndex, endIndex)));
+          startIndex = data.indexOf("📝");
+          endIndex = data.indexOf("\n", startIndex);
+          workingOnText.html(marked.parse(data.substring(startIndex, endIndex)))
+          $("a").attr("target", "_blank")
+        }
+      })
+
+      updateElements()
+    })
+  </script>
+</body>
+
+</html>
