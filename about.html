@@ -17,7 +17,7 @@
       overflow-x: hidden;
       height: 2400px;
     }
-    
+
     #effect {
       position: absolute;
       width: 150%;
@@ -240,7 +240,10 @@
 
       params = new URLSearchParams(window.location.search)
       if (params.get("blur") == "true") {
-        effect.animate({"opacity": "0"})
+        effect.animate({ "opacity": "0" });
+        setTimeout(() => {
+          effect.css("display", "none");
+        }, 1000);
       } else {
         effect.css("display", "none")
       }
