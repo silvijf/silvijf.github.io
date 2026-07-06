@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat';
+            overflow-x: hidden;
+        }
+
+        :root {
+            --border: black;
+            --light-bg: #ddf0ea;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --border: #969e9d;
+                --light-bg: #41474d;
+            }
+        }
+
+        button {
+            transition: 100ms;
+        }
+
+        button:hover {
+            scale: 1.05;
+        }
+
+        button:active {
+            scale: 0.95;
+        }
+
+        #machine-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .machine {
+            position: relative;
+            width: 200px;
+            height: 225px;
+            border: 2px solid var(--border);
+        }
+
+        .compartment {
+            position: relative;
+            cursor: pointer;
+            width: 40px;
+            height: 10px;
+            border: 2px solid var(--border);
+            --background: #ddf0ea;
+            background-color: var(--background);
+            margin: 10px;
+            transition: 500ms;
+            --border-size: 0px;
+            z-index: 1;
+        }
+
+        .compartment.open {
+            scale: 2;
+            transform: translateY(10px);
+            --border-size: 8px;
+        }
+
+        .compartment.drag-over {
+            --background: #a2dbc7;
+        }
+
+        .compartment.deterged {
+            --background: #f0f09c;
+        }
+
+        .compartment:before {
+            content: '';
+            position: absolute;
+            border-bottom: var(--border-size) solid var(--background);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            transition: 500ms;
+            width: 32px;
+            height: 0;
+            bottom: 11.5px;
+            z-index: 1;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .circle {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 10px;
+            border-radius: 100%;
+            border: 2px solid var(--border);
+            transition: 500ms;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle.drag-over {
+            background-color: var(--light-bg);
+        }
+
+        .circle input {
+            width: 30px;
+            padding: 5px;
+        }
+
+        .circle button {
+            background-color: var(--light-bg);
+            border-radius: 5px;
+            border: 2px solid var(--border);
+            padding: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .circle.washing {
+            animation: spin 1s infinite linear;
+        }
+
+        .timer {
+            font-size: 50px;
+            position: absolute;
+            margin: 0;
+            top: 90px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .circle img {
+            width: 50px;
+            position: relative;
+            top: 50px;
+        }
+
+        #detergent-container {
+            position: absolute;
+            right: 0;
+            top: 0px;
+            width: 50px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        #detergent-image {
+            width: 50px;
+            background-color: #b3e3e1;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            cursor: grab;
+        }
+
+        #detergent:before,
+        #detergent:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            right: 0;
+        }
+
+        #detergent:before {
+            top: calc(50% - 65px);
+            border-bottom: 30px solid #b3e3e1;
+            border-left: 50px solid transparent;
+            border-bottom-left-radius: 10px;
+        }
+
+        #detergent:after {
+            bottom: calc(50% - 61px);
+            border-top: 30px solid #b3e3e1;
+            border-left: 50px solid transparent;
+            border-top-left-radius: 10px;
+        }
+
+        #money-container {
+            position: absolute;
+            bottom: 0;
+            right: 29.5px;
+            background-color: #8ee38e;
+            padding: 5px;
+            padding-right: 40px;
+            font-size: xx-large;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 10px;
+        }
+
+        #money-container:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -30px;
+            width: 0;
+            height: 0;
+            border-bottom: 49px solid #8ee38e;
+            border-right: 35px solid transparent;
+            border-top-left-radius: 10px;
+        }
+
+        #money {
+            margin: 0px;
+            border-radius: 10px;
+            cursor: grab;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="machine-container">
+        <div class="machine">
+            <div class="compartment"></div>
+            <div class="circle"></div>
+        </div>
+    </div>
+    <div id="detergent-container">
+        <div id="detergent">
+            <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image">
+        </div>
+    </div>
+    <div id="money-container">
+        <p id="money" draggable="true">$5</p>
+    </div>
+
+    <script>
+        const machines = document.getElementsByClassName("machine")
+        const compartments = document.getElementsByClassName("compartment");
+        const circles = document.getElementsByClassName("circle");
+        const moneyEl = document.getElementById("money");
+
+        var money = 5;
+        var moneyInserted = {0: null};
+        var timers = {0: null};
+
+        var compartmentTimeout;
+        var laundryInterval;
+
+        function start() {
+            localStorage.setItem("laundryMoney", "5");
+        }
+
+        function continueGame() {
+            money = Number(localStorage.getItem("laundryMoney"));
+            moneyEl.innerText = `$${money}`;
+        }
+
+        function changeMoney(count) {
+            money += count;
+            moneyEl.innerText = `$${money}`;
+            localStorage.setItem("laundryMoney", money)
+        }
+
+        function timer(machine, machineIndex, timerEl, interval) {
+            timers[machineIndex] -= 1;
+            timerEl.innerText = timers[machineIndex];
+            if (timers[machineIndex] == 0) {
+                clearInterval(interval);
+                finishLaundry(machine, machineIndex);
+            }
+        }
+
+        function startLaundry(el) {
+            const machine = el.parentElement;
+            const machineIndex = [].slice.call(machines).indexOf(machine)
+            const compartment = machine.children[0];
+            if (compartment.classList.contains("deterged")) {
+                if (el.children[0].value > 0) {
+                    changeMoney(-el.children[0].value);
+                    moneyInserted[machineIndex] = el.children[0].value;
+                    const bill = document.createElement("img");
+                    bill.src = "Content/Money_Laundry_Simulator/bill.webp";
+                    bill.draggable = false;
+                    const timerEl = document.createElement("p");
+                    timerEl.classList.add("timer")
+                    timers[machineIndex] = 5;
+                    timerEl.innerText = timers[machineIndex]
+                    laundryInterval = setInterval(() => {timer(machine, machineIndex, timerEl, laundryInterval)}, 1000);
+                    el.replaceChildren(bill);
+                    machine.appendChild(timerEl);
+                    el.classList.remove("inserting");
+                    el.classList.add("washing");
+                    compartment.classList.remove("open");
+                }
+            } else {
+                compartment.classList.add("drag-over")
+                try {
+                    clearTimeout(compartmentTimeout)
+                } catch {}
+                compartmentTimeout = setTimeout(() => {
+                    compartment.classList.remove("drag-over")
+                }, 500)
+            }
+        }
+
+        function finishLaundry(machine, machineIndex) {
+            const compartment = machine.children[0];
+            const circle = machine.children[1];
+            const timerEl = machine.children[2];
+            compartment.classList.remove("deterged");
+            circle.classList.remove("washing");
+            circle.replaceChildren();
+            timerEl.remove()
+            changeMoney(Math.floor(moneyInserted[machineIndex] * 1.5))
+        }
+
+        moneyEl.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("Text", "money");
+        })
+
+        for (i = 0; i < compartments.length; i++) {
+            compartments[i].addEventListener("click", (e) => {
+                const circle = e.target.parentElement.children[1];
+                if (e.target.classList.contains("open")) {
+                    e.target.classList.remove("open");
+                } else if (!circle.classList.contains("washing")) {
+                    e.target.classList.add("open");
+                }
+            })
+
+            compartments[i].addEventListener("dragover", (e) => {
+                e.preventDefault();
+                if (e.target.classList.contains("open")) {
+                    e.target.classList.add("drag-over");
+                }
+            })
+
+            compartments[i].addEventListener("dragleave", (e) => {
+                e.target.classList.remove("drag-over");
+            })
+
+            compartments[i].addEventListener("drop", (e) => {
+                e.target.classList.remove("drag-over")
+                if (e.target.classList.contains("open")) {
+                    e.preventDefault();
+                    const data = e.dataTransfer.getData("text");
+                    if (data.endsWith("detergent.png")) {
+                        e.target.classList.add("deterged");
+                    }
+                }
+            })
+        }
+
+        for (i = 0; i < circles.length; i++) {
+            circles[i].addEventListener("dragover", (e) => {
+                e.preventDefault();
+                e.target.classList.add("drag-over");
+            })
+
+            circles[i].addEventListener("dragleave", (e) => {
+                e.target.classList.remove("drag-over");
+            })
+
+            circles[i].addEventListener("drop", (e) => {
+                e.target.classList.remove("drag-over")
+                e.preventDefault();
+                const data = e.dataTransfer.getData("text");
+                if (data == "money" && !e.target.classList.contains("inserting")) {
+                    e.target.classList.add("inserting")
+                    const input = document.createElement("input")
+                    input.type = "number"
+                    input.placeholder = money
+                    const button = document.createElement("button")
+                    button.innerText = "Insert money"
+                    button.addEventListener("click", () => { startLaundry(e.target) })
+                    e.target.appendChild(input)
+                    e.target.appendChild(button)
+                }
+            })
+        }
+
+        if (localStorage.getItem("laundryMoney")) continueGame()
+        else start()
+
+    </script>
+</body>
+
+</html>

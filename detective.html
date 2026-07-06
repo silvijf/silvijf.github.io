@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --background-primary: linear-gradient(135deg, #72c2ba, #9fcfe3)
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-primary: linear-gradient(135deg, #4a827c, #628ea1)
+            }
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Montserrat';
+            background: var(--background-primary);
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #canvas {
+            width: 80%;
+            border: 2px solid black;
+            border-radius: 10px;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h3>Detective drama</h3>
+        <canvas id="canvas" width="800" height="450"></canvas>
+
+        <script>
+            const canvas = document.getElementById("canvas")
+            const ctx = canvas.getContext("2d")
+
+            function logoAnimation() {
+                let gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                gradient.addColorStop("0", "#353838");
+                gradient.addColorStop("1", "#bfc7c7");
+                ctx.strokeStyle = gradient;
+                let width = 1;
+                let height = 1;
+                let type = 1;
+                var interval = setInterval(() => {
+                    ctx.beginPath();
+                    if (type == 1) {
+                        ctx.moveTo(200, 160);
+                        ctx.lineTo(200 + width, 160);
+                        ctx.moveTo(200, 160);
+                        ctx.lineTo(200, 160 + height);
+                    } else {
+                        ctx.moveTo(600, 260);
+                        ctx.lineTo(600 - width, 260);
+                        ctx.moveTo(600, 260);
+                        ctx.lineTo(600, 260 - height);
+                    }
+
+                    if (height == 100) {
+                        if (type == 1) {
+                            type++;
+                            width = 1;
+                            height = 1;
+                        } else {
+                            clearInterval(interval)
+                        }
+                    }
+
+                    ctx.stroke();
+                    width += 4;
+                    height++;
+                })
+            }
+
+            function showLogo() {
+                setTimeout(() => {
+                    let r = 0;
+                    let gb = 0;
+                    var interval = setInterval(() => {
+                        ctx.font = "50px Montserrat";
+                        ctx.fillStyle = `rgb(${r}, ${gb}, ${gb})`;
+                        ctx.textAlign = "center";
+                        ctx.fillText("Fainer Games", canvas.width / 2, canvas.height / 2);
+                        if (r < 100) r++;
+                        if (gb < 200) gb++;
+                        else {
+                            clearInterval(interval);
+                            logoAnimation();
+                        }
+                    })
+                })
+            }
+
+            function start() {
+                setTimeout(() => {
+                    showLogo()
+                }, 1000)
+            }
+
+            window.addEventListener("load", start);
+        </script>
+    </div>
+</body>
