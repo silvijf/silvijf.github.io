@@ -7,7 +7,7 @@ This is my site.
 - [x] Save washing progress
 - [x] Shop
 - [x] Money indicator floats with scroll
-- [ ] More washing machines
+- [x] More washing machines
 - [ ] Limited detergent
 - [ ] More detergent types
 - [ ] Smooth drag
