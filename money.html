@@ -238,69 +238,87 @@
     </div>
 
     <script>
-        const machines = document.getElementsByClassName("machine")
+        const machineEls = document.getElementsByClassName("machine")
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
         const moneyEl = document.getElementById("money");
 
         var money = 5;
-        var moneyInserted = {0: null};
-        var timers = {0: null};
+        var machines = [{ type: "normal", state: "idle", timer: null, money: null }]
 
         var compartmentTimeout;
         var laundryInterval;
 
-        function start() {
-            localStorage.setItem("laundryMoney", "5");
-        }
-
         function continueGame() {
             money = Number(localStorage.getItem("laundryMoney"));
             moneyEl.innerText = `$${money}`;
+            machines = JSON.parse(localStorage.getItem("laundryMachines"));
+            for (i = 0; i < machines.length; i++) {
+                if (machines[i]["state"] == "running") {
+                    const machine = machineEls[i];
+                    const compartment = machine.children[0];
+                    startLaundry(machine.children[1], machine, i, compartment,
+                        machines[i]["timer"], machines[i]["money"])
+                }
+            }
+        }
+
+        function save() {
+            localStorage.setItem("laundryMoney", money);
+            localStorage.setItem("laundryMachines", JSON.stringify(machines))
         }
 
         function changeMoney(count) {
             money += count;
             moneyEl.innerText = `$${money}`;
             localStorage.setItem("laundryMoney", money)
+            save()
         }
 
         function timer(machine, machineIndex, timerEl, interval) {
-            timers[machineIndex] -= 1;
-            timerEl.innerText = timers[machineIndex];
-            if (timers[machineIndex] == 0) {
+            machines[machineIndex]["timer"] -= 1;
+            timerEl.innerText = machines[machineIndex]["timer"];
+            if (machines[machineIndex]["timer"] == 0) {
                 clearInterval(interval);
                 finishLaundry(machine, machineIndex);
             }
+            save();
         }
 
-        function startLaundry(el) {
+        function startLaundry(circle, machine, machineIndex, compartment, secs, moneyInserted) {
+            const bill = document.createElement("img");
+            bill.src = "Content/Money_Laundry_Simulator/bill.webp";
+            bill.draggable = false;
+            const timerEl = document.createElement("p");
+            timerEl.classList.add("timer")
+            machines[machineIndex]["timer"] = secs;
+            timerEl.innerText = machines[machineIndex]["timer"]
+            laundryInterval = setInterval(() => { timer(machine, machineIndex, timerEl, laundryInterval) }, 1000);
+            circle.replaceChildren(bill);
+            machine.appendChild(timerEl);
+            circle.classList.remove("inserting");
+            circle.classList.add("washing");
+            compartment.classList.remove("open");
+            save();
+        }
+
+        function checkStartLaundry(el) {
             const machine = el.parentElement;
-            const machineIndex = [].slice.call(machines).indexOf(machine)
+            const machineIndex = [].slice.call(machineEls).indexOf(machine)
             const compartment = machine.children[0];
+            const moneyInserted = el.children[0].value;
             if (compartment.classList.contains("deterged")) {
                 if (el.children[0].value > 0) {
-                    changeMoney(-el.children[0].value);
-                    moneyInserted[machineIndex] = el.children[0].value;
-                    const bill = document.createElement("img");
-                    bill.src = "Content/Money_Laundry_Simulator/bill.webp";
-                    bill.draggable = false;
-                    const timerEl = document.createElement("p");
-                    timerEl.classList.add("timer")
-                    timers[machineIndex] = 5;
-                    timerEl.innerText = timers[machineIndex]
-                    laundryInterval = setInterval(() => {timer(machine, machineIndex, timerEl, laundryInterval)}, 1000);
-                    el.replaceChildren(bill);
-                    machine.appendChild(timerEl);
-                    el.classList.remove("inserting");
-                    el.classList.add("washing");
-                    compartment.classList.remove("open");
+                    machines[machineIndex]["state"] = "running";
+                    changeMoney(-moneyInserted);
+                    machines[machineIndex]["money"] = moneyInserted;
+                    startLaundry(el, machine, machineIndex, compartment, 5, moneyInserted);
                 }
             } else {
                 compartment.classList.add("drag-over")
                 try {
                     clearTimeout(compartmentTimeout)
-                } catch {}
+                } catch { }
                 compartmentTimeout = setTimeout(() => {
                     compartment.classList.remove("drag-over")
                 }, 500)
@@ -308,6 +326,7 @@
         }
 
         function finishLaundry(machine, machineIndex) {
+            machines[machineIndex]["state"] = "idle";
             const compartment = machine.children[0];
             const circle = machine.children[1];
             const timerEl = machine.children[2];
@@ -315,7 +334,8 @@
             circle.classList.remove("washing");
             circle.replaceChildren();
             timerEl.remove()
-            changeMoney(Math.floor(moneyInserted[machineIndex] * 1.5))
+            changeMoney(Math.floor(machines[machineIndex]["money"] * 1.5))
+            save()
         }
 
         moneyEl.addEventListener("dragstart", (e) => {
@@ -370,21 +390,21 @@
                 e.preventDefault();
                 const data = e.dataTransfer.getData("text");
                 if (data == "money" && !e.target.classList.contains("inserting")) {
-                    e.target.classList.add("inserting")
-                    const input = document.createElement("input")
-                    input.type = "number"
-                    input.placeholder = money
-                    const button = document.createElement("button")
-                    button.innerText = "Insert money"
-                    button.addEventListener("click", () => { startLaundry(e.target) })
-                    e.target.appendChild(input)
-                    e.target.appendChild(button)
+                    e.target.classList.add("inserting");
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.placeholder = money;
+                    const button = document.createElement("button");
+                    button.innerText = "Insert money";
+                    button.addEventListener("click", () => { checkStartLaundry(e.target) })
+                    e.target.appendChild(input);
+                    e.target.appendChild(button);
                 }
             })
         }
 
-        if (localStorage.getItem("laundryMoney")) continueGame()
-        else start()
+        if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
+        else save();
 
     </script>
 </body>
