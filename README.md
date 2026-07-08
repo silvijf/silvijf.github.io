@@ -10,6 +10,7 @@ This is my site.
 - [x] More washing machines
 - [ ] Sell machine button
 - [ ] Offline earnings
+- [ ] Balancing
 - [ ] Limited detergent and more detergent types
 - [ ] Smooth drag
 - [ ] Mobile support
