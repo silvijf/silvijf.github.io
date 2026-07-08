@@ -394,6 +394,7 @@
             machines[machineIndex].timer -= 1;
             timerEl.innerText = machines[machineIndex].timer;
             if (machines[machineIndex].timer == 0) {
+                console.log(intervalIndex)
                 clearInterval(intervalIndex);
                 finishLaundry(machine, machineIndex);
             }
