@@ -8,8 +8,7 @@ This is my site.
 - [x] Shop
 - [x] Money indicator floats with scroll
 - [x] More washing machines
-- [ ] Limited detergent
-- [ ] More detergent types
+- [ ] Limited detergent and more detergent types
 - [ ] Smooth drag
 - [ ] Mobile support
 - [ ] Tutorial
