@@ -29,6 +29,7 @@
 
         button {
             transition: 100ms;
+            cursor: pointer;
         }
 
         button:hover {
@@ -42,18 +43,22 @@
         #machine-container {
             display: flex;
             justify-content: space-around;
+            max-width: 100%;
+            flex-wrap: wrap;
         }
 
-        .machine {
+        .machine,
+        .machine-example {
             position: relative;
             width: 200px;
             height: 225px;
             border: 2px solid var(--border);
+            margin-bottom: 20px;
         }
 
-        .compartment {
+        .compartment,
+        .compartment-example {
             position: relative;
-            cursor: pointer;
             width: 40px;
             height: 10px;
             border: 2px solid var(--border);
@@ -63,6 +68,14 @@
             transition: 500ms;
             --border-size: 0px;
             z-index: 1;
+        }
+
+        .compartment {
+            cursor: pointer;
+        }
+
+        .compartment-example {
+            cursor: not-allowed
         }
 
         .compartment.open {
@@ -98,7 +111,8 @@
             }
         }
 
-        .circle {
+        .circle,
+        .circle-example {
             position: relative;
             width: 180px;
             height: 180px;
@@ -126,7 +140,6 @@
             border: 2px solid var(--border);
             padding: 5px;
             margin: 5px;
-            cursor: pointer;
         }
 
         .circle.washing {
@@ -156,6 +169,7 @@
             height: 100%;
             display: flex;
             align-items: center;
+            z-index: 1;
         }
 
         #detergent-image {
@@ -187,6 +201,43 @@
             border-top: 30px solid #b3e3e1;
             border-left: 50px solid transparent;
             border-top-left-radius: 10px;
+        }
+
+        #shop {
+            position: relative;
+            width: calc(100% - 35px);
+            left: -5px;
+            padding: 30px;
+            display: flex;
+            margin-top: 100px;
+            border-top: 5px solid var(--light-bg);
+            border-radius: 20px;
+        }
+
+        .shop-item {
+            border: 5px solid var(--light-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-left: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .shop-item p {
+            margin-top: 0;
+        }
+
+        .price {
+            transform: rotate(20deg);
+            background-color: var(--light-bg);
+            font-size: larger;
+        }
+
+        .buy {
+            background-color: var(--light-bg);
+            border-radius: 5px;
+            width: 50px;
         }
 
         #money-container {
@@ -233,30 +284,52 @@
             <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image">
         </div>
     </div>
+    <div id="shop">
+        <div class="shop-item">
+            <p>Normal machine</p>
+            <p class="price">$30</p>
+            <div class="machine-example">
+                <div class="compartment-example"></div>
+                <div class="circle-example"></div>
+            </div>
+            <button class="buy">Buy</button>
+        </div>
+    </div>
     <div id="money-container">
         <p id="money" draggable="true">$5</p>
     </div>
 
     <script>
+        const machineContainer = document.getElementById("machine-container")
         const machineEls = document.getElementsByClassName("machine")
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
         const moneyEl = document.getElementById("money");
+        const buys = document.getElementsByClassName("buy");
 
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null }]
 
         var compartmentTimeout;
-        var laundryInterval;
+        var laundryIntervals;
 
         function continueGame() {
             money = Number(localStorage.getItem("laundryMoney"));
             moneyEl.innerText = `$${money}`;
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
-            for (i = 0; i < machines.length; i++) {
+            for (let i = 0; i < machines.length; i++) {
+                if (i > 0) {
+                    machineContainer.insertAdjacentHTML("beforeend", `
+                    <div class="machine">
+                        <div class="compartment"></div>
+                        <div class="circle"></div>
+                    </div>
+                    `);
+                }
                 if (machines[i]["state"] == "running") {
                     const machine = machineEls[i];
                     const compartment = machine.children[0];
+                    compartment.classList.add("deterged");
                     startLaundry(machine.children[1], machine, i, compartment,
                         machines[i]["timer"], machines[i]["money"])
                 }
@@ -275,11 +348,11 @@
             save()
         }
 
-        function timer(machine, machineIndex, timerEl, interval) {
+        function timer(machine, machineIndex, timerEl, intervalIndex) {
             machines[machineIndex]["timer"] -= 1;
             timerEl.innerText = machines[machineIndex]["timer"];
             if (machines[machineIndex]["timer"] == 0) {
-                clearInterval(interval);
+                clearInterval(intervalIndex);
                 finishLaundry(machine, machineIndex);
             }
             save();
@@ -293,7 +366,7 @@
             timerEl.classList.add("timer")
             machines[machineIndex]["timer"] = secs;
             timerEl.innerText = machines[machineIndex]["timer"]
-            laundryInterval = setInterval(() => { timer(machine, machineIndex, timerEl, laundryInterval) }, 1000);
+            laundryIntervals = setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals.length) }, 1000);
             circle.replaceChildren(bill);
             machine.appendChild(timerEl);
             circle.classList.remove("inserting");
@@ -308,7 +381,7 @@
             const compartment = machine.children[0];
             const moneyInserted = el.children[0].value;
             if (compartment.classList.contains("deterged")) {
-                if (el.children[0].value > 0) {
+                if (moneyInserted > 0 && moneyInserted < money) {
                     machines[machineIndex]["state"] = "running";
                     changeMoney(-moneyInserted);
                     machines[machineIndex]["money"] = moneyInserted;
@@ -338,11 +411,15 @@
             save()
         }
 
+
+        if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
+        else save();
+
         moneyEl.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("Text", "money");
         })
 
-        for (i = 0; i < compartments.length; i++) {
+        for (let i = 0; i < compartments.length; i++) {
             compartments[i].addEventListener("click", (e) => {
                 const circle = e.target.parentElement.children[1];
                 if (e.target.classList.contains("open")) {
@@ -375,7 +452,7 @@
             })
         }
 
-        for (i = 0; i < circles.length; i++) {
+        for (let i = 0; i < circles.length; i++) {
             circles[i].addEventListener("dragover", (e) => {
                 e.preventDefault();
                 e.target.classList.add("drag-over");
@@ -403,8 +480,84 @@
             })
         }
 
-        if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
-        else save();
+        for (let i = 0; i < buys.length; i++) {
+            buys[i].addEventListener("click", () => {
+                if (money >= 30) {
+                    changeMoney(-30);
+
+                    machineContainer.insertAdjacentHTML("beforeend", `
+                <div class="machine">
+                    <div class="compartment"></div>
+                    <div class="circle"></div>
+                </div>
+                `);
+
+                    machines.push({ type: "normal", state: "idle", timer: null, money: null });
+
+                    const machine = machineEls[machineEls.length - 1];
+                    const compartment = machine.children[0];
+                    const circle = machine.children[1];
+
+                    compartment.addEventListener("click", (e) => {
+                        const circle = e.target.parentElement.children[1];
+                        if (e.target.classList.contains("open")) {
+                            e.target.classList.remove("open");
+                        } else if (!circle.classList.contains("washing")) {
+                            e.target.classList.add("open");
+                        }
+                    })
+
+                    compartment.addEventListener("dragover", (e) => {
+                        e.preventDefault();
+                        if (e.target.classList.contains("open")) {
+                            e.target.classList.add("drag-over");
+                        }
+                    })
+
+                    compartment.addEventListener("dragleave", (e) => {
+                        e.target.classList.remove("drag-over");
+                    })
+
+                    compartment.addEventListener("drop", (e) => {
+                        e.target.classList.remove("drag-over");
+                        if (e.target.classList.contains("open")) {
+                            e.preventDefault();
+                            const data = e.dataTransfer.getData("text");
+                            if (data.endsWith("detergent.png")) {
+                                e.target.classList.add("deterged");
+                            }
+                        }
+                    })
+
+                    circle.addEventListener("dragover", (e) => {
+                        e.preventDefault();
+                        e.target.classList.add("drag-over");
+                    })
+
+                    circle.addEventListener("dragleave", (e) => {
+                        e.target.classList.remove("drag-over");
+                    })
+
+                    circle.addEventListener("drop", (e) => {
+                        e.target.classList.remove("drag-over")
+                        e.preventDefault();
+                        const data = e.dataTransfer.getData("text");
+                        if (data == "money" && !e.target.classList.contains("inserting")) {
+                            e.target.classList.add("inserting");
+                            const input = document.createElement("input");
+                            input.type = "number";
+                            input.placeholder = money;
+                            const button = document.createElement("button");
+                            button.innerText = "Insert money";
+                            button.addEventListener("click", () => { checkStartLaundry(e.target) })
+                            e.target.appendChild(input);
+                            e.target.appendChild(button);
+                        }
+                    })
+                    save();
+                }
+            })
+        }
 
     </script>
 </body>
