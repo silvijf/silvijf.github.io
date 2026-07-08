@@ -161,6 +161,10 @@
             top: 50px;
         }
 
+        .pink {
+            background-color: pink;
+        }
+
         #detergent-container {
             position: absolute;
             right: 0;
@@ -250,6 +254,7 @@
             font-size: xx-large;
             border-top-left-radius: 5px;
             border-top-right-radius: 10px;
+            box-shadow: 0px 20px #8ee38e;
         }
 
         #money-container:after {
@@ -262,6 +267,7 @@
             border-bottom: 49px solid #8ee38e;
             border-right: 35px solid transparent;
             border-top-left-radius: 10px;
+            box-shadow: 0px 20px #8ee38e;
         }
 
         #money {
@@ -287,12 +293,23 @@
     <div id="shop">
         <div class="shop-item">
             <p>Normal machine</p>
+            <p>1.5x profit, 5sec</p>
             <p class="price">$30</p>
             <div class="machine-example">
                 <div class="compartment-example"></div>
                 <div class="circle-example"></div>
             </div>
-            <button class="buy">Buy</button>
+            <button class="buy" machinetype="pink">Buy</button>
+        </div>
+        <div class="shop-item">
+            <p>Pink machine</p>
+            <p>2x profit, 20 sec</p>
+            <p class="price">$60</p>
+            <div class="machine-example pink">
+                <div class="compartment-example"></div>
+                <div class="circle-example pink"></div>
+            </div>
+            <button class="buy" machinetype="pink">Buy</button>
         </div>
     </div>
     <div id="money-container">
@@ -304,8 +321,32 @@
         const machineEls = document.getElementsByClassName("machine")
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
+        const moneyContainer = document.getElementById("money-container")
         const moneyEl = document.getElementById("money");
         const buys = document.getElementsByClassName("buy");
+
+        const machineTypes = {
+            normal: {
+                code: `
+                <div class="machine">
+                    <div class="compartment"></div>
+                    <div class="circle"></div>
+                </div>
+                `, cost: 30,
+                profit: 1.5,
+                time: 5
+            },
+            pink: {
+                code: `
+                <div class="machine pink">
+                    <div class="compartment"></div>
+                    <div class="circle pink"></div>
+                </div>
+                `, cost: 60,
+                profit: 2,
+                time: 20
+            }
+        }
 
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null }]
@@ -319,19 +360,14 @@
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
             for (let i = 0; i < machines.length; i++) {
                 if (i > 0) {
-                    machineContainer.insertAdjacentHTML("beforeend", `
-                    <div class="machine">
-                        <div class="compartment"></div>
-                        <div class="circle"></div>
-                    </div>
-                    `);
+                    machineContainer.insertAdjacentHTML("beforeend", machineTypes[machines[i].type].code);
                 }
-                if (machines[i]["state"] == "running") {
+                if (machines[i].state == "running") {
                     const machine = machineEls[i];
                     const compartment = machine.children[0];
                     compartment.classList.add("deterged");
                     startLaundry(machine.children[1], machine, i, compartment,
-                        machines[i]["timer"], machines[i]["money"])
+                        machines[i].timer, machines[i].money)
                 }
             }
         }
@@ -349,9 +385,9 @@
         }
 
         function timer(machine, machineIndex, timerEl, intervalIndex) {
-            machines[machineIndex]["timer"] -= 1;
-            timerEl.innerText = machines[machineIndex]["timer"];
-            if (machines[machineIndex]["timer"] == 0) {
+            machines[machineIndex].timer -= 1;
+            timerEl.innerText = machines[machineIndex].timer;
+            if (machines[machineIndex].timer == 0) {
                 clearInterval(intervalIndex);
                 finishLaundry(machine, machineIndex);
             }
@@ -364,9 +400,9 @@
             bill.draggable = false;
             const timerEl = document.createElement("p");
             timerEl.classList.add("timer")
-            machines[machineIndex]["timer"] = secs;
-            timerEl.innerText = machines[machineIndex]["timer"]
-            laundryIntervals = setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals.length) }, 1000);
+            machines[machineIndex].timer = secs;
+            timerEl.innerText = machines[machineIndex].timer
+            laundryIntervals = setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals) }, 1000);
             circle.replaceChildren(bill);
             machine.appendChild(timerEl);
             circle.classList.remove("inserting");
@@ -381,11 +417,12 @@
             const compartment = machine.children[0];
             const moneyInserted = el.children[0].value;
             if (compartment.classList.contains("deterged")) {
-                if (moneyInserted > 0 && moneyInserted < money) {
-                    machines[machineIndex]["state"] = "running";
+                if (moneyInserted > 0 && moneyInserted <= money) {
+                    const secs = machineTypes[machines[machineIndex].type].time;
+                    machines[machineIndex].state = "running";
                     changeMoney(-moneyInserted);
-                    machines[machineIndex]["money"] = moneyInserted;
-                    startLaundry(el, machine, machineIndex, compartment, 5, moneyInserted);
+                    machines[machineIndex].money = moneyInserted;
+                    startLaundry(el, machine, machineIndex, compartment, secs, moneyInserted);
                 }
             } else {
                 compartment.classList.add("drag-over")
@@ -399,7 +436,7 @@
         }
 
         function finishLaundry(machine, machineIndex) {
-            machines[machineIndex]["state"] = "idle";
+            machines[machineIndex].state = "idle";
             const compartment = machine.children[0];
             const circle = machine.children[1];
             const timerEl = machine.children[2];
@@ -407,9 +444,13 @@
             circle.classList.remove("washing");
             circle.replaceChildren();
             timerEl.remove()
-            changeMoney(Math.floor(machines[machineIndex]["money"] * 1.5))
+            changeMoney(Math.floor(machines[machineIndex].money * machineTypes[machines[machineIndex].type].profit))
             save()
         }
+
+        document.addEventListener("scroll", () => {
+            moneyContainer.style.bottom = `-${window.scrollY}px`;
+        })
 
 
         if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
@@ -481,18 +522,15 @@
         }
 
         for (let i = 0; i < buys.length; i++) {
-            buys[i].addEventListener("click", () => {
+            buys[i].addEventListener("click", (e) => {
                 if (money >= 30) {
-                    changeMoney(-30);
+                    const type = machineTypes[e.target.getAttribute("machinetype")];
 
-                    machineContainer.insertAdjacentHTML("beforeend", `
-                <div class="machine">
-                    <div class="compartment"></div>
-                    <div class="circle"></div>
-                </div>
-                `);
+                    changeMoney(type.cost);
 
-                    machines.push({ type: "normal", state: "idle", timer: null, money: null });
+                    machineContainer.insertAdjacentHTML("beforeend", type.code);
+
+                    machines.push({ type: e.target.getAttribute("machinetype"), state: "idle", timer: null, money: null });
 
                     const machine = machineEls[machineEls.length - 1];
                     const compartment = machine.children[0];

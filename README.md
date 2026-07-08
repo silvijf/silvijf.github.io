@@ -6,7 +6,7 @@ This is my site.
 ### Money Laundry Simulator:
 - [x] Save washing progress
 - [x] Shop
-- [ ] Money indicator floats with scroll
+- [x] Money indicator floats with scroll
 - [ ] More washing machines
 - [ ] Limited detergent
 - [ ] More detergent types
