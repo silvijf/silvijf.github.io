@@ -173,7 +173,7 @@
 
         #detergent-container {
             position: absolute;
-            right: 0;
+            right: -10px;
             top: 0px;
             width: 50px;
             height: 100%;
@@ -358,7 +358,7 @@
         var machines = [{ type: "normal", state: "idle", timer: null, money: null }]
 
         var compartmentTimeout;
-        var laundryIntervals;
+        var laundryIntervals = 0;
 
         function continueGame() {
             money = Number(localStorage.getItem("laundryMoney"));
@@ -407,14 +407,15 @@
             const timerEl = document.createElement("p");
             timerEl.classList.add("timer")
             machines[machineIndex].timer = secs;
-            timerEl.innerText = machines[machineIndex].timer
-            laundryIntervals += 1;
-            setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals) }, 1000);
+            timerEl.innerText = machines[machineIndex].timer;
+            setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals + 1) }, 1000);
+            console.log(machineIndex, laundryIntervals);
             circle.replaceChildren(bill);
             machine.appendChild(timerEl);
             circle.classList.remove("inserting");
             circle.classList.add("washing");
             compartment.classList.remove("open");
+            laundryIntervals += 1;
             save();
         }
 
