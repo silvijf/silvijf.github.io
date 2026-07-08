@@ -305,7 +305,7 @@
                 <div class="compartment-example"></div>
                 <div class="circle-example"></div>
             </div>
-            <button class="buy" machinetype="pink">Buy</button>
+            <button class="buy" machinetype="normal">Buy</button>
         </div>
         <div class="shop-item">
             <p>Pink machine</p>
@@ -408,7 +408,8 @@
             timerEl.classList.add("timer")
             machines[machineIndex].timer = secs;
             timerEl.innerText = machines[machineIndex].timer
-            laundryIntervals = setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals) }, 1000);
+            laundryIntervals += 1;
+            setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals) }, 1000);
             circle.replaceChildren(bill);
             machine.appendChild(timerEl);
             circle.classList.remove("inserting");
