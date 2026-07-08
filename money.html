@@ -409,7 +409,6 @@
             machines[machineIndex].timer = secs;
             timerEl.innerText = machines[machineIndex].timer;
             setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals + 1) }, 1000);
-            console.log(machineIndex, laundryIntervals);
             circle.replaceChildren(bill);
             machine.appendChild(timerEl);
             circle.classList.remove("inserting");
