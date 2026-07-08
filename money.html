@@ -358,7 +358,7 @@
         var machines = [{ type: "normal", state: "idle", timer: null, money: null }]
 
         var compartmentTimeout;
-        var laundryIntervals = 0;
+        var laundryIntervals = {};
 
         function continueGame() {
             money = Number(localStorage.getItem("laundryMoney"));
@@ -390,14 +390,10 @@
             save()
         }
 
-        function timer(machine, machineIndex, timerEl, intervalIndex) {
+        function timer(machine, machineIndex, timerEl) {
             machines[machineIndex].timer -= 1;
             timerEl.innerText = machines[machineIndex].timer;
-            if (machines[machineIndex].timer == 0) {
-                console.log(intervalIndex)
-                clearInterval(intervalIndex);
-                finishLaundry(machine, machineIndex);
-            }
+            if (machines[machineIndex].timer == 0) finishLaundry(machine, machineIndex);
             save();
         }
 
@@ -409,13 +405,12 @@
             timerEl.classList.add("timer")
             machines[machineIndex].timer = secs;
             timerEl.innerText = machines[machineIndex].timer;
-            setInterval(() => { timer(machine, machineIndex, timerEl, laundryIntervals + 1) }, 1000);
+            laundryIntervals[machineIndex] = setInterval(() => { timer(machine, machineIndex, timerEl) }, 1000);
             circle.replaceChildren(bill);
             machine.appendChild(timerEl);
             circle.classList.remove("inserting");
             circle.classList.add("washing");
             compartment.classList.remove("open");
-            laundryIntervals += 1;
             save();
         }
 
@@ -444,6 +439,8 @@
         }
 
         function finishLaundry(machine, machineIndex) {
+            clearInterval(laundryIntervals[machineIndex]);
+            delete laundryIntervals[machineIndex];
             machines[machineIndex].state = "idle";
             const compartment = machine.children[0];
             const circle = machine.children[1];
