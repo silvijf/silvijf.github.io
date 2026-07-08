@@ -532,7 +532,7 @@
                 if (money >= 30) {
                     const type = machineTypes[e.target.getAttribute("machinetype")];
 
-                    changeMoney(type.cost);
+                    changeMoney(-type.cost);
 
                     machineContainer.insertAdjacentHTML("beforeend", type.code);
 
