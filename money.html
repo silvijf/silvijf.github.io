@@ -308,8 +308,8 @@
     <div id="shop">
         <div class="shop-item">
             <p>Normal machine</p>
-            <p>1.5x profit, 5 sec</p>
-            <p class="price">$30</p>
+            <p>1.2x profit, 5 sec</p>
+            <p class="price">$60</p>
             <div class="machine-example">
                 <div class="compartment-example"></div>
                 <div class="circle-example"></div>
@@ -318,8 +318,8 @@
         </div>
         <div class="shop-item">
             <p>Pink machine</p>
-            <p>2x profit, 20 sec</p>
-            <p class="price">$60</p>
+            <p>1.4x profit, 20 sec</p>
+            <p class="price">$100</p>
             <div class="machine-example pink">
                 <div class="compartment-example"></div>
                 <div class="circle-example pink"></div>
@@ -349,8 +349,8 @@
                     <div class="circle"></div>
                     <button class="sell">Sell</button>
                 </div>
-                `, cost: 30,
-                profit: 1.5,
+                `, cost: 60,
+                profit: 1.2,
                 time: 5
             },
             pink: {
@@ -360,8 +360,8 @@
                     <div class="circle pink"></div>
                     <button class="sell">Sell</button>
                 </div>
-                `, cost: 60,
-                profit: 2,
+                `, cost: 100,
+                profit: 1.4,
                 time: 20
             }
         };
@@ -544,7 +544,7 @@
                 const machineIndex = [].slice.call(machineEls).indexOf(machine);
                 machine.remove();
                 const cost = machineTypes[machines[machineIndex].type].cost;
-                changeMoney(cost * 2 / 3);
+                changeMoney(cost * 3 / 4);
                 machines.splice(machineIndex, 1);
                 save();
             })
