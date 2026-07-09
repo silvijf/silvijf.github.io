@@ -8,7 +8,7 @@ This is my site.
 - [x] Shop
 - [x] Money indicator floats with scroll
 - [x] More washing machines
-- [ ] Sell machine button
+- [x] Sell machine button
 - [ ] Offline earnings
 - [ ] Balancing
 - [ ] Limited detergent and more detergent types

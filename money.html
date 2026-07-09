@@ -167,6 +167,15 @@
             top: 50px;
         }
 
+        .sell {
+            background-color: #f75555;
+            position: absolute;
+            right: 4px;
+            bottom: 4px;
+            padding: 4px;
+            border-radius: 5px;
+        }
+
         .pink {
             background-color: pink;
         }
@@ -323,11 +332,12 @@
     </div>
 
     <script>
-        const machineContainer = document.getElementById("machine-container")
-        const machineEls = document.getElementsByClassName("machine")
+        const machineContainer = document.getElementById("machine-container");
+        const machineEls = document.getElementsByClassName("machine");
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
-        const moneyContainer = document.getElementById("money-container")
+        const sells = document.getElementsByClassName("sell");
+        const moneyContainer = document.getElementById("money-container");
         const moneyEl = document.getElementById("money");
         const buys = document.getElementsByClassName("buy");
 
@@ -337,6 +347,7 @@
                 <div class="machine">
                     <div class="compartment"></div>
                     <div class="circle"></div>
+                    <button class="sell">Sell</button>
                 </div>
                 `, cost: 30,
                 profit: 1.5,
@@ -347,15 +358,16 @@
                 <div class="machine pink">
                     <div class="compartment"></div>
                     <div class="circle pink"></div>
+                    <button class="sell">Sell</button>
                 </div>
                 `, cost: 60,
                 profit: 2,
                 time: 20
             }
-        }
+        };
 
         var money = 5;
-        var machines = [{ type: "normal", state: "idle", timer: null, money: null }]
+        var machines = [{ type: "normal", state: "idle", timer: null, money: null }];
 
         var compartmentTimeout;
         var laundryIntervals = {};
@@ -373,21 +385,21 @@
                     const compartment = machine.children[0];
                     compartment.classList.add("deterged");
                     startLaundry(machine.children[1], machine, i, compartment,
-                        machines[i].timer, machines[i].money)
+                        machines[i].timer, machines[i].money);
                 }
             }
         }
 
         function save() {
             localStorage.setItem("laundryMoney", money);
-            localStorage.setItem("laundryMachines", JSON.stringify(machines))
+            localStorage.setItem("laundryMachines", JSON.stringify(machines));
         }
 
         function changeMoney(count) {
             money += count;
             moneyEl.innerText = `$${money}`;
-            localStorage.setItem("laundryMoney", money)
-            save()
+            localStorage.setItem("laundryMoney", money);
+            save();
         }
 
         function timer(machine, machineIndex, timerEl) {
@@ -402,7 +414,7 @@
             bill.src = "Content/Money_Laundry_Simulator/bill.webp";
             bill.draggable = false;
             const timerEl = document.createElement("p");
-            timerEl.classList.add("timer")
+            timerEl.classList.add("timer");
             machines[machineIndex].timer = secs;
             timerEl.innerText = machines[machineIndex].timer;
             laundryIntervals[machineIndex] = setInterval(() => { timer(machine, machineIndex, timerEl) }, 1000);
@@ -416,7 +428,7 @@
 
         function checkStartLaundry(el) {
             const machine = el.parentElement;
-            const machineIndex = [].slice.call(machineEls).indexOf(machine)
+            const machineIndex = [].slice.call(machineEls).indexOf(machine);
             const compartment = machine.children[0];
             const moneyInserted = el.children[0].value;
             if (compartment.classList.contains("deterged")) {
@@ -428,12 +440,12 @@
                     startLaundry(el, machine, machineIndex, compartment, secs, moneyInserted);
                 }
             } else {
-                compartment.classList.add("drag-over")
+                compartment.classList.add("drag-over");
                 try {
-                    clearTimeout(compartmentTimeout)
+                    clearTimeout(compartmentTimeout);
                 } catch { }
                 compartmentTimeout = setTimeout(() => {
-                    compartment.classList.remove("drag-over")
+                    compartment.classList.remove("drag-over");
                 }, 500)
             }
         }
@@ -526,6 +538,18 @@
             })
         }
 
+        for (let i = 0; i < sells.length; i++) {
+            sells[i].addEventListener("click", (e) => {
+                const machine = e.target.parentElement;
+                const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                machine.remove();
+                const cost = machineTypes[machines[machineIndex].type].cost;
+                changeMoney(cost * 2 / 3);
+                machines.splice(machineIndex, 1);
+                save();
+            })
+        }
+
         for (let i = 0; i < buys.length; i++) {
             buys[i].addEventListener("click", (e) => {
                 if (money >= 30) {
@@ -540,6 +564,7 @@
                     const machine = machineEls[machineEls.length - 1];
                     const compartment = machine.children[0];
                     const circle = machine.children[1];
+                    const sell = machine.children[2];
 
                     compartment.addEventListener("click", (e) => {
                         const circle = e.target.parentElement.children[1];
@@ -596,6 +621,16 @@
                             e.target.appendChild(input);
                             e.target.appendChild(button);
                         }
+                    })
+
+                    sell.addEventListener("click", (e) => {
+                        const machine = e.target.parentElement;
+                        const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                        machine.remove();
+                        const cost = machineTypes[machines[machineIndex].type].cost;
+                        changeMoney(cost * 2 / 3);
+                        machines.splice(machineIndex, 1);
+                        save();
                     })
                     save();
                 }
