@@ -16,3 +16,4 @@ This is my site.
 - [ ] Mobile support
 - [ ] Tutorial
 - [ ] Bankruptcy helper
+- [ ] Slot system
