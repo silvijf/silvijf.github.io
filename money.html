@@ -17,6 +17,10 @@
             overflow-x: hidden;
         }
 
+        body:has(#detergent-clone) *, body:has(#money-clone) * {
+            cursor: grabbing !important;
+        }
+
         :root {
             --border: black;
             --light-bg: #ddf0ea;
@@ -56,6 +60,7 @@
             height: 225px;
             border: 2px solid var(--border);
             margin-bottom: 20px;
+            z-index: 2;
         }
 
         .compartment,
@@ -76,6 +81,11 @@
             cursor: pointer;
         }
 
+
+        .compartment:hover {
+            background-color: #a2dbc7;
+        }
+
         .compartment-example {
             cursor: not-allowed
         }
@@ -86,12 +96,8 @@
             --border-size: 8px;
         }
 
-        .compartment.drag-over {
-            --background: #a2dbc7;
-        }
-
         .compartment.deterged {
-            --background: #f0f09c;
+            --background: #f0f09c !important;
         }
 
         .compartment:before {
@@ -105,6 +111,7 @@
             height: 0;
             bottom: 11.5px;
             z-index: 1;
+            pointer-events: none;
         }
 
         @keyframes spin {
@@ -127,11 +134,11 @@
             align-items: center;
         }
 
-        .circle.drag-over {
+        .circle:not(.washing):not(.inserting):hover {
             background-color: var(--light-bg);
         }
 
-        .circle.drag-over.pink {
+        .circle:not(.washing):not(.inserting).pink:hover {
             background-color: #e8a2ad;
         }
 
@@ -197,6 +204,17 @@
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
             cursor: grab;
+        }
+
+        #detergent-clone {
+            position: absolute;
+            width: 50px;
+            background-color: #b3e3e1;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            z-index: 2;
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         #detergent:before,
@@ -266,7 +284,6 @@
             background-color: #8ee38e;
             padding: 5px;
             padding-right: 40px;
-            font-size: xx-large;
             border-top-left-radius: 5px;
             border-top-right-radius: 10px;
             box-shadow: 0px 20px #8ee38e;
@@ -288,7 +305,19 @@
         #money {
             margin: 0px;
             border-radius: 10px;
+            font-size: xx-large;
             cursor: grab;
+            user-select: none;
+        }
+
+        #money-clone {
+            position: absolute;
+            margin: 0px;
+            border-radius: 10px;
+            font-size: xx-large;
+            background-color: #8ee38e;
+            z-index: 2;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -302,7 +331,7 @@
     </div>
     <div id="detergent-container">
         <div id="detergent">
-            <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image">
+            <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image" draggable="false">
         </div>
     </div>
     <div id="shop">
@@ -328,7 +357,7 @@
         </div>
     </div>
     <div id="money-container">
-        <p id="money" draggable="true">$5</p>
+        <p id="money">$5</p>
     </div>
 
     <script>
@@ -336,6 +365,7 @@
         const machineEls = document.getElementsByClassName("machine");
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
+        const detergent = document.getElementById("detergent-image");
         const sells = document.getElementsByClassName("sell");
         const moneyContainer = document.getElementById("money-container");
         const moneyEl = document.getElementById("money");
@@ -368,6 +398,9 @@
 
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null }];
+        var grabbingDetergent = false;
+        var grabbingMoney = false;
+        var moneyWidth = moneyEl.getBoundingClientRect().width;
 
         var compartmentTimeout;
         var laundryIntervals = {};
@@ -375,6 +408,7 @@
         function continueGame() {
             money = Number(localStorage.getItem("laundryMoney"));
             moneyEl.innerText = `$${money}`;
+            moneyWidth = moneyEl.getBoundingClientRect().width;
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
             for (let i = 0; i < machines.length; i++) {
                 if (i > 0) {
@@ -398,6 +432,7 @@
         function changeMoney(count) {
             money += count;
             moneyEl.innerText = `$${money}`;
+            moneyWidth = moneyEl.getBoundingClientRect().width;
             localStorage.setItem("laundryMoney", money);
             save();
         }
@@ -456,11 +491,16 @@
             machines[machineIndex].state = "idle";
             const compartment = machine.children[0];
             const circle = machine.children[1];
-            const timerEl = machine.children[2];
+            let timerEl;
+            if (machine.children[2].classList.contains("sell")) {
+                timerEl = machine.children[3];
+            } else {
+                timerEl = machine.children[2];
+            }
             compartment.classList.remove("deterged");
             circle.classList.remove("washing");
             circle.replaceChildren();
-            timerEl.remove()
+            timerEl.remove();
             changeMoney(Math.floor(machines[machineIndex].money * machineTypes[machines[machineIndex].type].profit))
             save()
         }
@@ -473,8 +513,76 @@
         if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
         else save();
 
-        moneyEl.addEventListener("dragstart", (e) => {
-            e.dataTransfer.setData("Text", "money");
+        detergent.addEventListener("mousedown", (e) => {
+            grabbingDetergent = true;
+            const clone = detergent.cloneNode(true);
+            clone.id = "detergent-clone";
+            clone.style.left = `${e.clientX - 25}px`;
+            clone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            document.body.appendChild(clone);
+        })
+
+        document.addEventListener("mousemove", (e) => {
+            if (grabbingDetergent) {
+                const detergentClone = document.getElementById("detergent-clone");
+                detergentClone.style.left = `${e.clientX - 25}px`;
+                detergentClone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            }
+        })
+
+        document.addEventListener("mouseup", (e) => {
+            if (grabbingDetergent) {
+                const detergentClone = document.getElementById("detergent-clone");
+                detergentClone.remove();
+                grabbingDetergent = false;
+                for (let i = 0; i < compartments.length; i++) {
+                    const rect = compartments[i].getBoundingClientRect();
+                    if (rect.left < e.clientX && rect.top < e.clientY && rect.right > e.clientX && rect.bottom > e.clientY
+                        && compartments[i].classList.contains("open")
+                    ) {
+                        compartments[i].classList.add("deterged");
+                    }
+                }
+            }
+        })
+
+        moneyEl.addEventListener("mousedown", (e) => {
+            grabbingMoney = true;
+            const clone = moneyEl.cloneNode(true);
+            clone.id = "money-clone";
+            clone.style.left = `${e.clientX - moneyWidth / 2}px`;
+            clone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            document.body.appendChild(clone);
+        })
+
+        document.addEventListener("mousemove", (e) => {
+            if (grabbingMoney) {
+                const moneyClone = document.getElementById("money-clone");
+                moneyClone.style.left = `${e.clientX - moneyWidth / 2}px`;
+                moneyClone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            }
+        })
+
+        document.addEventListener("mouseup", (e) => {
+            if (grabbingMoney) {
+                const moneyClone = document.getElementById("money-clone");
+                moneyClone.remove();
+                grabbingMoney = false;
+                for (let i = 0; i < circles.length; i++) {
+                    const rect = circles[i].getBoundingClientRect();
+                    if (rect.left < e.clientX && rect.top < e.clientY && rect.right > e.clientX && rect.bottom > e.clientY) {
+                        circles[i].classList.add("inserting");
+                        const input = document.createElement("input");
+                        input.type = "number";
+                        input.placeholder = money;
+                        const button = document.createElement("button");
+                        button.innerText = "Insert money";
+                        button.addEventListener("click", (e) => { checkStartLaundry(e.target.parentElement) })
+                        circles[i].appendChild(input);
+                        circles[i].appendChild(button);
+                    }
+                }
+            }
         })
 
         for (let i = 0; i < compartments.length; i++) {
@@ -484,56 +592,6 @@
                     e.target.classList.remove("open");
                 } else if (!circle.classList.contains("washing")) {
                     e.target.classList.add("open");
-                }
-            })
-
-            compartments[i].addEventListener("dragover", (e) => {
-                e.preventDefault();
-                if (e.target.classList.contains("open")) {
-                    e.target.classList.add("drag-over");
-                }
-            })
-
-            compartments[i].addEventListener("dragleave", (e) => {
-                e.target.classList.remove("drag-over");
-            })
-
-            compartments[i].addEventListener("drop", (e) => {
-                e.target.classList.remove("drag-over")
-                if (e.target.classList.contains("open")) {
-                    e.preventDefault();
-                    const data = e.dataTransfer.getData("text");
-                    if (data.endsWith("detergent.png")) {
-                        e.target.classList.add("deterged");
-                    }
-                }
-            })
-        }
-
-        for (let i = 0; i < circles.length; i++) {
-            circles[i].addEventListener("dragover", (e) => {
-                e.preventDefault();
-                e.target.classList.add("drag-over");
-            })
-
-            circles[i].addEventListener("dragleave", (e) => {
-                e.target.classList.remove("drag-over");
-            })
-
-            circles[i].addEventListener("drop", (e) => {
-                e.target.classList.remove("drag-over")
-                e.preventDefault();
-                const data = e.dataTransfer.getData("text");
-                if (data == "money" && !e.target.classList.contains("inserting")) {
-                    e.target.classList.add("inserting");
-                    const input = document.createElement("input");
-                    input.type = "number";
-                    input.placeholder = money;
-                    const button = document.createElement("button");
-                    button.innerText = "Insert money";
-                    button.addEventListener("click", () => { checkStartLaundry(e.target) })
-                    e.target.appendChild(input);
-                    e.target.appendChild(button);
                 }
             })
         }
