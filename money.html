@@ -526,7 +526,9 @@
             circle.classList.remove("washing");
             circle.replaceChildren();
             timerEl.remove();
-            changeMoney(Math.floor(machines[machineIndex].money * machineTypes[machines[machineIndex].type].profit))
+            let moneyGot = Math.floor(machines[machineIndex].money * machineTypes[machines[machineIndex].type].profit)
+            moneyGot += (moneyGot == machines[machineIndex].money) ? 1 : 0
+            changeMoney(moneyGot)
             save()
         }
 
