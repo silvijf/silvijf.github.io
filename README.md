@@ -9,7 +9,9 @@ This is my site.
 - [x] Money indicator floats with scroll
 - [x] More washing machines
 - [x] Sell machine button
-- [ ] Smooth drag - Almost done
+- [x] Smooth drag
+- [ ] Max money per machine
+- [ ] Slots
 - [ ] Offline earnings
 - [ ] Limited detergent and more detergent types
 - [ ] Mobile support
