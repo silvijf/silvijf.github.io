@@ -17,7 +17,8 @@
             overflow-x: hidden;
         }
 
-        body:has(#detergent-clone) *, body:has(#money-clone) * {
+        body:has(#detergent-clone) *,
+        body:has(#money-clone) * {
             cursor: grabbing !important;
         }
 
@@ -215,6 +216,8 @@
             z-index: 2;
             opacity: 0.5;
             pointer-events: none;
+            transform-origin: 50% 5px;
+            transition: transform 100ms;
         }
 
         #detergent:before,
@@ -318,6 +321,8 @@
             background-color: #8ee38e;
             z-index: 2;
             pointer-events: none;
+            transform-origin: 50% 5px;
+            transition: transform 100ms;
         }
     </style>
 </head>
@@ -399,7 +404,9 @@
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null }];
         var grabbingDetergent = false;
+        var lastDetergentPos;
         var grabbingMoney = false;
+        var lastMoneyPos;
         var moneyWidth = moneyEl.getBoundingClientRect().width;
 
         var compartmentTimeout;
@@ -513,12 +520,27 @@
         if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
         else save();
 
+        function updateRotations() {
+            if (grabbingDetergent) {
+                const detergentClone = document.getElementById("detergent-clone")
+                const detergentPos = detergentClone.style.left.split("px")[0];
+                detergentClone.style.transform = `rotate(${(detergentPos - lastDetergentPos) * 0.5}deg)`;
+                lastDetergentPos = detergentPos;
+            } else if (grabbingMoney) {
+                const moneyClone = document.getElementById("money-clone")
+                const moneyPos = moneyClone.style.left.split("px")[0];
+                moneyClone.style.transform = `rotate(${(moneyPos - lastMoneyPos) * 0.2}deg)`;
+                lastMoneyPos = moneyPos;
+            }
+        }
+
         detergent.addEventListener("mousedown", (e) => {
             grabbingDetergent = true;
             const clone = detergent.cloneNode(true);
             clone.id = "detergent-clone";
             clone.style.left = `${e.clientX - 25}px`;
             clone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            lastDetergentPos = e.clientX - 25;
             document.body.appendChild(clone);
         })
 
@@ -527,6 +549,10 @@
                 const detergentClone = document.getElementById("detergent-clone");
                 detergentClone.style.left = `${e.clientX - 25}px`;
                 detergentClone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            } else if (grabbingMoney) {
+                const moneyClone = document.getElementById("money-clone");
+                moneyClone.style.left = `${e.clientX - moneyWidth / 2}px`;
+                moneyClone.style.top = `${e.clientY + window.scrollY - 5}px`;
             }
         })
 
@@ -543,28 +569,7 @@
                         compartments[i].classList.add("deterged");
                     }
                 }
-            }
-        })
-
-        moneyEl.addEventListener("mousedown", (e) => {
-            grabbingMoney = true;
-            const clone = moneyEl.cloneNode(true);
-            clone.id = "money-clone";
-            clone.style.left = `${e.clientX - moneyWidth / 2}px`;
-            clone.style.top = `${e.clientY + window.scrollY - 5}px`;
-            document.body.appendChild(clone);
-        })
-
-        document.addEventListener("mousemove", (e) => {
-            if (grabbingMoney) {
-                const moneyClone = document.getElementById("money-clone");
-                moneyClone.style.left = `${e.clientX - moneyWidth / 2}px`;
-                moneyClone.style.top = `${e.clientY + window.scrollY - 5}px`;
-            }
-        })
-
-        document.addEventListener("mouseup", (e) => {
-            if (grabbingMoney) {
+            } else if (grabbingMoney) {
                 const moneyClone = document.getElementById("money-clone");
                 moneyClone.remove();
                 grabbingMoney = false;
@@ -584,6 +589,17 @@
                 }
             }
         })
+
+        moneyEl.addEventListener("mousedown", (e) => {
+            grabbingMoney = true;
+            const clone = moneyEl.cloneNode(true);
+            clone.id = "money-clone";
+            clone.style.left = `${e.clientX - moneyWidth / 2}px`;
+            clone.style.top = `${e.clientY + window.scrollY - 5}px`;
+            document.body.appendChild(clone);
+        })
+
+        setInterval(updateRotations, 50);
 
         for (let i = 0; i < compartments.length; i++) {
             compartments[i].addEventListener("click", (e) => {
