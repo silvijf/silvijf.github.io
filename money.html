@@ -556,6 +556,7 @@
 
         function grabDetergentStart(e, type) {
             e.preventDefault();
+            if (document.getElementById("detergent-clone")) document.getElementById("detergent-clone").remove()
             grabbingDetergent = true;
             const clone = detergent.cloneNode(true);
             clone.id = "detergent-clone";
@@ -573,6 +574,7 @@
 
         function grabMoneyStart(e, type) {
             e.preventDefault();
+            if (document.getElementById("money-clone")) document.getElementById("money-clone").remove()
             grabbingMoney = true;
             const clone = moneyEl.cloneNode(true);
             clone.id = "money-clone";
