@@ -184,6 +184,11 @@
             border-radius: 5px;
         }
 
+        .circle.washing~.sell {
+            cursor: not-allowed;
+            background-color: #a18787;
+        }
+
         .pink {
             background-color: pink;
         }
@@ -671,12 +676,14 @@
         for (let i = 0; i < sells.length; i++) {
             sells[i].addEventListener("click", (e) => {
                 const machine = e.target.parentElement;
-                const machineIndex = [].slice.call(machineEls).indexOf(machine);
-                machine.remove();
-                const cost = machineTypes[machines[machineIndex].type].cost;
-                changeMoney(cost * 3 / 4);
-                machines.splice(machineIndex, 1);
-                save();
+                if (!machine.children[1].classList.contains("washing")) {
+                    const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                    machine.remove();
+                    const cost = machineTypes[machines[machineIndex].type].cost;
+                    changeMoney(Math.floor(cost * 3 / 4));
+                    machines.splice(machineIndex, 1);
+                    save();
+                }
             })
         }
 
@@ -754,13 +761,15 @@
                     })
 
                     sell.addEventListener("click", (e) => {
-                        const machine = e.target.parentElement;
-                        const machineIndex = [].slice.call(machineEls).indexOf(machine);
-                        machine.remove();
-                        const cost = machineTypes[machines[machineIndex].type].cost;
-                        changeMoney(cost * 2 / 3);
-                        machines.splice(machineIndex, 1);
-                        save();
+                        if (!machine.children[1].classList.contains("washing")) {
+                            const machine = e.target.parentElement;
+                            const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                            machine.remove();
+                            const cost = machineTypes[machines[machineIndex].type].cost;
+                            changeMoney(Math.floor(cost * 2 / 3));
+                            machines.splice(machineIndex, 1);
+                            save();
+                        }
                     })
                     save();
                 }
