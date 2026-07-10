@@ -614,8 +614,8 @@
                 for (let i = 0; i < circles.length; i++) {
                     const rect = circles[i].getBoundingClientRect();
                     if (rect.left < touch.clientX && rect.top < touch.clientY &&
-                    rect.right > touch.clientX && rect.bottom > touch.clientY &&
-                    !circles[i].classList.contains("inserting") && !circles[i].classList.contains("washing")) {
+                        rect.right > touch.clientX && rect.bottom > touch.clientY &&
+                        !circles[i].classList.contains("inserting") && !circles[i].classList.contains("washing")) {
                         const machine = circles[i].parentElement;
                         const machineIndex = [].slice.call(machineEls).indexOf(machine);
                         const type = machines[machineIndex].type;
