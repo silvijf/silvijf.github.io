@@ -576,6 +576,7 @@
         }
 
         function move(e, type) {
+            e.preventDefault();
             let touch;
             if (type == "mouse") touch = e;
             else touch = e.touches[0];
