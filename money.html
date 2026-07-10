@@ -290,6 +290,7 @@
             border-top-left-radius: 5px;
             border-top-right-radius: 10px;
             box-shadow: 0px 20px #8ee38e;
+            z-index: 2;
         }
 
         #money-container:after {
@@ -545,36 +546,62 @@
             }
         }
 
-        detergent.addEventListener("mousedown", (e) => {
+        function grabDetergentStart(e, type) {
+            e.preventDefault();
             grabbingDetergent = true;
             const clone = detergent.cloneNode(true);
             clone.id = "detergent-clone";
-            clone.style.left = `${e.clientX - 25}px`;
-            clone.style.top = `${e.clientY + window.scrollY - 5}px`;
-            lastDetergentPos = e.clientX - 25;
+            let touch;
+            if (type == "mouse") {
+                touch = e;
+            } else {
+                touch = e.touches[0];
+            }
+            clone.style.left = `${touch.clientX - 25}px`;
+            clone.style.top = `${touch.clientY + window.scrollY - 5}px`;
+            lastDetergentPos = touch.clientX - 25;
             document.body.appendChild(clone);
-        })
+        }
 
-        document.addEventListener("mousemove", (e) => {
+        function grabMoneyStart(e, type) {
+            e.preventDefault();
+            grabbingMoney = true;
+            const clone = moneyEl.cloneNode(true);
+            clone.id = "money-clone";
+            if (type == "mouse") touch = e;
+            else touch = e.touches[0];
+            clone.style.left = `${touch.clientX - moneyWidth / 2}px`;
+            clone.style.top = `${touch.clientY + window.scrollY - 5}px`;
+            document.body.appendChild(clone);
+        }
+
+        function move(e, type) {
+            let touch;
+            if (type == "mouse") touch = e;
+            else touch = e.touches[0];
             if (grabbingDetergent) {
                 const detergentClone = document.getElementById("detergent-clone");
-                detergentClone.style.left = `${e.clientX - 25}px`;
-                detergentClone.style.top = `${e.clientY + window.scrollY - 5}px`;
+                detergentClone.style.left = `${touch.clientX - 25}px`;
+                detergentClone.style.top = `${touch.clientY + window.scrollY - 5}px`;
             } else if (grabbingMoney) {
                 const moneyClone = document.getElementById("money-clone");
-                moneyClone.style.left = `${e.clientX - moneyWidth / 2}px`;
-                moneyClone.style.top = `${e.clientY + window.scrollY - 5}px`;
+                moneyClone.style.left = `${touch.clientX - moneyWidth / 2}px`;
+                moneyClone.style.top = `${touch.clientY + window.scrollY - 5}px`;
             }
-        })
+        }
 
-        document.addEventListener("mouseup", (e) => {
+        function drop(e, type) {
+            let touch;
+            if (type == "mouse") touch = e;
+            else touch = e.changedTouches[0];
             if (grabbingDetergent) {
                 const detergentClone = document.getElementById("detergent-clone");
                 detergentClone.remove();
                 grabbingDetergent = false;
                 for (let i = 0; i < compartments.length; i++) {
                     const rect = compartments[i].getBoundingClientRect();
-                    if (rect.left < e.clientX && rect.top < e.clientY && rect.right > e.clientX && rect.bottom > e.clientY
+                    if (rect.left < touch.clientX && rect.top < touch.clientY &&
+                        rect.right > touch.clientX && rect.bottom > touch.clientY
                         && compartments[i].classList.contains("open")
                     ) {
                         compartments[i].classList.add("deterged");
@@ -586,8 +613,10 @@
                 grabbingMoney = false;
                 for (let i = 0; i < circles.length; i++) {
                     const rect = circles[i].getBoundingClientRect();
-                    if (rect.left < e.clientX && rect.top < e.clientY && rect.right > e.clientX && rect.bottom > e.clientY) {
-                        const machine = e.target.parentElement;
+                    if (rect.left < touch.clientX && rect.top < touch.clientY &&
+                    rect.right > touch.clientX && rect.bottom > touch.clientY &&
+                    !circles[i].classList.contains("inserting") && !circles[i].classList.contains("washing")) {
+                        const machine = circles[i].parentElement;
                         const machineIndex = [].slice.call(machineEls).indexOf(machine);
                         const type = machines[machineIndex].type;
                         const max = machineTypes[type].max;
@@ -610,16 +639,19 @@
                     }
                 }
             }
-        })
+        }
 
-        moneyEl.addEventListener("mousedown", (e) => {
-            grabbingMoney = true;
-            const clone = moneyEl.cloneNode(true);
-            clone.id = "money-clone";
-            clone.style.left = `${e.clientX - moneyWidth / 2}px`;
-            clone.style.top = `${e.clientY + window.scrollY - 5}px`;
-            document.body.appendChild(clone);
-        })
+        detergent.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") })
+        detergent.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") })
+
+        moneyEl.addEventListener("mousedown", (e) => { grabMoneyStart(e, "mouse") });
+        moneyEl.addEventListener("touchstart", (e) => { grabMoneyStart(e, "touch") });
+
+        document.addEventListener("mousemove", (e) => { move(e, "mouse") })
+        document.addEventListener("touchmove", (e) => { move(e, "touch") })
+
+        document.addEventListener("mouseup", (e) => { drop(e, "mouse") })
+        document.addEventListener("touchend", (e) => { drop(e, "touch") })
 
         setInterval(updateRotations, 50);
 

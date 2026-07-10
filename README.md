@@ -11,12 +11,13 @@ This is my site.
 - [x] Sell machine button
 - [x] Smooth drag
 - [x] Max money per machine
+- [ ] Mobile support - in progress
+- [ ] Make selling impossible while washing
 - [ ] Slots
-- [ ] Offline earnings
 - [ ] Limited detergent and more detergent types
-- [ ] Mobile support
 - [ ] Tutorial
 - [ ] Bankruptcy helper
 
 When there are more machines:
 - [ ] Balancing
+- [ ] Offline earnings
