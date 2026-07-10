@@ -10,14 +10,13 @@ This is my site.
 - [x] More washing machines
 - [x] Sell machine button
 - [x] Smooth drag
-- [ ] Max money per machine
+- [x] Max money per machine
 - [ ] Slots
 - [ ] Offline earnings
 - [ ] Limited detergent and more detergent types
 - [ ] Mobile support
 - [ ] Tutorial
 - [ ] Bankruptcy helper
-- [ ] Slot system
 
 When there are more machines:
 - [ ] Balancing

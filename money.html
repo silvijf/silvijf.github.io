@@ -17,8 +17,8 @@
             overflow-x: hidden;
         }
 
-        body:has(#detergent-clone) *,
-        body:has(#money-clone) * {
+        html:has(#detergent-clone) *,
+        html:has(#money-clone) * {
             cursor: grabbing !important;
         }
 
@@ -144,7 +144,7 @@
         }
 
         .circle input {
-            width: 30px;
+            width: 50px;
             padding: 5px;
         }
 
@@ -342,8 +342,8 @@
     <div id="shop">
         <div class="shop-item">
             <p>Normal machine</p>
-            <p>1.2x profit, 5 sec</p>
-            <p class="price">$60</p>
+            <p>1.2x profit, 5 sec, max $20</p>
+            <p class="price">$40</p>
             <div class="machine-example">
                 <div class="compartment-example"></div>
                 <div class="circle-example"></div>
@@ -352,8 +352,8 @@
         </div>
         <div class="shop-item">
             <p>Pink machine</p>
-            <p>1.4x profit, 20 sec</p>
-            <p class="price">$100</p>
+            <p>1.4x profit, 20 sec, max $30</p>
+            <p class="price">$60</p>
             <div class="machine-example pink">
                 <div class="compartment-example"></div>
                 <div class="circle-example pink"></div>
@@ -384,9 +384,11 @@
                     <div class="circle"></div>
                     <button class="sell">Sell</button>
                 </div>
-                `, cost: 60,
+                `,
+                cost: 40,
                 profit: 1.2,
-                time: 5
+                time: 5,
+                max: 20
             },
             pink: {
                 code: `
@@ -395,9 +397,11 @@
                     <div class="circle pink"></div>
                     <button class="sell">Sell</button>
                 </div>
-                `, cost: 100,
+                `,
+                cost: 60,
                 profit: 1.4,
-                time: 20
+                time: 20,
+                max: 30
             }
         };
 
@@ -471,15 +475,22 @@
         function checkStartLaundry(el) {
             const machine = el.parentElement;
             const machineIndex = [].slice.call(machineEls).indexOf(machine);
+            const type = machines[machineIndex].type;
+            const max = machineTypes[type].max;
             const compartment = machine.children[0];
             const moneyInserted = el.children[0].value;
             if (compartment.classList.contains("deterged")) {
                 if (moneyInserted > 0 && moneyInserted <= money) {
-                    const secs = machineTypes[machines[machineIndex].type].time;
-                    machines[machineIndex].state = "running";
-                    changeMoney(-moneyInserted);
-                    machines[machineIndex].money = moneyInserted;
-                    startLaundry(el, machine, machineIndex, compartment, secs, moneyInserted);
+                    if (moneyInserted <= max) {
+                        const secs = machineTypes[machines[machineIndex].type].time;
+                        machines[machineIndex].state = "running";
+                        changeMoney(-moneyInserted);
+                        machines[machineIndex].money = moneyInserted;
+                        startLaundry(el, machine, machineIndex, compartment, secs, moneyInserted);
+                    } else {
+                        el.children[1].innerText = "Over max! Try this";
+                        el.children[0].value = max;
+                    }
                 }
             } else {
                 compartment.classList.add("drag-over");
@@ -576,10 +587,21 @@
                 for (let i = 0; i < circles.length; i++) {
                     const rect = circles[i].getBoundingClientRect();
                     if (rect.left < e.clientX && rect.top < e.clientY && rect.right > e.clientX && rect.bottom > e.clientY) {
+                        const machine = e.target.parentElement;
+                        const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                        const type = machines[machineIndex].type;
+                        const max = machineTypes[type].max;
                         circles[i].classList.add("inserting");
                         const input = document.createElement("input");
                         input.type = "number";
-                        input.placeholder = money;
+                        input.min = 0;
+                        if (max > money) {
+                            input.max = money;
+                            input.placeholder = money;
+                        } else {
+                            input.max = max;
+                            input.placeholder = max;
+                        }
                         const button = document.createElement("button");
                         button.innerText = "Insert money";
                         button.addEventListener("click", (e) => { checkStartLaundry(e.target.parentElement) })
