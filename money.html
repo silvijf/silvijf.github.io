@@ -143,6 +143,10 @@
             background-color: #e8a2ad;
         }
 
+        .circle:not(.washing):not(.inserting).yellow:hover {
+            background-color: #d9d971;
+        }
+
         .circle input {
             width: 50px;
             padding: 5px;
@@ -191,6 +195,10 @@
 
         .pink {
             background-color: pink;
+        }
+
+        .yellow {
+            background-color: #f3f38e;
         }
 
         #detergent-container {
@@ -367,6 +375,16 @@
             </div>
             <button class="buy" machinetype="pink">Buy</button>
         </div>
+        <div class="shop-item">
+            <p>Yellow machine</p>
+            <p>1.6x profit, 30 sec, max $50</p>
+            <p class="price">$100</p>
+            <div class="machine-example yellow">
+                <div class="compartment-example"></div>
+                <div class="circle-example yellow"></div>
+            </div>
+            <button class="buy" machinetype="yellow">Buy</button>
+        </div>
     </div>
     <div id="money-container">
         <p id="money">$5</p>
@@ -405,10 +423,23 @@
                     <button class="sell">Sell</button>
                 </div>
                 `,
-                cost: 60,
+                cost: 100,
                 profit: 1.4,
-                time: 20,
+                time: 30,
                 max: 30
+            },
+            yellow: {
+                code: `
+                <div class="machine yellow">
+                    <div class="compartment"></div>
+                    <div class="circle yellow"></div>
+                    <button class="sell">Sell</button>
+                </div>
+                `,
+                cost: 60,
+                profit: 1.6,
+                time: 30,
+                max: 50
             }
         };
 
