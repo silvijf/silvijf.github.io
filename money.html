@@ -894,10 +894,11 @@
                         }
                     })
                     save();
-                } else if (buytype == detergent) {
+                } else if (buytype == "detergent") {
                     // const type = e.target.dataset.detergenttype;
                     detergentCount += 4;
                     detergentCountEl.innerText = detergentCount;
+                    changeMoney(-5);
                     save();
                 }
             })
