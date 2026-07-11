@@ -100,7 +100,7 @@
         }
 
 
-        .compartment:hover {
+        .compartment:not(.deterged):hover {
             background-color: #a2dbc7;
         }
 
@@ -415,7 +415,7 @@
         <div id="detergent">
             <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image" draggable="false"
                 oncontextmenu="return false;">
-            <p id="detergent-count">4</p>
+            <p id="detergent-count">6</p>
         </div>
     </div>
     <div id="tab-btns">
@@ -524,7 +524,7 @@
 
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null, deterged: false }];
-        var detergentCount = 4;
+        var detergentCount = 6;
         var grabbingDetergent = false;
         var lastDetergentPos;
         var grabbingMoney = false;
@@ -554,7 +554,7 @@
                 }
             }
             detergentCount = Number(localStorage.getItem("laundryDetergent"))
-            if (detergentCount == undefined) detergentCount = 4;
+            if (detergentCount == undefined) detergentCount = 6;
             detergentCountEl.innerText = detergentCount;
         }
 
@@ -919,7 +919,7 @@
                         }, 3000)
                     } else if (money >= 5) {
                         // const type = e.target.dataset.detergenttype;
-                        detergentCount += 4;
+                        detergentCount += 6;
                         detergentCountEl.innerText = detergentCount;
                         changeMoney(-5);
                         save();
