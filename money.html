@@ -353,7 +353,7 @@
         .buy {
             background-color: var(--light-bg);
             border-radius: 5px;
-            width: 50px;
+            min-width: 50px;
         }
 
         #money-container {
@@ -912,11 +912,18 @@
                     })
                     save();
                 } else if (buytype == "detergent") {
-                    // const type = e.target.dataset.detergenttype;
-                    detergentCount += 4;
-                    detergentCountEl.innerText = detergentCount;
-                    changeMoney(-5);
-                    save();
+                    if (money - 5 == 0 && machines.length == 1) {
+                        e.target.innerText = "You'd be bankrupt if you bought this!";
+                        setTimeout(() => {
+                            e.target.innerText = "Buy";
+                        }, 3000)
+                    } else if (money >= 5) {
+                        // const type = e.target.dataset.detergenttype;
+                        detergentCount += 4;
+                        detergentCountEl.innerText = detergentCount;
+                        changeMoney(-5);
+                        save();
+                    }
                 }
             })
         }
