@@ -25,6 +25,7 @@
         :root {
             --border: black;
             --light-bg: #ddf0ea;
+            --very-light-gray: #efefef;
             --light-gray: #dddddd;
             --dark-gray: #bbbbbb;
         }
@@ -34,7 +35,19 @@
                 --border: #969e9d;
                 --light-bg: #41474d;
                 --light-gray: #333333;
+                --very-light-gray: #010101;
                 --dark-gray: #555555;
+            }
+        }
+
+        @media (max-width: 500px) {
+            #tab-btns {
+                padding-left: 0 !important;
+                width: calc(100% + 18px) !important;
+            }
+
+            .tab-btn {
+                width: 100%;
             }
         }
 
@@ -272,17 +285,22 @@
             position: relative;
             display: flex;
             margin-top: 75px;
+            width: calc(100% + -26px);
+            padding-left: 45px;
             left: -8px;
+            border-bottom: 5px solid var(--light-gray);
         }
 
         .tab-btn {
-            width: 100%;
+            position: relative;
             text-align: center;
             padding: 20px;
             cursor: pointer;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            background-color: var(--very-light-gray);
             border-bottom: 5px solid var(--light-gray);
+            bottom: -4.5px;
             transition: 100ms;
         }
 
@@ -298,7 +316,6 @@
 
         .tab {
             position: relative;
-            width: calc(100% - 35px);
             left: -5px;
             padding: 30px;
             flex-wrap: wrap;
