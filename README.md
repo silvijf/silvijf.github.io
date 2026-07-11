@@ -13,9 +13,10 @@ This is my site.
 - [x] Max money per machine
 - [x] Mobile support
 - [x] Make selling impossible while washing
+- [ ] Limited detergent and more detergent types
+- [ ] Bankruptcy helper
 - [ ] Slots
 - [ ] Tutorial
-- [ ] Limited detergent and more detergent types
 - [ ] Pets shop
 
 When there are more machines:

@@ -25,12 +25,16 @@
         :root {
             --border: black;
             --light-bg: #ddf0ea;
+            --light-gray: #dddddd;
+            --dark-gray: #bbbbbb;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
                 --border: #969e9d;
                 --light-bg: #41474d;
+                --light-gray: #333333;
+                --dark-gray: #555555;
             }
         }
 
@@ -233,6 +237,14 @@
             transition: transform 100ms;
         }
 
+        #detergent-count {
+            position: absolute;
+            bottom: calc(50% - 50px);
+            left: 5px;
+            font-size: larger;
+            pointer-events: none;
+        }
+
         #detergent:before,
         #detergent:after {
             content: '';
@@ -256,16 +268,45 @@
             border-top-left-radius: 10px;
         }
 
-        #shop {
+        #tab-btns {
+            position: relative;
+            display: flex;
+            margin-top: 75px;
+            left: -8px;
+        }
+
+        .tab-btn {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border-bottom: 5px solid var(--light-gray);
+            transition: 100ms;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--light-gray);
+            border-bottom: 5px solid var(--dark-gray);
+        }
+
+        .tab-btn.active {
+            background-color: var(--light-bg);
+            border-bottom: 5px solid #a2dbc7;
+        }
+
+        .tab {
             position: relative;
             width: calc(100% - 35px);
             left: -5px;
             padding: 30px;
-            display: flex;
             flex-wrap: wrap;
-            margin-top: 100px;
-            border-top: 5px solid var(--light-bg);
-            border-radius: 20px;
+            display: none;
+        }
+
+        .tab.active {
+            display: flex;
         }
 
         .shop-item {
@@ -280,6 +321,10 @@
 
         .shop-item p {
             margin-top: 0;
+        }
+
+        .detergent-example {
+            height: 250px;
         }
 
         .price {
@@ -351,10 +396,16 @@
     </div>
     <div id="detergent-container">
         <div id="detergent">
-            <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image" draggable="false">
+            <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image" draggable="false"
+                oncontextmenu="return false;">
+            <p id="detergent-count">4</p>
         </div>
     </div>
-    <div id="shop">
+    <div id="tab-btns">
+        <div class="tab-btn active" data-tab="tab1">Machines</div>
+        <div class="tab-btn" data-tab="tab2">Detergent</div>
+    </div>
+    <div id="tab1" class="tab active">
         <div class="shop-item">
             <p>Normal machine</p>
             <p>1.2x profit, 5 sec, max $20</p>
@@ -363,7 +414,7 @@
                 <div class="compartment-example"></div>
                 <div class="circle-example"></div>
             </div>
-            <button class="buy" machinetype="normal">Buy</button>
+            <button class="buy" data-type="machine" data-machinetype="normal">Buy</button>
         </div>
         <div class="shop-item">
             <p>Pink machine</p>
@@ -373,7 +424,7 @@
                 <div class="compartment-example"></div>
                 <div class="circle-example pink"></div>
             </div>
-            <button class="buy" machinetype="pink">Buy</button>
+            <button class="buy" data-type="machine" data-machinetype="pink">Buy</button>
         </div>
         <div class="shop-item">
             <p>Yellow machine</p>
@@ -383,7 +434,16 @@
                 <div class="compartment-example"></div>
                 <div class="circle-example yellow"></div>
             </div>
-            <button class="buy" machinetype="yellow">Buy</button>
+            <button class="buy" data-type="machine" data-machinetype="yellow">Buy</button>
+        </div>
+    </div>
+    <div id="tab2" class="tab">
+        <div class="shop-item">
+            <p>Yellow detergent</p>
+            <p>4 uses</p>
+            <p class="price">$5</p>
+            <img class="detergent-example" src="Content/Money_Laundry_Simulator/detergent.png">
+            <button class="buy" data-type="detergent" data-detergenttype="normal">Buy</button>
         </div>
     </div>
     <div id="money-container">
@@ -396,9 +456,11 @@
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
         const detergent = document.getElementById("detergent-image");
+        const detergentCountEl = document.getElementById("detergent-count")
         const sells = document.getElementsByClassName("sell");
         const moneyContainer = document.getElementById("money-container");
         const moneyEl = document.getElementById("money");
+        const tabButtons = document.getElementById("tab-btns");
         const buys = document.getElementsByClassName("buy");
 
         const machineTypes = {
@@ -444,7 +506,8 @@
         };
 
         var money = 5;
-        var machines = [{ type: "normal", state: "idle", timer: null, money: null }];
+        var machines = [{ type: "normal", state: "idle", timer: null, money: null, deterged: false }];
+        var detergentCount = 4;
         var grabbingDetergent = false;
         var lastDetergentPos;
         var grabbingMoney = false;
@@ -463,19 +526,25 @@
                 if (i > 0) {
                     machineContainer.insertAdjacentHTML("beforeend", machineTypes[machines[i].type].code);
                 }
+                const machine = machineEls[i];
+                const compartment = machine.children[0];
                 if (machines[i].state == "running") {
-                    const machine = machineEls[i];
-                    const compartment = machine.children[0];
-                    compartment.classList.add("deterged");
                     startLaundry(machine.children[1], machine, i, compartment,
                         machines[i].timer, machines[i].money);
                 }
+                if (machines[i].deterged == true) {
+                    compartment.classList.add("deterged");
+                }
             }
+            detergentCount = Number(localStorage.getItem("laundryDetergent"))
+            if (detergentCount == undefined) detergentCount = 4;
+            detergentCountEl.innerText = detergentCount;
         }
 
         function save() {
             localStorage.setItem("laundryMoney", money);
             localStorage.setItem("laundryMachines", JSON.stringify(machines));
+            localStorage.setItem("laundryDetergent", detergentCount);
         }
 
         function changeMoney(count) {
@@ -545,6 +614,7 @@
             clearInterval(laundryIntervals[machineIndex]);
             delete laundryIntervals[machineIndex];
             machines[machineIndex].state = "idle";
+            machines[machineIndex].deterged = false;
             const compartment = machine.children[0];
             const circle = machine.children[1];
             let timerEl;
@@ -571,6 +641,16 @@
         if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
         else save();
 
+        tabButtons.addEventListener("click", (e) => {
+            const clicked = e.target.closest(".tab-btn")
+            if (!clicked) return;
+            document.querySelector(".tab-btn.active").classList.remove("active");
+            clicked.classList.add("active");
+            const tabId = clicked.dataset.tab;
+            document.querySelector(".tab.active").classList.remove("active");
+            document.getElementById(tabId).classList.add("active");
+        })
+
         function updateRotations() {
             if (grabbingDetergent) {
                 const detergentClone = document.getElementById("detergent-clone")
@@ -586,21 +666,23 @@
         }
 
         function grabDetergentStart(e, type) {
-            e.preventDefault();
-            if (document.getElementById("detergent-clone")) document.getElementById("detergent-clone").remove()
-            grabbingDetergent = true;
-            const clone = detergent.cloneNode(true);
-            clone.id = "detergent-clone";
-            let touch;
-            if (type == "mouse") {
-                touch = e;
-            } else {
-                touch = e.touches[0];
+            if (detergentCount > 0) {
+                e.preventDefault();
+                if (document.getElementById("detergent-clone")) document.getElementById("detergent-clone").remove()
+                grabbingDetergent = true;
+                const clone = detergent.cloneNode(true);
+                clone.id = "detergent-clone";
+                let touch;
+                if (type == "mouse") {
+                    touch = e;
+                } else {
+                    touch = e.touches[0];
+                }
+                clone.style.left = `${touch.clientX - 15}px`;
+                clone.style.top = `${touch.clientY + window.scrollY - 5}px`;
+                lastDetergentPos = touch.clientX - 15;
+                document.body.appendChild(clone);
             }
-            clone.style.left = `${touch.clientX - 25}px`;
-            clone.style.top = `${touch.clientY + window.scrollY - 5}px`;
-            lastDetergentPos = touch.clientX - 25;
-            document.body.appendChild(clone);
         }
 
         function grabMoneyStart(e, type) {
@@ -623,7 +705,7 @@
             else touch = e.touches[0];
             if (grabbingDetergent) {
                 const detergentClone = document.getElementById("detergent-clone");
-                detergentClone.style.left = `${touch.clientX - 25}px`;
+                detergentClone.style.left = `${touch.clientX - 15}px`;
                 detergentClone.style.top = `${touch.clientY + window.scrollY - 5}px`;
             } else if (grabbingMoney) {
                 const moneyClone = document.getElementById("money-clone");
@@ -644,9 +726,15 @@
                     const rect = compartments[i].getBoundingClientRect();
                     if (rect.left < touch.clientX && rect.top < touch.clientY &&
                         rect.right > touch.clientX && rect.bottom > touch.clientY
-                        && compartments[i].classList.contains("open")
+                        && compartments[i].classList.contains("open") && detergentCount > 0
                     ) {
                         compartments[i].classList.add("deterged");
+                        const machine = compartments[i].parentElement;
+                        const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                        machines[machineIndex].deterged = true;
+                        detergentCount -= 1;
+                        detergentCountEl.innerText = detergentCount;
+                        save();
                     }
                 }
             } else if (grabbingMoney) {
@@ -724,14 +812,13 @@
 
         for (let i = 0; i < buys.length; i++) {
             buys[i].addEventListener("click", (e) => {
-                if (money >= 30) {
-                    const type = machineTypes[e.target.getAttribute("machinetype")];
-
+                const buytype = e.target.dataset.type;
+                if (buytype == "machine" && money >= 30) {
+                    const type = machineTypes[e.target.dataset.machinetype];
                     changeMoney(-type.cost);
-
                     machineContainer.insertAdjacentHTML("beforeend", type.code);
 
-                    machines.push({ type: e.target.getAttribute("machinetype"), state: "idle", timer: null, money: null });
+                    machines.push({ type: e.target.dataset.machinetype, state: "idle", timer: null, money: null });
 
                     const machine = machineEls[machineEls.length - 1];
                     const compartment = machine.children[0];
@@ -806,6 +893,11 @@
                             save();
                         }
                     })
+                    save();
+                } else if (buytype == detergent) {
+                    // const type = e.target.dataset.detergenttype;
+                    detergentCount += 4;
+                    detergentCountEl.innerText = detergentCount;
                     save();
                 }
             })
