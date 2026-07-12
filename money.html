@@ -872,10 +872,10 @@
         }
 
         moneyEl.addEventListener("mousedown", (e) => { grabMoneyStart(e, "mouse") });
-        moneyEl.addEventListener("touchstart", (e) => { grabMoneyStart(e, "touch") });
+        moneyEl.addEventListener("touchstart", (e) => { grabMoneyStart(e, "touch") }, {passive: false});
 
         document.addEventListener("mousemove", (e) => { move(e, "mouse") })
-        document.addEventListener("touchmove", (e) => { move(e, "touch") })
+        document.addEventListener("touchmove", (e) => { move(e, "touch") }, {passive: false})
 
         document.addEventListener("mouseup", (e) => { drop(e, "mouse") })
         document.addEventListener("touchend", (e) => { drop(e, "touch") })
