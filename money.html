@@ -53,6 +53,10 @@
             .tab {
                 justify-content: center;
             }
+
+            #tutorial-text {
+                max-width: 100px;
+            }
         }
 
         button {
@@ -416,6 +420,25 @@
             transform-origin: 50% 5px;
             transition: transform 100ms;
         }
+
+        #cursor {
+            width: 100px;
+            position: absolute;
+            top: 100vh;
+            transform: rotateZ(360deg);
+            transition: 1s;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #tutorial-text {
+            position: absolute;
+            top: 100vh;
+            transition: 1s;
+            pointer-events: none;
+            background-color: white;
+            z-index: 10;
+        }
     </style>
 </head>
 
@@ -486,7 +509,12 @@
         </div>
     </div>
     <div id="money-container">
-        <p id="money">$5</p>
+        <p id="money">$10</p>
+    </div>
+
+    <div id="tutorial-container">
+        <img src="Content/Money_Laundry_Simulator/cursor.png" id="cursor">
+        <p id="tutorial-text">Step 1. Open the compartment.</p>
     </div>
 
     <script>
@@ -503,6 +531,9 @@
         const moneyEl = document.getElementById("money");
         const tabButtons = document.getElementById("tab-btns");
         const buys = document.getElementsByClassName("buy");
+        const tutorialContainer = document.getElementById("tutorial-container");
+        const cursor = document.getElementById("cursor");
+        const tutorialText = document.getElementById("tutorial-text");
 
         const machineTypes = {
             normal: {
@@ -559,7 +590,7 @@
             }
         }
 
-        var money = 5;
+        var money = 10;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null, deterged: false }];
         var detergentCount = { yellow: 6, pink: 0 };
         var grabbingDetergent = null;
@@ -572,6 +603,7 @@
         var laundryIntervals = {};
 
         function continueGame() {
+            tutorialContainer.style.display = "none";
             money = Number(localStorage.getItem("laundryMoney"));
             moneyEl.innerText = `$${money}`;
             moneyWidth = moneyEl.getBoundingClientRect().width;
@@ -626,8 +658,102 @@
                 }
 
                 const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
-                detergentContainer.style.setProperty("--len", len)
+                detergentContainer.style.setProperty("--len", len);
             }
+        }
+
+        function continueTutorial() {
+            setTimeout(() => {
+                if (compartments[0].classList.contains("deterged")) {
+                    document.removeEventListener("mouseup", continueTutorial);
+                    document.removeEventListener("touchend", continueTutorial);
+                    const moneyRect = moneyEl.getBoundingClientRect();
+                    const moneyPos = [
+                        moneyRect.left - 75,
+                        moneyRect.top + window.scrollY - 75
+                    ]
+                    cursor.style.left = `${moneyPos[0]}px`;
+                    cursor.style.top = `${moneyPos[1]}px`;
+                    cursor.style.transform = "rotateZ(150deg)";
+                    tutorialText.innerHTML = "Step 3. Drag the money to the circle inside the machine.";
+                    if (moneyPos[0] - 350 > 0 ) tutorialText.style.left = `${moneyPos[0] - 350}px`;
+                    else tutorialText.style.left = "5px";
+                    tutorialText.style.top = `${moneyPos[1] - 30}px`;
+                    document.addEventListener("mouseup", continueTutorial2, { once: true });
+                    document.addEventListener("touchend", continueTutorial2, { once: true });
+                }
+            }, 100)
+        }
+
+        function continueTutorial2() {
+            setTimeout(() => {
+                if (circles[0].classList.contains("inserting")) {
+                    document.removeEventListener("mouseup", continueTutorial2);
+                    document.removeEventListener("touchend", continueTutorial2);
+                    const insertButton = document.querySelector(".circle > button");
+                    const buttonRect = insertButton.getBoundingClientRect();
+                    const buttonMiddle = [
+                        buttonRect.left + (buttonRect.right - buttonRect.left) / 2 - 50,
+                        buttonRect.top + (buttonRect.top - buttonRect.bottom) / 2 + window.scrollY + 20
+                    ]
+                    cursor.style.left = `${buttonMiddle[0]}px`;
+                    cursor.style.top = `${buttonMiddle[1]}px`;
+                    cursor.style.transform = "rotateZ(0deg)";
+                    tutorialText.innerHTML = "Step 4. Insert some money after typing an amount.";
+                    if (buttonMiddle[0] - 30 > 0) tutorialText.style.left = `${buttonMiddle[0] - 30}px`;
+                    else tutorialText.style.left = "5px";
+                    tutorialText.style.top = `${buttonMiddle[1] + 100}px`;
+                    insertButton.addEventListener("click", () => {
+                        setTimeout(() => {
+                            if (circles[0].classList.contains("washing")) {
+                                cursor.style.top = "-100px";
+                                cursor.style.transform = "rotateZ(-1000deg)";
+                                tutorialText.innerText = "If your detergent runs out, \n buy some new detergent in the shop. Good luck!"
+                                setTimeout(() => {
+                                    tutorialContainer.style.display = "none";
+                                }, 4000)
+                            }
+                        }, 100)
+                    })
+                }
+            }, 100)
+        }
+
+        function startGame() {
+            save();
+
+            const img = document.querySelector(".detergent-image[data-detergenttype=yellow]");
+            img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") });
+            img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") });
+
+            const compartmentRect = compartments[0].getBoundingClientRect();
+            const compartmentMiddle = [
+                compartmentRect.left + (compartmentRect.right - compartmentRect.left) / 2 - 50,
+                compartmentRect.top + (compartmentRect.top - compartmentRect.bottom) / 2 + window.scrollY
+            ]
+            cursor.style.left = `${compartmentMiddle[0]}px`;
+            cursor.style.top = `${compartmentMiddle[1]}px`;
+            cursor.style.transform = "rotateZ(0deg)";
+            tutorialText.style.left = `${compartmentMiddle[0]}px`;
+            tutorialText.style.top = `${compartmentMiddle[1] + 100}px`;
+
+            compartments[0].addEventListener("click", () => {
+                const detergentRect = detergents[0].getBoundingClientRect();
+                const detergentMiddle = [
+                    detergentRect.left + (detergentRect.right - detergentRect.left) / 2 - 75,
+                    detergentRect.top + (detergentRect.top - detergentRect.bottom) / 2 + window.scrollY + 50
+                ]
+                cursor.style.left = `${detergentMiddle[0]}px`;
+                cursor.style.top = `${detergentMiddle[1]}px`;
+                cursor.style.transform = "rotateZ(45deg)";
+                tutorialText.innerHTML = "Step 2. Drag this detergent to the compartment.";
+                if (detergentMiddle[0] - 300 > 0) tutorialText.style.left = `${detergentMiddle[0] - 300}px`;
+                else tutorialText.style.left = "5px";
+                tutorialText.style.top = `${detergentMiddle[1]}px`;
+
+                document.addEventListener("mouseup", continueTutorial, { once: true });
+                document.addEventListener("touchend", continueTutorial, { once: true });
+            }, { once: true })
         }
 
         function save() {
@@ -729,7 +855,7 @@
 
 
         if (localStorage.getItem("laundryMoney") && localStorage.getItem("laundryMachines")) continueGame();
-        else save();
+        else startGame();
 
         tabButtons.addEventListener("click", (e) => {
             const clicked = e.target.closest(".tab-btn")
