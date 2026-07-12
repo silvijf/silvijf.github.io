@@ -792,15 +792,16 @@
         }
 
         function move(e, type) {
-            e.preventDefault();
             let touch;
             if (type == "mouse") touch = e;
             else touch = e.touches[0];
             if (grabbingDetergent) {
+                e.preventDefault();
                 const detergentClone = document.getElementById("detergent-clone");
                 detergentClone.style.left = `${touch.clientX - 15}px`;
                 detergentClone.style.top = `${touch.clientY + window.scrollY - 5}px`;
             } else if (grabbingMoney) {
+                e.preventDefault();
                 const moneyClone = document.getElementById("money-clone");
                 moneyClone.style.left = `${touch.clientX - moneyWidth / 2}px`;
                 moneyClone.style.top = `${touch.clientY + window.scrollY - 5}px`;
@@ -872,10 +873,10 @@
         }
 
         moneyEl.addEventListener("mousedown", (e) => { grabMoneyStart(e, "mouse") });
-        moneyEl.addEventListener("touchstart", (e) => { grabMoneyStart(e, "touch") }, {passive: false});
+        moneyEl.addEventListener("touchstart", (e) => { grabMoneyStart(e, "touch") }, { passive: false });
 
         document.addEventListener("mousemove", (e) => { move(e, "mouse") })
-        document.addEventListener("touchmove", (e) => { move(e, "touch") }, {passive: false})
+        document.addEventListener("touchmove", (e) => { move(e, "touch") }, { passive: false })
 
         document.addEventListener("mouseup", (e) => { drop(e, "mouse") })
         document.addEventListener("touchend", (e) => { drop(e, "touch") })
