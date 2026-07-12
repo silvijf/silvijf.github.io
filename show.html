@@ -22,7 +22,8 @@
 
         #text {
             font-size: 30vw;
-            font-family: 'Montserrat'
+            font-family: 'Montserrat';
+            margin: 0;
         }
     </style>
 </head>
@@ -43,16 +44,19 @@
         }
 
         if (strings[string] != undefined) {
-            text.innerHTML = strings[string]
-            document.title = strings[string]
+            text.innerHTML = strings[string];
+            document.title = strings[string];
         } else {
             if (string != undefined) {
-                text.innerHTML = decodeURIComponent(string.replaceAll("+", " ").toUpperCase())
-                document.title = decodeURIComponent(string.replaceAll("+", " ").toUpperCase())
-                if (decodeURIComponent(string).length > 7) text.style.fontSize = "8vw"
-                else if (decodeURIComponent(string).length > 4) text.style.fontSize = "20vw"
+                let newString = decodeURIComponent(string.replaceAll("+", " "));
+                if (!newString.startsWith("$") && !newString.startsWith("\\$")) newString = newString.toUpperCase();
+                else if (newString.startsWith("$") || newString.startsWith("\\$")) newString = newString.slice(1, newString.length);
+                text.innerHTML = newString;
+                document.title = newString;
+                if (newString.length < 4) text.style.fontSize = "30vw"
+                else text.style.fontSize = `${100 / (newString.length * 0.8)}vw`;
             } else {
-                document.title = "NOPE"
+                document.title = "NOPE";
             }
         }
 
