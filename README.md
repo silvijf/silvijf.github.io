@@ -16,8 +16,8 @@ This is my site.
 - [x] Limited detergent
 - [x] Bankruptcy helper
 - [x] More detergent types
+- [x] Tutorial
 - [ ] Slots
-- [ ] Tutorial
 - [ ] Pets shop
 
 When there are more machines:
