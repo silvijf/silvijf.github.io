@@ -23,3 +23,6 @@ This is my site.
 When there are more machines:
 - [ ] Balancing
 - [ ] Offline earnings
+
+Machine plan:
+Blue, purple, green, camouflage, bright purple with yellow dots

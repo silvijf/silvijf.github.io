@@ -229,7 +229,14 @@
             z-index: 1;
         }
 
-        #detergent-image {
+        #detergent {
+            --len: 65px;
+            background-color: #b3e3e1;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .detergent-image {
             width: 50px;
             background-color: #b3e3e1;
             border-top-left-radius: 10px;
@@ -250,12 +257,14 @@
             transition: transform 100ms;
         }
 
-        #detergent-count {
+        .detergent-count {
             position: absolute;
-            bottom: calc(50% - 50px);
+            /*bottom: calc(50% - 50px);*/
+            transform: translateY(-50px);
             left: 5px;
             font-size: larger;
             pointer-events: none;
+            z-index: 3;
         }
 
         #detergent:before,
@@ -268,14 +277,14 @@
         }
 
         #detergent:before {
-            top: calc(50% - 65px);
+            top: calc(50% - var(--len));
             border-bottom: 30px solid #b3e3e1;
             border-left: 50px solid transparent;
             border-bottom-left-radius: 10px;
         }
 
         #detergent:after {
-            bottom: calc(50% - 61px);
+            bottom: calc(50% - var(--len));
             border-top: 30px solid #b3e3e1;
             border-left: 50px solid transparent;
             border-top-left-radius: 10px;
@@ -413,9 +422,9 @@
     </div>
     <div id="detergent-container">
         <div id="detergent">
-            <img src="Content/Money_Laundry_Simulator/detergent.png" id="detergent-image" draggable="false"
-                oncontextmenu="return false;">
-            <p id="detergent-count">6</p>
+            <img src="Content/Money_Laundry_Simulator/detergent.png" class="detergent-image" draggable="false"
+                data-detergenttype="yellow" oncontextmenu="return false;">
+            <p class="detergent-count" data-detergenttype="yellow">6</p>
         </div>
     </div>
     <div id="tab-btns">
@@ -460,7 +469,14 @@
             <p>6 uses</p>
             <p class="price">$5</p>
             <img class="detergent-example" src="Content/Money_Laundry_Simulator/detergent.png">
-            <button class="buy" data-type="detergent" data-detergenttype="normal">Buy</button>
+            <button class="buy" data-type="detergent" data-detergenttype="yellow">Buy</button>
+        </div>
+        <div class="shop-item">
+            <p>Pink detergent</p>
+            <p>20 uses</p>
+            <p class="price">$20</p>
+            <img class="detergent-example" src="Content/Money_Laundry_Simulator/detergent-pink.png">
+            <button class="buy" data-type="detergent" data-detergenttype="pink">Buy</button>
         </div>
     </div>
     <div id="money-container">
@@ -472,8 +488,10 @@
         const machineEls = document.getElementsByClassName("machine");
         const compartments = document.getElementsByClassName("compartment");
         const circles = document.getElementsByClassName("circle");
-        const detergent = document.getElementById("detergent-image");
-        const detergentCountEl = document.getElementById("detergent-count")
+        const detergentContainer = document.getElementById("detergent");
+        const detergents = document.getElementsByClassName("detergent-image");
+        const detergentCountEl = document.getElementsByClassName("detergent-count")[0];
+        const detergentCountEls = document.getElementsByClassName("detergent-count");
         const sells = document.getElementsByClassName("sell");
         const moneyContainer = document.getElementById("money-container");
         const moneyEl = document.getElementById("money");
@@ -522,9 +540,22 @@
             }
         };
 
+        const detergentTypes = {
+            yellow: {
+                cost: 5,
+                uses: 6,
+                src: "Content/Money_Laundry_Simulator/detergent.png"
+            },
+            pink: {
+                cost: 20,
+                uses: 20,
+                src: "Content/Money_Laundry_Simulator/detergent-pink.png"
+            }
+        }
+
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null, deterged: false }];
-        var detergentCount = 6;
+        var detergentCount = { yellow: 6, pink: 0 };
         var grabbingDetergent = false;
         var lastDetergentPos;
         var grabbingMoney = false;
@@ -553,15 +584,48 @@
                     compartment.classList.add("deterged");
                 }
             }
-            detergentCount = Number(localStorage.getItem("laundryDetergent"))
-            if (detergentCount == undefined) detergentCount = 6;
-            detergentCountEl.innerText = detergentCount;
+            detergentCount = JSON.parse(localStorage.getItem("laundryDetergent"))
+            if (typeof (detergentCount) != "object") detergentCount = { yellow: 6 };
+            for (let i = 0; i < Object.values(detergentCount).length; i++) {
+                const detergentType = Object.keys(detergentCount)[i];
+                const type = detergentTypes[detergentType];
+                if (detergentType == "yellow") {
+                    const img = document.querySelector(".detergent-image[data-detergenttype=yellow]");
+                    img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") });
+                    img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") });
+                    const thisDetergentCountEl = document.querySelector(".detergent-count[data-detergenttype=yellow]");
+                    thisDetergentCountEl.innerText = detergentCount.yellow;
+                } else if (Object.values(detergentCount)[i] > 0) {
+                    const img = document.createElement("img");
+                    img.src = type.src;
+                    img.classList.add("detergent-image");
+                    img.draggable = false;
+                    img.oncontextmenu = "return false";
+                    img.dataset.detergenttype = detergentType;
+                    const thisDetergentCountEl = document.createElement("p");
+                    thisDetergentCountEl.classList.add("detergent-count");
+                    thisDetergentCountEl.dataset.detergenttype = detergentType;
+                    thisDetergentCountEl.innerText = detergentCount[detergentType];
+                    detergentContainer.appendChild(img);
+                    detergentContainer.appendChild(thisDetergentCountEl);
+                    img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") });
+                    img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") });
+                }
+
+                const detergentCountLength = Object.values(detergentCount).filter(d => d > 1).length;
+                if (detergentCount.yellow == 0 && detergentCountLength > 0) {
+                    detergentContainer.children[0].remove();
+                }
+
+                const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
+                detergentContainer.style.setProperty("--len", len)
+            }
         }
 
         function save() {
             localStorage.setItem("laundryMoney", money);
             localStorage.setItem("laundryMachines", JSON.stringify(machines));
-            localStorage.setItem("laundryDetergent", detergentCount);
+            localStorage.setItem("laundryDetergent", JSON.stringify(detergentCount));
         }
 
         function changeMoney(count) {
@@ -683,18 +747,29 @@
         }
 
         function grabDetergentStart(e, type) {
-            if (detergentCount > 0) {
+            let touch;
+            if (type == "mouse") {
+                touch = e;
+            } else {
+                touch = e.touches[0];
+            }
+            const detergentType = e.target.dataset.detergenttype;
+            if (detergentType == "yellow" && detergentCount.yellow > 0) {
                 e.preventDefault();
                 if (document.getElementById("detergent-clone")) document.getElementById("detergent-clone").remove()
                 grabbingDetergent = true;
-                const clone = detergent.cloneNode(true);
+                const clone = document.querySelector(".detergent-image[data-detergenttype=yellow]").cloneNode(true);
                 clone.id = "detergent-clone";
-                let touch;
-                if (type == "mouse") {
-                    touch = e;
-                } else {
-                    touch = e.touches[0];
-                }
+                clone.style.left = `${touch.clientX - 15}px`;
+                clone.style.top = `${touch.clientY + window.scrollY - 5}px`;
+                lastDetergentPos = touch.clientX - 15;
+                document.body.appendChild(clone);
+            } else if (detergentType == "pink" && detergentCount.pink > 0) {
+                e.preventDefault();
+                if (document.getElementById("detergent-clone")) document.getElementById("detergent-clone").remove()
+                grabbingDetergent = "pink";
+                const clone = document.querySelector(".detergent-image[data-detergenttype=pink]").cloneNode(true);
+                clone.id = "detergent-clone";
                 clone.style.left = `${touch.clientX - 15}px`;
                 clone.style.top = `${touch.clientY + window.scrollY - 5}px`;
                 lastDetergentPos = touch.clientX - 15;
@@ -737,20 +812,27 @@
             else touch = e.changedTouches[0];
             if (grabbingDetergent) {
                 const detergentClone = document.getElementById("detergent-clone");
+                const detergentType = detergentClone.dataset.detergenttype;
                 detergentClone.remove();
                 grabbingDetergent = false;
                 for (let i = 0; i < compartments.length; i++) {
                     const rect = compartments[i].getBoundingClientRect();
                     if (rect.left < touch.clientX && rect.top < touch.clientY &&
                         rect.right > touch.clientX && rect.bottom > touch.clientY
-                        && compartments[i].classList.contains("open") && detergentCount > 0
+                        && compartments[i].classList.contains("open") && detergentCount[detergentType] > 0
                     ) {
                         compartments[i].classList.add("deterged");
                         const machine = compartments[i].parentElement;
                         const machineIndex = [].slice.call(machineEls).indexOf(machine);
                         machines[machineIndex].deterged = true;
-                        detergentCount -= 1;
-                        detergentCountEl.innerText = detergentCount;
+                        detergentCount[detergentType] -= 1;
+                        const detergentCountLength = Object.values(detergentCount).filter(d => d > 1).length;
+                        if (detergentCount[detergentType] == 0 && detergentCountLength > 0) {
+                            document.querySelector(`.detergent-image[data-detergenttype=${detergentType}]`).remove();
+                            document.querySelector(`.detergent-count[data-detergenttype=${detergentType}]`).remove();
+                            const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
+                            detergentContainer.style.setProperty("--len", len);
+                        } else document.querySelector(`.detergent-count[data-detergenttype=${detergentType}]`).innerText = detergentCount[detergentType];
                         save();
                     }
                 }
@@ -787,9 +869,6 @@
                 }
             }
         }
-
-        detergent.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") })
-        detergent.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") })
 
         moneyEl.addEventListener("mousedown", (e) => { grabMoneyStart(e, "mouse") });
         moneyEl.addEventListener("touchstart", (e) => { grabMoneyStart(e, "touch") });
@@ -912,16 +991,46 @@
                     })
                     save();
                 } else if (buytype == "detergent") {
-                    if (money - 5 == 0 && machines.length == 1) {
+                    const detergentType = e.target.dataset.detergenttype;
+                    const type = detergentTypes[detergentType];
+                    if (money == type.cost && machines.length == 1) {
                         e.target.innerText = "You'd be bankrupt if you bought this!";
                         setTimeout(() => {
                             e.target.innerText = "Buy";
                         }, 3000)
-                    } else if (money >= 5) {
-                        // const type = e.target.dataset.detergenttype;
-                        detergentCount += 6;
-                        detergentCountEl.innerText = detergentCount;
-                        changeMoney(-5);
+                    } else if (money >= type.cost) {
+                        if (!document.querySelector(`.detergent-image[data-detergenttype=${detergentType}]`)) {
+                            const img = document.createElement("img");
+                            img.src = type.src;
+                            img.classList.add("detergent-image");
+                            img.draggable = false;
+                            img.oncontextmenu = "return false";
+                            img.dataset.detergenttype = detergentType;
+                            const thisDetergentCountEl = document.createElement("p");
+                            thisDetergentCountEl.classList.add("detergent-count");
+                            thisDetergentCountEl.dataset.detergenttype = detergentType;
+                            thisDetergentCountEl.innerText = detergentCount[detergentType];
+                            detergentContainer.appendChild(img);
+                            detergentContainer.appendChild(thisDetergentCountEl);
+                            img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") })
+                            img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") })
+                        }
+                        detergentCount[detergentType] += type.uses;
+                        document.querySelector(`.detergent-count[data-detergenttype=${detergentType}]`).innerText = detergentCount[detergentType];
+                        changeMoney(-type.cost);
+                        for (let i = 0; i < Object.values(detergentCount).length; i++) {
+                            if (Object.values(detergentCount)[i] == 0) {
+                                const detergentType = Object.keys(detergentCount)[i];
+                                const detergentImage = document.querySelector(`.detergent-image[data-detergenttype=${detergentType}]`);
+                                if (detergentImage) {
+                                    detergentImage.remove();
+                                    document.querySelector(`.detergent-count[data-detergenttype=${detergentType}]`).remove();
+                                }
+                            }
+                        }
+
+                        const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
+                        detergentContainer.style.setProperty("--len", len);
                         save();
                     }
                 }
