@@ -490,7 +490,6 @@
         const circles = document.getElementsByClassName("circle");
         const detergentContainer = document.getElementById("detergent");
         const detergents = document.getElementsByClassName("detergent-image");
-        const detergentCountEl = document.getElementsByClassName("detergent-count")[0];
         const detergentCountEls = document.getElementsByClassName("detergent-count");
         const sells = document.getElementsByClassName("sell");
         const moneyContainer = document.getElementById("money-container");
@@ -556,7 +555,7 @@
         var money = 5;
         var machines = [{ type: "normal", state: "idle", timer: null, money: null, deterged: false }];
         var detergentCount = { yellow: 6, pink: 0 };
-        var grabbingDetergent = false;
+        var grabbingDetergent = null;
         var lastDetergentPos;
         var grabbingMoney = false;
         var lastMoneyPos;
@@ -593,8 +592,8 @@
                     const img = document.querySelector(".detergent-image[data-detergenttype=yellow]");
                     img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") });
                     img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") });
-                    const thisDetergentCountEl = document.querySelector(".detergent-count[data-detergenttype=yellow]");
-                    thisDetergentCountEl.innerText = detergentCount.yellow;
+                    const detergentCountEl = document.querySelector(".detergent-count[data-detergenttype=yellow]");
+                    detergentCountEl.innerText = detergentCount.yellow;
                 } else if (Object.values(detergentCount)[i] > 0) {
                     const img = document.createElement("img");
                     img.src = type.src;
@@ -602,19 +601,21 @@
                     img.draggable = false;
                     img.oncontextmenu = "return false";
                     img.dataset.detergenttype = detergentType;
-                    const thisDetergentCountEl = document.createElement("p");
-                    thisDetergentCountEl.classList.add("detergent-count");
-                    thisDetergentCountEl.dataset.detergenttype = detergentType;
-                    thisDetergentCountEl.innerText = detergentCount[detergentType];
+                    const detergentCountEl = document.createElement("p");
+                    detergentCountEl.classList.add("detergent-count");
+                    detergentCountEl.dataset.detergenttype = detergentType;
+                    detergentCountEl.innerText = detergentCount[detergentType];
                     detergentContainer.appendChild(img);
-                    detergentContainer.appendChild(thisDetergentCountEl);
+                    detergentContainer.appendChild(detergentCountEl);
                     img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") });
                     img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") });
                 }
 
                 const detergentCountLength = Object.values(detergentCount).filter(d => d > 1).length;
-                if (detergentCount.yellow == 0 && detergentCountLength > 0) {
+                if (detergentCount.yellow == 0 && detergentCountLength > 0 &&
+                    document.querySelector(".detergent-image[data-detergenttype=yellow]")) {
                     detergentContainer.children[0].remove();
+                    document.querySelector(".detergent-count[data-detergenttype=yellow]").remove();
                 }
 
                 const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
@@ -757,7 +758,7 @@
             if (detergentType == "yellow" && detergentCount.yellow > 0) {
                 e.preventDefault();
                 if (document.getElementById("detergent-clone")) document.getElementById("detergent-clone").remove()
-                grabbingDetergent = true;
+                grabbingDetergent = "yellow";
                 const clone = document.querySelector(".detergent-image[data-detergenttype=yellow]").cloneNode(true);
                 clone.id = "detergent-clone";
                 clone.style.left = `${touch.clientX - 15}px`;
@@ -814,7 +815,7 @@
                 const detergentClone = document.getElementById("detergent-clone");
                 const detergentType = detergentClone.dataset.detergenttype;
                 detergentClone.remove();
-                grabbingDetergent = false;
+                grabbingDetergent = null;
                 for (let i = 0; i < compartments.length; i++) {
                     const rect = compartments[i].getBoundingClientRect();
                     if (rect.left < touch.clientX && rect.top < touch.clientY &&
@@ -909,87 +910,89 @@
         for (let i = 0; i < buys.length; i++) {
             buys[i].addEventListener("click", (e) => {
                 const buytype = e.target.dataset.type;
-                if (buytype == "machine" && money >= 30) {
+                if (buytype == "machine") {
                     const type = machineTypes[e.target.dataset.machinetype];
-                    changeMoney(-type.cost);
-                    machineContainer.insertAdjacentHTML("beforeend", type.code);
+                    if (money >= type.cost) {
+                        changeMoney(-type.cost);
+                        machineContainer.insertAdjacentHTML("beforeend", type.code);
 
-                    machines.push({ type: e.target.dataset.machinetype, state: "idle", timer: null, money: null });
+                        machines.push({ type: e.target.dataset.machinetype, state: "idle", timer: null, money: null });
 
-                    const machine = machineEls[machineEls.length - 1];
-                    const compartment = machine.children[0];
-                    const circle = machine.children[1];
-                    const sell = machine.children[2];
+                        const machine = machineEls[machineEls.length - 1];
+                        const compartment = machine.children[0];
+                        const circle = machine.children[1];
+                        const sell = machine.children[2];
 
-                    compartment.addEventListener("click", (e) => {
-                        const circle = e.target.parentElement.children[1];
-                        if (e.target.classList.contains("open")) {
-                            e.target.classList.remove("open");
-                        } else if (!circle.classList.contains("washing")) {
-                            e.target.classList.add("open");
-                        }
-                    })
+                        compartment.addEventListener("click", (e) => {
+                            const circle = e.target.parentElement.children[1];
+                            if (e.target.classList.contains("open")) {
+                                e.target.classList.remove("open");
+                            } else if (!circle.classList.contains("washing")) {
+                                e.target.classList.add("open");
+                            }
+                        })
 
-                    compartment.addEventListener("dragover", (e) => {
-                        e.preventDefault();
-                        if (e.target.classList.contains("open")) {
+                        compartment.addEventListener("dragover", (e) => {
+                            e.preventDefault();
+                            if (e.target.classList.contains("open")) {
+                                e.target.classList.add("drag-over");
+                            }
+                        })
+
+                        compartment.addEventListener("dragleave", (e) => {
+                            e.target.classList.remove("drag-over");
+                        })
+
+                        compartment.addEventListener("drop", (e) => {
+                            e.target.classList.remove("drag-over");
+                            if (e.target.classList.contains("open")) {
+                                e.preventDefault();
+                                const data = e.dataTransfer.getData("text");
+                                if (data.endsWith("detergent.png")) {
+                                    e.target.classList.add("deterged");
+                                }
+                            }
+                        })
+
+                        circle.addEventListener("dragover", (e) => {
+                            e.preventDefault();
                             e.target.classList.add("drag-over");
-                        }
-                    })
+                        })
 
-                    compartment.addEventListener("dragleave", (e) => {
-                        e.target.classList.remove("drag-over");
-                    })
+                        circle.addEventListener("dragleave", (e) => {
+                            e.target.classList.remove("drag-over");
+                        })
 
-                    compartment.addEventListener("drop", (e) => {
-                        e.target.classList.remove("drag-over");
-                        if (e.target.classList.contains("open")) {
+                        circle.addEventListener("drop", (e) => {
+                            e.target.classList.remove("drag-over")
                             e.preventDefault();
                             const data = e.dataTransfer.getData("text");
-                            if (data.endsWith("detergent.png")) {
-                                e.target.classList.add("deterged");
+                            if (data == "money" && !e.target.classList.contains("inserting")) {
+                                e.target.classList.add("inserting");
+                                const input = document.createElement("input");
+                                input.type = "number";
+                                input.placeholder = money;
+                                const button = document.createElement("button");
+                                button.innerText = "Insert money";
+                                button.addEventListener("click", () => { checkStartLaundry(e.target) })
+                                e.target.appendChild(input);
+                                e.target.appendChild(button);
                             }
-                        }
-                    })
+                        })
 
-                    circle.addEventListener("dragover", (e) => {
-                        e.preventDefault();
-                        e.target.classList.add("drag-over");
-                    })
-
-                    circle.addEventListener("dragleave", (e) => {
-                        e.target.classList.remove("drag-over");
-                    })
-
-                    circle.addEventListener("drop", (e) => {
-                        e.target.classList.remove("drag-over")
-                        e.preventDefault();
-                        const data = e.dataTransfer.getData("text");
-                        if (data == "money" && !e.target.classList.contains("inserting")) {
-                            e.target.classList.add("inserting");
-                            const input = document.createElement("input");
-                            input.type = "number";
-                            input.placeholder = money;
-                            const button = document.createElement("button");
-                            button.innerText = "Insert money";
-                            button.addEventListener("click", () => { checkStartLaundry(e.target) })
-                            e.target.appendChild(input);
-                            e.target.appendChild(button);
-                        }
-                    })
-
-                    sell.addEventListener("click", (e) => {
-                        if (!machine.children[1].classList.contains("washing")) {
-                            const machine = e.target.parentElement;
-                            const machineIndex = [].slice.call(machineEls).indexOf(machine);
-                            machine.remove();
-                            const cost = machineTypes[machines[machineIndex].type].cost;
-                            changeMoney(Math.floor(cost * 2 / 3));
-                            machines.splice(machineIndex, 1);
-                            save();
-                        }
-                    })
-                    save();
+                        sell.addEventListener("click", (e) => {
+                            if (!machine.children[1].classList.contains("washing")) {
+                                const machine = e.target.parentElement;
+                                const machineIndex = [].slice.call(machineEls).indexOf(machine);
+                                machine.remove();
+                                const cost = machineTypes[machines[machineIndex].type].cost;
+                                changeMoney(Math.floor(cost * 2 / 3));
+                                machines.splice(machineIndex, 1);
+                                save();
+                            }
+                        })
+                        save();
+                    }
                 } else if (buytype == "detergent") {
                     const detergentType = e.target.dataset.detergenttype;
                     const type = detergentTypes[detergentType];
@@ -1006,12 +1009,12 @@
                             img.draggable = false;
                             img.oncontextmenu = "return false";
                             img.dataset.detergenttype = detergentType;
-                            const thisDetergentCountEl = document.createElement("p");
-                            thisDetergentCountEl.classList.add("detergent-count");
-                            thisDetergentCountEl.dataset.detergenttype = detergentType;
-                            thisDetergentCountEl.innerText = detergentCount[detergentType];
+                            const detergentCountEl = document.createElement("p");
+                            detergentCountEl.classList.add("detergent-count");
+                            detergentCountEl.dataset.detergenttype = detergentType;
+                            detergentCountEl.innerText = detergentCount[detergentType];
                             detergentContainer.appendChild(img);
-                            detergentContainer.appendChild(thisDetergentCountEl);
+                            detergentContainer.appendChild(detergentCountEl);
                             img.addEventListener("mousedown", (e) => { grabDetergentStart(e, "mouse") })
                             img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") })
                         }
