@@ -15,8 +15,8 @@ This is my site.
 - [x] Make selling impossible while washing
 - [x] Limited detergent
 - [x] Bankruptcy helper
+- [x] More detergent types
 - [ ] Slots
-- [ ] More detergent types
 - [ ] Tutorial
 - [ ] Pets shop
 
