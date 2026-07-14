@@ -23,6 +23,7 @@
         }
 
         :root {
+            --body-background: #fff;
             --border: black;
             --light-bg: #ddf0ea;
             --very-light-gray: #efefef;
@@ -32,6 +33,7 @@
 
         @media (prefers-color-scheme: dark) {
             :root {
+                --body-background: #191919;
                 --border: #969e9d;
                 --light-bg: #41474d;
                 --light-gray: #333333;
@@ -433,10 +435,10 @@
 
         #tutorial-text {
             position: absolute;
+            background-color: var(--body-background);
             top: 100vh;
             transition: 1s;
             pointer-events: none;
-            background-color: white;
             z-index: 10;
         }
     </style>
@@ -502,7 +504,7 @@
         </div>
         <div class="shop-item">
             <p>Pink detergent</p>
-            <p>20 uses</p>
+            <p>25 uses</p>
             <p class="price">$20</p>
             <img class="detergent-example" src="Content/Money_Laundry_Simulator/detergent-pink.png">
             <button class="buy" data-type="detergent" data-detergenttype="pink">Buy</button>
@@ -585,7 +587,7 @@
             },
             pink: {
                 cost: 20,
-                uses: 20,
+                uses: 25,
                 src: "Content/Money_Laundry_Simulator/detergent-pink.png"
             }
         }
