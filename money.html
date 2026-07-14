@@ -271,7 +271,7 @@
 
         .detergent-count {
             position: absolute;
-            /*bottom: calc(50% - 50px);*/
+            color: black;
             transform: translateY(-50px);
             left: 5px;
             font-size: larger;
@@ -678,7 +678,7 @@
                     cursor.style.top = `${moneyPos[1]}px`;
                     cursor.style.transform = "rotateZ(150deg)";
                     tutorialText.innerHTML = "Step 3. Drag the money to the circle inside the machine.";
-                    if (moneyPos[0] - 350 > 0 ) tutorialText.style.left = `${moneyPos[0] - 350}px`;
+                    if (moneyPos[0] - 350 > 0) tutorialText.style.left = `${moneyPos[0] - 350}px`;
                     else tutorialText.style.left = "5px";
                     tutorialText.style.top = `${moneyPos[1] - 30}px`;
                     document.addEventListener("mouseup", continueTutorial2, { once: true });
@@ -802,9 +802,11 @@
             const type = machines[machineIndex].type;
             const max = machineTypes[type].max;
             const compartment = machine.children[0];
-            const moneyInserted = el.children[0].value;
+            let moneyInserted = el.children[0].value;
             if (compartment.classList.contains("deterged")) {
-                if (moneyInserted > 0 && moneyInserted <= money) {
+                if (moneyInserted == '') moneyInserted = money > max ? max : money;
+                if (moneyInserted == 0) return;
+                if (moneyInserted <= money) {
                     if (moneyInserted <= max) {
                         const secs = machineTypes[machines[machineIndex].type].time;
                         machines[machineIndex].state = "running";
@@ -955,8 +957,8 @@
                 grabbingDetergent = null;
                 for (let i = 0; i < compartments.length; i++) {
                     const rect = compartments[i].getBoundingClientRect();
-                    if (rect.left < touch.clientX && rect.top < touch.clientY &&
-                        rect.right > touch.clientX && rect.bottom > touch.clientY
+                    if (rect.left - 10 < touch.clientX && rect.top - 10 < touch.clientY &&
+                        rect.right + 10 > touch.clientX && rect.bottom + 10 > touch.clientY
                         && compartments[i].classList.contains("open") && detergentCount[detergentType] > 0
                     ) {
                         compartments[i].classList.add("deterged");
