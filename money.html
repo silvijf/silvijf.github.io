@@ -625,7 +625,7 @@
                 }
             }
             detergentCount = JSON.parse(localStorage.getItem("laundryDetergent"))
-            if (typeof (detergentCount) != "object") detergentCount = { yellow: 6 };
+            if (typeof detergentCount != "object" || detergentCount == null) detergentCount = { yellow: 6, pink: 0 };
             for (let i = 0; i < Object.values(detergentCount).length; i++) {
                 const detergentType = Object.keys(detergentCount)[i];
                 const type = detergentTypes[detergentType];
