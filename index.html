@@ -20,11 +20,11 @@
         }
 
         #topbar {
-            position: absolute;
-            width: 100%;
+            position: relative;
+            width: calc(100% + 12px);
             height: 45px;
-            left: -1px;
-            top: -1px;
+            left: -8px;
+            top: -5px;
             background-color: black;
             box-shadow: 5px 0px 5px;
         }
@@ -38,28 +38,20 @@
             font-size: 220%;
         }
 
-        #Roblox {
+        .link {
             position: absolute;
-            top: 3px;
-            right: 50px;
-            width: 40px;
-            height: 40px;
-        }
-
-        #YT {
-            position: absolute;
-            top: 3px;
-            right: 5px;
+            margin: 3px;
+            right: 2px;
             width: 40px;
             height: 40px;
         }
 
         .header {
             font-family: 'Anton SC';
-            position: absolute;
-            top: 70px;
-            width: 100%;
-            left: -1px;
+            position: relative;
+            margin-top: 20px;
+            width: calc(100% + 20px);
+            left: -5px;
             background-color: black;
             color: white;
             font-size: 300%;
@@ -86,21 +78,28 @@
         }
 
         #info {
-            position: relative;
-            text-align: right;
+            position: absolute;
+            right: 0px;
             color: white;
-            top: 130px;
+            margin-top: 8px;
         }
 
         .itemContainer {
-            display: grid;
+            display: flex;
+            flex-wrap: wrap;
             position: relative;
-            top: 95px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .item {
+            margin: 5px;
         }
 
         .title {
             color: white;
             text-align: center;
+            margin: 0;
         }
 
         #msgbox {
@@ -208,7 +207,7 @@
             padding-top: 20px;
             padding-bottom: 20px;
             width: 25px;
-            right: 0px;
+            right: -8px;
             cursor: pointer;
             border: 2px solid black;
             animation-fill-mode: forwards;
@@ -236,7 +235,7 @@
             height: 50%;
             top: 25%;
             width: 120px;
-            right: -120px;
+            right: -128px;
             color: white;
             animation-fill-mode: forwards;
         }
@@ -292,86 +291,92 @@
     <div id="topbar">
         <a href="https://silvijf.github.io" id="welcome" title="Home">Welcome to Fainer's site!</a>
         <a href="https://www.roblox.com/users/5046304648/profile" target="_blank">
-            <img id="Roblox" alt="My Roblox" title="Go to my Roblox"
+            <img id="Roblox" class="link" alt="My Roblox" title="Go to my Roblox"
                 src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/RobloxLogo.jpg">
 
-        </a>
-        <a href="https://www.youtube.com/@s38bw123" target="_blank">
-            <img id="YT" title="Ga naar mijn YouTube (Nederlands)"
-                src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
         </a>
     </div>
 
     <div class="header"><i style="position: relative; left: 10px;">GAMES AND TOOLS</i></div>
     <p id="info" oncontextmenu="return false;" onmouseup="show(event, 'Try right-clicking on a logo!')">Try
         right-clicking on a logo!</p>
-    <div class="itemContainer" style="width: 1000px;">
-        <a href="platformer" style="grid-column: 1; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-                alt="Platformer Game" class="games" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
-        </a>
-
-        <a href="jspuzzles" style="grid-column: 2; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/JS puzzles.png"
-                alt="JS Puzzles" class="games" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Only for starting developers! But also for you :)')">
-        </a>
-
-        <a href="canvas" style="grid-column: 3; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-                alt="Canvas" class="games" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Try to set the color to #ffffff!')">
-        </a>
-
-
-        <a href="raceclicker" style="grid-column: 4; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
-                alt="Race clicker" class="games" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Click on clicks, they help you!')">
-        </a>
-
-        <a href="copy" style="grid-column: 5; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Copy.png"
-                alt="Copy hub" class="games bg" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Did you know that you can use CTRL + Z?')">
-        </a>
-
-        <a href="isiti" style="grid-column: 6; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/isiti.png"
-                alt="Is it I?" class="games bg" oncontextmenu=" return false;" onmouseup="show(event, 'I.')">
-        </a>
-
-        <a href="money" style="grid-column: 7; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Money%20Laundry%20Simulator.png"
-                alt="Money Laundry Simulator" class="games bg" oncontextmenu=" return false;" onmouseup="show(event, 'Perfectly legal.')">
-        </a>
-        <p class="title" style="grid-column: 1; grid-row: 2">Platformer Game</p>
-        <p class="title" style="grid-column: 2; grid-row: 2">JS Puzzles</p>
-        <p class="title" style="grid-column: 3; grid-row: 2">Canvas</p>
-        <p class="title" style="grid-column: 4; grid-row: 2">Race Clicker</p>
-        <p class="title" style="grid-column: 5; grid-row: 2">Copy Hub</p>
-        <p class="title" style="grid-column: 6; grid-row: 2">Is it I?</p>
-        <p class="title" style="grid-column: 7; grid-row: 2">Money Laundry Simulator</p>
+    <div class="itemContainer">
+        <div class="item">
+            <a href="platformer">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
+                    alt="Platformer Game" class="games" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
+            </a>
+            <p class="title">Platformer Game</p>
+        </div>
+        <div class="item">
+            <a href="jspuzzles">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/JS puzzles.png"
+                    alt="JS Puzzles" class="games" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Only for starting developers! But also for you :)')">
+            </a>
+            <p class="title">JS Puzzles</p>
+        </div>
+        <div class="item">
+            <a href="canvas">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
+                    alt="Canvas" class="games" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Try to set the color to #ffffff!')">
+            </a>
+            <p class="title">Canvas</p>
+        </div>
+        <div class="item">
+            <a href="raceclicker">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
+                    alt="Race clicker" class="games" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Click on clicks, they help you!')">
+            </a>
+            <p class="title">Race Clicker</p>
+        </div>
+        <div class="item">
+            <a href="copy">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Copy.png"
+                    alt="Copy hub" class="games bg" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Did you know that you can use CTRL + Z?')">
+            </a>
+            <p class="title">Copy Hub</p>
+        </div>
+        <div class="item">
+            <a href="isiti">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/isiti.png"
+                    alt="Is it I?" class="games bg" oncontextmenu=" return false;" onmouseup="show(event, 'I.')">
+            </a>
+            <p class="title">Is it I?</p>
+        </div>
+        <div class="item">
+            <a href="money">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Money%20Laundry%20Simulator.png"
+                    alt="Money Laundry Simulator" class="games bg" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Perfectly legal.')">
+            </a>
+            <p class="title">Money Laundry Simulator</p>
+        </div>
     </div>
 
-    <div class="header" style="top: 380px;"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
+    <div class="header"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
 
-    <br><br><br><br>
-
-    <div class="itemContainer" style="width: 200px;">
-        <a href="https://polewolf.github.io" target="_blank" style="grid-column: 1; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Polewolf.png"
-                alt="Polewolf's Site" class="games" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Did you know that you can also left-click on this logo?')">
-        </a>
-        <a href="https://jippie.github.io" target="_blank" style="grid-column: 2; grid-row: 1">
-            <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Jippie.png"
-                alt="Jippie's Site" class="games" oncontextmenu=" return false;"
-                onmouseup="show(event, 'Polewolfs new site. Work in progress!')">
-        </a>
-        <p class="title" style="grid-column: 1; grid-row: 2">Polewolf (Dutch)</p>
-        <p class="title" style="grid-column: 2; grid-row: 2">Jippie (Dutch)</p>
+    <div class="itemContainer">
+        <div class="item">
+            <a href="https://polewolf.github.io" target="_blank">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Polewolf.png"
+                    alt="Polewolf's Site" class="games" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Did you know that you can also left-click on this logo?')">
+            </a>
+            <p class="title">Polewolf (Dutch)</p>
+        </div>
+        <div class="item">
+            <a href="https://jippie.github.io" target="_blank">
+                <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Jippie.png"
+                    alt="Jippie's Site" class="games" oncontextmenu=" return false;"
+                    onmouseup="show(event, 'Polewolfs new site. Work in progress!')">
+            </a>
+            <p class="title">Jippie (Dutch)</p>
+        </div>
     </div>
 
     <div id="msgbox">
@@ -451,7 +456,6 @@
         closebutton.addEventListener("click", () => msgBox.style.display = "none")
         infoButton.addEventListener("click", () => {
             if (!infoOn) {
-                console.log(1)
                 cookieDisclaimer.style.display = "block"
                 infoOn = true
                 dontHide = true
@@ -459,18 +463,21 @@
         })
         document.addEventListener("click", () => {
             if (infoOn && !dontHide) {
-                console.log(2)
                 cookieDisclaimer.style.display = "none"
                 infoOn = false
             }
             dontHide = false
         })
-        infoButton.addEventListener("mouseenter", () => { cookieDisclaimer.style.display = "block" })
-        infoButton.addEventListener("mouseout", () => {
-            if (!infoOn) {
-                cookieDisclaimer.style.display = "none"
-                infoOn = false
+        infoButton.addEventListener("mouseenter", () => {
+            cookieDisclaimer.style.display = "block";
+            const rect = cookieDisclaimer.getBoundingClientRect();
+            if (rect.right > document.documentElement.clientWidth) {
+                cookieDisclaimer.style.left = `${document.documentElement.clientWidth - 330}px`;
             }
+        })
+
+        infoButton.addEventListener("mouseout", () => {
+            if (!infoOn) cookieDisclaimer.style.display = "none"
         })
         infoButton.addEventListener("mousemove", (event) => {
             if (!infoOn && !isMobile) {
