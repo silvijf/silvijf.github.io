@@ -652,7 +652,7 @@
                     img.addEventListener("touchstart", (e) => { grabDetergentStart(e, "touch") });
                 }
 
-                const detergentCountLength = Object.values(detergentCount).filter(d => d > 1).length;
+                const detergentCountLength = Object.values(detergentCount).filter(d => d > 0).length;
                 if (detergentCount.yellow == 0 && detergentCountLength > 0 &&
                     document.querySelector(".detergent-image[data-detergenttype=yellow]")) {
                     detergentContainer.children[0].remove();
@@ -959,14 +959,16 @@
                     const rect = compartments[i].getBoundingClientRect();
                     if (rect.left - 10 < touch.clientX && rect.top - 10 < touch.clientY &&
                         rect.right + 10 > touch.clientX && rect.bottom + 10 > touch.clientY
-                        && compartments[i].classList.contains("open") && detergentCount[detergentType] > 0
+                        && compartments[i].classList.contains("open") &&
+                        !compartments[i].classList.contains("deterged") &&
+                        detergentCount[detergentType] > 0
                     ) {
                         compartments[i].classList.add("deterged");
                         const machine = compartments[i].parentElement;
                         const machineIndex = [].slice.call(machineEls).indexOf(machine);
                         machines[machineIndex].deterged = true;
                         detergentCount[detergentType] -= 1;
-                        const detergentCountLength = Object.values(detergentCount).filter(d => d > 1).length;
+                        const detergentCountLength = Object.values(detergentCount).filter(d => d > 0).length;
                         if (detergentCount[detergentType] == 0 && detergentCountLength > 0) {
                             document.querySelector(`.detergent-image[data-detergenttype=${detergentType}]`).remove();
                             document.querySelector(`.detergent-count[data-detergenttype=${detergentType}]`).remove();
@@ -1003,6 +1005,9 @@
                         const button = document.createElement("button");
                         button.innerText = "Insert money";
                         button.addEventListener("click", (e) => { checkStartLaundry(e.target.parentElement) })
+                        input.addEventListener("keydown", (e) => {
+                            if (e.key == "Enter") checkStartLaundry(e.target.parentElement);
+                        })
                         circles[i].appendChild(input);
                         circles[i].appendChild(button);
                     }
