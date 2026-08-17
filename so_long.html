@@ -30,8 +30,19 @@
         :root {
             --border: black;
             --green: #97da97;
-            --blue-shadow: #9bc6da;
             --green-shadow: #bbe7bb;
+            --blue-shadow: #9bc6da;
+            --passed-shadow: #9bc6da;
+            --progress-shadow: #9bdac0;
+            --countdown-shadow: #9bdac8;
+            --to-go-shadow: #ab9bda;
+            --onetimethispercent-shadow: #faf2b6;
+            --onepercentequals-shadow: #da9bd3;
+            --milestones-shadow: #d09beb;
+            --passed-since-open-shadow: #daa89b;
+            --previous-checks-shadow: #9bd9da;
+            --percentage-calculator-shadow: #9bdac3;
+            --share-shadow: #9bb9da;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -120,7 +131,6 @@
         .tile {
             border: 2px solid black;
             border-radius: 20px;
-            box-shadow: 10px 10px 10px var(--blue-shadow);
         }
 
         .tile-title,
@@ -189,6 +199,10 @@
             #countdown-text {
                 font-size: 300%;
             }
+        }
+
+        #percentage-calculator button {
+           box-shadow: 2px 2px 2px var(--percentage-calculator-shadow);
         }
 
         .calculator-screen {
@@ -289,7 +303,8 @@
 
         #end {
             position: relative;
-            height: 75px;
+            height: 25px;
+            grid-column: span 2;
         }
     </style>
 </head>
@@ -315,7 +330,8 @@
         </div>
     </div>
     <div id="grid">
-        <div class="tile" id="progress" style="grid-column: 1 / -1;">
+        <div class="tile" id="progress" style="grid-column: 1 / -1;
+            box-shadow: 10px 10px 10px var(--progress-shadow);">
             <div id="progress-bar">
                 <div id="progress-bar-bar"></div>
             </div>
@@ -325,37 +341,39 @@
             </div>
             <p id="progress-text" class="tile-text">Loading...</p>
         </div>
-        <div class="tile" id="countdown" style="grid-column: span 2;">
+        <div class="tile" id="countdown" style="grid-column: span 2;
+            box-shadow: 10px 10px 10px var(--countdown-shadow);">
             <p class="tile-text" id="countdown-text">Loading...</p>
         </div>
-        <div class="tile" id="passed">
+        <div class="tile" id="passed" style="
+            box-shadow: 10px 10px 10px var(--passed-shadow);">
             <h3 class="tile-title">Right now have passed...</h3>
             <p id="passed-text" class="tile-text">Loading...</p>
         </div>
-        <div class="tile" id="to-go">
+        <div class="tile" id="to-go" style="box-shadow: 10px 10px 10px var(--to-go-shadow);">
             <h3 class="tile-title">You still have to go...</h3>
             <p id="to-go-text" class="tile-text">Loading...</p>
         </div>
-        <div class="tile" id="onetimethispercent">
+        <div class="tile" id="onetimethispercent" style="box-shadow: 10px 10px 10px var(--onetimethispercent-shadow);">
             <p id="onetimethispercent-text" class="tile-text"> Loading...</p>
         </div>
-        <div class="tile" id="onepercentequals">
+        <div class="tile" id="onepercentequals" style="box-shadow: 10px 10px 10px var(--onepercentequals-shadow);">
             <h3 class="tile-title">1% equals...</h3>
             <p id="onepercentequals-text" class="tile-text"> Loading...</p>
         </div>
-        <div class="tile" id="milestones">
+        <div class="tile" id="milestones" style="box-shadow: 10px 10px 10px var(--milestones-shadow);">
             <h3 class="tile-title">Milestones are:</h3>
             <p id="milestones-text" class="tile-text">Loading...</p>
         </div>
-        <div class="tile" id="passed-since-open">
+        <div class="tile" id="passed-since-open" style="box-shadow: 10px 10px 10px var(--passed-since-open-shadow);">
             <h3 class="tile-title">Since you opened this page, this time has passed...</h3>
             <p id="passed-since-open-text" class="tile-text">Loading...</p>
         </div>
-        <div class="tile" id="previous-checks">
+        <div class="tile" id="previous-checks" style="box-shadow: 10px 10px 10px var(--previous-checks-shadow);">
             <h3 class="tile-title">Previous checks</h3>
             <p id="previous-checks-text" class="tile-text">This is your first check!</p>
         </div>
-        <div class="tile" id="percentage-calculator">
+        <div class="tile" id="percentage-calculator" style="box-shadow: 10px 10px 10px var(--percentage-calculator-shadow);">
             <h3 class="tile-title">Percentage calculator</h3>
             <div class="calculator-screen">
                 <p class="calculate-text" id="percentage-calculate-text">0%</p>
@@ -380,7 +398,7 @@
                 <button>-</button>
             </div>
         </div>
-        <div class="tile" id="share">
+        <div class="tile" id="share" style="box-shadow: 5px 5px 5px var(--share-shadow);">
             <p class="material-symbols-outlined">share</p>
             <p id="share-text">Click again to copy link</p>
         </div>
