@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=backspace,share,content_copy" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=content_copy,backspace,share" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <style>
@@ -202,7 +202,7 @@
         }
 
         #percentage-calculator button {
-           box-shadow: 2px 2px 2px var(--percentage-calculator-shadow);
+            box-shadow: 2px 2px 2px var(--percentage-calculator-shadow);
         }
 
         .calculator-screen {
@@ -373,7 +373,8 @@
             <h3 class="tile-title">Previous checks</h3>
             <p id="previous-checks-text" class="tile-text">This is your first check!</p>
         </div>
-        <div class="tile" id="percentage-calculator" style="box-shadow: 10px 10px 10px var(--percentage-calculator-shadow);">
+        <div class="tile" id="percentage-calculator"
+            style="box-shadow: 10px 10px 10px var(--percentage-calculator-shadow);">
             <h3 class="tile-title">Percentage calculator</h3>
             <div class="calculator-screen">
                 <p class="calculate-text" id="percentage-calculate-text">0%</p>
@@ -742,10 +743,12 @@
             window.history.pushState({ path: newURL }, '', newURL);
             fromTime = Number(params.get("from"));
             toTime = Number(params.get("to"));
-            localStorage.removeItem("solong-previouschecks")
+            localStorage.removeItem("solong-previouschecks");
             timePassed = now - fromTime;
             timeBetween = toTime - fromTime;
             percentage = timePassed / timeBetween * 100;
+            localStorage.setItem("solong-fromtime", fromTime);
+            localStorage.setItem("solong-totime", toTime);
             fromText.innerHTML = dateToString(new Date(fromTime));
             toText.innerHTML = dateToString(new Date(toTime));
             percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
