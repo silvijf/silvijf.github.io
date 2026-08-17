@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=backspace" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=backspace,share,content_copy" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <style>
@@ -90,6 +90,7 @@
 
         #close {
             display: none;
+            z-index: 1;
             background-color: rgb(227, 84, 84);
             position: absolute;
             top: 0px;
@@ -172,6 +173,24 @@
             font-weight: bold;
         }
 
+        @media (max-width: 1200px) {
+            #countdown-text {
+                font-size: 600%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            #countdown-text {
+                font-size: 500%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #countdown-text {
+                font-size: 300%;
+            }
+        }
+
         .calculator-screen {
             position: relative;
             background-color: #e3eded;
@@ -223,6 +242,54 @@
 
         .calculator-buttons button:active {
             scale: 0.95;
+        }
+
+        #share {
+            position: relative;
+            width: 38px;
+            height: 50px;
+            padding-left: 13px;
+            display: flex;
+            gap: 5px;
+            justify-content: left;
+            align-items: center;
+            cursor: pointer;
+            transition: scale 100ms, width 500ms;
+        }
+
+        #share.open {
+            width: 230px;
+        }
+
+        #share:hover {
+            scale: 1.1;
+        }
+
+        #share.open:hover {
+            scale: 1.025;
+        }
+
+        #share:active {
+            scale: 0.95 !important;
+        }
+
+        #share p {
+            margin: 0;
+        }
+
+        #share-text {
+            display: none;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        #share.open #share-text {
+            display: block;
+        }
+
+        #end {
+            position: relative;
+            height: 75px;
         }
     </style>
 </head>
@@ -313,13 +380,17 @@
                 <button>-</button>
             </div>
         </div>
+        <div class="tile" id="share">
+            <p class="material-symbols-outlined">share</p>
+            <p id="share-text">Click again to copy link</p>
+        </div>
+        <div id="end"></div>
     </div>
 
     <script>
         /*
         Tile ideas:
-        - Calculators
-        - Share
+            -
         */
 
         const selectContainer = document.getElementById("select-container");
@@ -340,6 +411,7 @@
         const milestonesText = document.getElementById("milestones-text");
         const passedSinceOpenText = document.getElementById("passed-since-open-text");
         const previousChecksText = document.getElementById("previous-checks-text");
+        const share = document.getElementById("share");
 
         const percentageCalculateText = document.getElementById("percentage-calculate-text");
         const percentageAnswerText = document.getElementById("percentage-answer-text");
@@ -370,6 +442,7 @@
         var timePassed;
         var timeToGo;
         var timePassedSinceOpen;
+        var percentage;
 
         var previousChecks = [];
 
@@ -381,13 +454,19 @@
         ]
 
         function dateToString(date) {
-            return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}
+            return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getFullYear())}
             ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes(2, '0')).padStart(2, '0')}`;
         }
 
         function editProgress() {
-            progressBarBar.style.width = `${timePassed / timeBetween * 100}%`;
-            progressText.innerText = `You're at ${(timePassed / timeBetween * 100).toFixed(2)}%!`;
+            if (percentage < 100) {
+                progressBarBar.style.width = `${percentage}%`;
+                progressText.innerText = `You're at ${percentage.toFixed(2)}%!`;
+            } else {
+                progressBarBar.style.width = "100%";
+                progressBarBar.style.borderRadius = "7px";
+                progressText.innerText = `You're there! ${percentage.toFixed(2)}%!`
+            }
         }
 
         function editCountdown() {
@@ -473,11 +552,15 @@
                 const milestoneTime = timeBetween * milestones[i] / 100;
                 const milestoneDifference = milestoneTime - timePassed;
                 if (milestoneDifference > 0) {
-                    const bestUnit = converts.findLast(convert => milestoneDifference / convert > 1)
-                    text += `${milestones[i]}%: in <b>${(milestoneDifference / bestUnit).toFixed(2)}</b> ${Object.keys(units).find(u => units[u] == bestUnit)}<br>`;
+                    const bestUnit = converts.findLast(convert => milestoneDifference / convert > 1);
+                    if (bestUnit) {
+                        text += `${milestones[i]}%: in <b>${(milestoneDifference / bestUnit).toFixed(2)}</b> ${Object.keys(units).find(u => units[u] == bestUnit)}<br>`;
+                    } else text += `${milestones[i]}%: <b>Now!</b><br>`
                 } else {
-                    const bestUnit = converts.findLast(convert => milestoneDifference / convert < -1)
-                    text += `${milestones[i]}%: <b>${(Math.abs(milestoneDifference / bestUnit).toFixed(2))}</b> ${Object.keys(units).find(u => units[u] == bestUnit)} ago<br>`;
+                    const bestUnit = converts.findLast(convert => milestoneDifference / convert < -1);
+                    if (bestUnit) {
+                        text += `${milestones[i]}%: <b>${(Math.abs(milestoneDifference / bestUnit).toFixed(2))}</b> ${Object.keys(units).find(u => units[u] == bestUnit)} ago<br>`;
+                    } else text += `${milestones[i]}%: <b>Now!</b><br>`
                 }
             }
 
@@ -502,12 +585,12 @@
 
         function editPreviousChecks() {
             if (previousChecks.length > 0) {
-                previousChecks[previousChecks.length - 1].to = timePassed / timeBetween * 100;
+                previousChecks[previousChecks.length - 1].to = percentage;
             } else {
                 previousChecks = [
                     {
-                        from: timePassed / timeBetween * 100,
-                        to: timePassed / timeBetween * 100
+                        from: percentage,
+                        to: percentage
                     }
                 ]
             }
@@ -526,6 +609,7 @@
             timePassed = now - fromTime;
             timeToGo = toTime - now;
             timePassedSinceOpen = now - openTime
+            percentage = timePassed / timeBetween * 100;
             editProgress();
             editCountdown();
             editPassed();
@@ -542,8 +626,14 @@
                 let button = e.target.innerHTML;
                 if (!isNaN(Number(button))) {
                     if (percentageCalculation[percentageCalculation.length - 1].type != "action") {
-                        let newValue = Number(
-                            percentageCalculation[percentageCalculation.length - 1].value + button);
+                        let newValue;
+                        if (button == 0 &&
+                            String(percentageCalculation[percentageCalculation.length - 1].value).indexOf(".") > 0) {
+                            newValue = percentageCalculation[percentageCalculation.length - 1].value + button;
+                        } else {
+                            newValue = Number(
+                                percentageCalculation[percentageCalculation.length - 1].value + button);
+                        }
                         percentageCalculation[percentageCalculation.length - 1].value = newValue;
                     } else {
                         percentageCalculation.push(
@@ -585,18 +675,20 @@
                         )
                     } else if (button == "Current %") {
                         editingBlock = percentageCalculation[percentageCalculation.length - 1];
-                        if (editingBlock.type == "number") editingBlock.value = (timePassed / timeBetween * 100).toFixed(2);
+                        if (editingBlock.type == "number") editingBlock.value = percentage.toFixed(2);
                         else {
                             percentageCalculation.push(
                                 {
                                     type: "number",
-                                    value: (timePassed / timeBetween * 100).toFixed(2)
+                                    value: percentage.toFixed(2)
                                 }
                             )
                         }
                     } else if (button == ".") {
                         editingBlock = percentageCalculation[percentageCalculation.length - 1];
-                        if (editingBlock.type == "number") editingBlock.value += ".";
+                        if (editingBlock.type == "number") {
+                            if (String(editingBlock.value).indexOf(".") == -1) editingBlock.value += ".";
+                        }
                         else {
                             percentageCalculation.push(
                                 {
@@ -624,22 +716,41 @@
             }
         })
 
-        if (localStorage.getItem("solong-fromtime")) {
+        const paramsString = window.location.search;
+        const params = new URLSearchParams(paramsString);
+
+        if (params.has("from") && params.has("to")) {
+            let newURL = window.location.protocol + "//" + window.location.host + window.location.pathname
+            window.history.pushState({ path: newURL }, '', newURL);
+            fromTime = Number(params.get("from"));
+            toTime = Number(params.get("to"));
+            localStorage.removeItem("solong-previouschecks")
+            timePassed = now - fromTime;
+            timeBetween = toTime - fromTime;
+            percentage = timePassed / timeBetween * 100;
+            fromText.innerHTML = dateToString(new Date(fromTime));
+            toText.innerHTML = dateToString(new Date(toTime));
+            percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
+            closeButton.style.display = "block";
+            grid.style.display = "grid";
+            mainLoop();
+            setInterval(mainLoop, 1000);
+        } else if (localStorage.getItem("solong-fromtime")) {
             fromTime = Number(localStorage.getItem("solong-fromtime"));
             toTime = Number(localStorage.getItem("solong-totime"));
             timePassed = now - fromTime;
             timeBetween = toTime - fromTime;
+            percentage = timePassed / timeBetween * 100;
+            previousChecks = JSON.parse(localStorage.getItem("solong-previouschecks"));
+            if (previousChecks[previousChecks.length - 1].to.toFixed(2) != percentage.toFixed(2)) {
+                previousChecks.push({
+                    from: percentage,
+                    to: percentage
+                });
+            }
             fromText.innerHTML = dateToString(new Date(fromTime));
             toText.innerHTML = dateToString(new Date(toTime));
             percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
-            previousChecks = JSON.parse(localStorage.getItem("solong-previouschecks"));
-            if (previousChecks[previousChecks.length - 1].to.toFixed(2) != (timePassed / timeBetween * 100).toFixed(2)) {
-                previousChecks.push({
-                    from: timePassed / timeBetween * 100,
-                    to: timePassed / timeBetween * 100
-                });
-            }
-            document.body.style.height = "180%";
             closeButton.style.display = "block";
             grid.style.display = "grid";
             mainLoop();
@@ -656,7 +767,6 @@
                 toTime = Date.parse(dateTimeTo.value);
                 timeBetween = toTime - fromTime;
                 if (fromTime < toTime) {
-                    document.body.style.height = "180%";
                     selectContainer.style.display = "none";
                     closeButton.style.display = "block";
                     grid.style.display = "grid";
@@ -671,6 +781,18 @@
                 }
             })
         }
+
+        share.addEventListener("click", () => {
+            if (!share.classList.contains("open")) {
+                share.children[0].innerText = "content_copy";
+                share.classList.add("open");
+            } else {
+                navigator.clipboard.writeText(`https://silvijf.github.io/so_long?from=${fromTime}&to=${toTime}`);
+                share.children[0].innerText = "share";
+                share.classList.remove("open");
+            }
+
+        })
 
         closeButton.addEventListener("click", () => {
             localStorage.removeItem("solong-fromtime");
