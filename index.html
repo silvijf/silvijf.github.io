@@ -13,6 +13,10 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=keyboard_arrow_up" />
     <style>
+        html {
+            color-scheme: dark;
+        }
+
         body {
             font-family: 'Fredoka';
             overflow-x: hidden;
@@ -26,7 +30,7 @@
             left: -8px;
             top: -5px;
             background-color: black;
-            box-shadow: 5px 0px 5px;
+            box-shadow: 5px 0px 5px black;
         }
 
         #welcome {
@@ -63,14 +67,9 @@
             border-radius: 5px;
             width: 150px;
             height: 150px;
-            transition: 0.5s;
             top: 0px;
             left: 0px;
             margin: 5px;
-        }
-
-        .games:hover {
-            scale: 1.1;
         }
 
         .bg {
@@ -93,7 +92,23 @@
         }
 
         .item {
-            margin: 5px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #4f5460;
+            border: 2px solid black;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.5s;
+        }
+
+        .item:hover {
+            scale: 1.1;
+        }
+
+        a:has(.item) {
+            text-decoration: none;
         }
 
         .title {
@@ -108,6 +123,7 @@
             left: 10px;
             background-color: #76a4d6;
             border: 2px solid black;
+            color: black;
             border-radius: 15px;
             font-size: 130%;
         }
@@ -152,7 +168,6 @@
 
         #cookiedisclaimer {
             position: absolute;
-            color: white;
             border: 3px solid black;
             background: #78a6d8;
             border-radius: 10px;
@@ -301,82 +316,80 @@
     <p id="info" oncontextmenu="return false;" onmouseup="show(event, 'Try right-clicking on a logo!')">Try
         right-clicking on a logo!</p>
     <div class="itemContainer">
-        <div class="item">
-            <a href="platformer">
+        <a href="platformer">
+            <div class="item" oncontextmenu=" return false;"
+                onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Platformer.png"
-                    alt="Platformer Game" class="games" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Did you know that (almost) every keyboard key is jump?')">
-            </a>
-            <p class="title">Platformer Game</p>
-        </div>
-        <div class="item">
-            <a href="jspuzzles">
+                    alt="Platformer Game" class="games" oncontextmenu=" return false;">
+                <p class="title">Platformer Game</p>
+            </div>
+        </a>
+        <a href="jspuzzles">
+            <div class="item" oncontextmenu=" return false;"
+                onmouseup="show(event, 'Only for starting developers! But also for you :)')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/JS puzzles.png"
-                    alt="JS Puzzles" class="games" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Only for starting developers! But also for you :)')">
-            </a>
-            <p class="title">JS Puzzles</p>
-        </div>
-        <div class="item">
-            <a href="canvas">
+                    alt="JS Puzzles" class="games" oncontextmenu=" return false;">
+                <p class="title">JS Puzzles</p>
+            </div>
+        </a>
+        <a href="canvas">
+            <div class="item" oncontextmenu=" return false;"
+                onmouseup="show(event, 'Try to set the color to #ffffff!')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/CanvasLogo.png"
-                    alt="Canvas" class="games" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Try to set the color to #ffffff!')">
-            </a>
-            <p class="title">Canvas</p>
-        </div>
-        <div class="item">
-            <a href="raceclicker">
+                    alt="Canvas" class="games" oncontextmenu=" return false;">
+                <p class="title">Canvas</p>
+            </div>
+        </a>
+        <a href="raceclicker">
+            <div class="item" oncontextmenu=" return false;" onmouseup="show(event, 'Click on clicks, they help you!')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Race%20clicker.png"
-                    alt="Race clicker" class="games" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Click on clicks, they help you!')">
-            </a>
-            <p class="title">Race Clicker</p>
-        </div>
-        <div class="item">
-            <a href="copy">
+                    alt="Race clicker" class="games">
+                <p class="title">Race Clicker</p>
+            </div>
+        </a>
+        <a href="copy">
+            <div class="item" oncontextmenu=" return false;"
+                onmouseup="show(event, 'Did you know that you can use CTRL + Z?')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Copy.png"
-                    alt="Copy hub" class="games bg" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Did you know that you can use CTRL + Z?')">
-            </a>
-            <p class="title">Copy Hub</p>
-        </div>
-        <div class="item">
-            <a href="isiti">
+                    alt="Copy hub" class="games bg">
+                <p class="title">Copy Hub</p>
+            </div>
+        </a>
+        <a href="isiti">
+            <div class="item" oncontextmenu=" return false;" onmouseup="show(event, 'I.')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/isiti.png"
-                    alt="Is it I?" class="games bg" oncontextmenu=" return false;" onmouseup="show(event, 'I.')">
-            </a>
-            <p class="title">Is it I?</p>
-        </div>
-        <div class="item">
-            <a href="money">
+                    alt="Is it I?" class="games bg">
+                <p class="title">Is it I?</p>
+            </div>
+        </a>
+        <a href="money">
+            <div class="item" oncontextmenu=" return false;" onmouseup="show(event, 'Perfectly legal.')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Money%20Laundry%20Simulator.png"
-                    alt="Money Laundry Simulator" class="games bg" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Perfectly legal.')">
-            </a>
-            <p class="title">Money Laundry Simulator</p>
-        </div>
+                    alt="Money Laundry Simulator" class="games bg">
+                <p class="title">Money Laundry Simulator</p>
+            </div>
+        </a>
     </div>
 
     <div class="header"><i style="position: relative; left: 10px;">MORE SITES TO DISCOVER</i></div>
 
     <div class="itemContainer">
-        <div class="item">
-            <a href="https://polewolf.github.io" target="_blank">
+        <a href="https://polewolf.github.io" target="_blank">
+            <div class="item" oncontextmenu=" return false;"
+                onmouseup="show(event, 'Did you know that you can also left-click on this logo?')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Polewolf.png"
-                    alt="Polewolf's Site" class="games" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Did you know that you can also left-click on this logo?')">
-            </a>
-            <p class="title">Polewolf (Dutch)</p>
-        </div>
-        <div class="item">
-            <a href="https://jippie.github.io" target="_blank">
+                    alt="Polewolf's Site" class="games">
+                <p class="title">Polewolf (Dutch)</p>
+            </div>
+        </a>
+        <a href="https://jippie.github.io" target="_blank">
+            <div class="item" oncontextmenu=" return false;"
+                onmouseup="show(event, 'Polewolfs new site. Work in progress!')">
                 <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Icons/Jippie.png"
-                    alt="Jippie's Site" class="games" oncontextmenu=" return false;"
-                    onmouseup="show(event, 'Polewolfs new site. Work in progress!')">
-            </a>
-            <p class="title">Jippie (Dutch)</p>
-        </div>
+                    alt="Jippie's Site" class="games">
+                <p class="title">Jippie (Dutch)</p>
+        </a>
+    </div>
     </div>
 
     <div id="msgbox">
@@ -406,8 +419,7 @@
     </div>
     <div id="aboutme"></div>
 
-    <img src="https://www.kuijtkachelsenhaarden.nl/images/productimages/big/img-20240523-173735.jpg" id="fireplace"
-        class="jelln">
+    <img src="" id="fireplace" class="jelln">
     <img src="https://raw.githubusercontent.com/silvijf/silvijf.github.io/refs/heads/main/Content/Jelln.png" id="jelle"
         class="jelln">
 
@@ -421,7 +433,7 @@
         let isMobile
         try {
             isMobile = navigator.userAgentData.mobile
-        } catch (err) {
+        } catch {
             isMobile = false
         }
         const msgBox = document.getElementById("msgbox")
@@ -484,6 +496,10 @@
                 cookieDisclaimer.style.bottom = `${window.innerHeight - event.clientY}px`
                 cookieDisclaimer.style.left = `${event.clientX}px`
             }
+        })
+
+        document.addEventListener("scroll", () => {
+            msgBox.style.bottom = `${10 - window.scrollY}px`;
         })
 
         setInterval(setVisit, 1000)

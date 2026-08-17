@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>So long!</title>
+    <link rel="icon" href="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=backspace" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        html {
+            font-family: 'Montserrat';
+        }
+
+        html,
+        body {
+            height: 95%;
+        }
+
+        button {
+            font-family: 'Montserrat';
+        }
+
+        :root {
+            --border: black;
+            --green: #97da97;
+            --blue-shadow: #9bc6da;
+            --green-shadow: #bbe7bb;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --border: white;
+                --green: #488c48;
+            }
+        }
+
+        #select-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        #select {
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 10px 10px 10px var(--blue-shadow);
+            min-width: 80%;
+            min-height: 80%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #form * {
+            font-size: 1.5rem;
+            margin: 10px;
+        }
+
+        .form-item {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #submit {
+            background-color: var(--green);
+            box-shadow: 5px 5px 5px var(--green-shadow);
+            border: 2px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 100ms;
+        }
+
+        #submit:hover {
+            scale: 1.1;
+        }
+
+        #submit:active {
+            scale: 0.95;
+        }
+
+        #close {
+            display: none;
+            background-color: rgb(227, 84, 84);
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 50px;
+            height: 50px;
+            border-bottom-left-radius: 1000px;
+            border: 2px solid black;
+            font-size: x-large;
+            padding-left: 10px;
+            padding-bottom: 10px;
+            cursor: pointer;
+        }
+
+        #grid {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (min-width: 1000px) {
+            #grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .tile {
+            border: 2px solid black;
+            border-radius: 20px;
+            box-shadow: 10px 10px 10px var(--blue-shadow);
+        }
+
+        .tile-title,
+        .tile-text {
+            margin: 10px;
+            margin-left: 5%;
+            max-width: 90%;
+        }
+
+        #progress-bar {
+            background-color: #eef3f3;
+            border-radius: 7px;
+            position: relative;
+            width: 90%;
+            margin: 10px;
+            margin-left: 5%;
+            height: 20px;
+        }
+
+        #progress-bar-bar {
+            background: linear-gradient(to right, #9adea5, #97c0c0);
+            height: 100%;
+            border-top-left-radius: 7px;
+            border-bottom-left-radius: 7px;
+        }
+
+        #progress-times {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #progress-times p {
+            margin: 0;
+            margin-left: 5%;
+            margin-right: 5%;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #from-text {
+            background: linear-gradient(to right, #b3ebba, #e8efe8);
+        }
+
+        #to-text {
+            background: linear-gradient(to left, #bbcdd5, #e8efef);
+        }
+
+        #countdown-text {
+            font-size: 700%;
+            font-weight: bold;
+        }
+
+        .calculator-screen {
+            position: relative;
+            background-color: #e3eded;
+            border-radius: 10px;
+            width: 90%;
+            height: 50px;
+            margin-left: 5%;
+            margin-bottom: 20px;
+        }
+
+        .calculate-text {
+            margin-left: 10px;
+            margin-top: 1px;
+            margin-bottom: 0px;
+        }
+
+        .answer-text {
+            margin-left: 10px;
+            margin-top: 0px;
+            font-size: x-large;
+            font-weight: bold;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            gap: 10px;
+            padding: 5%;
+            padding-top: 0;
+        }
+
+        .calculator-buttons button {
+            background-color: #b3ebba;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            cursor: pointer;
+            transition: 100ms;
+        }
+
+        .calculator-buttons button.material-symbols-outlined {
+            font-variation-settings: 'wght' 250;
+        }
+
+        .calculator-buttons button:hover {
+            scale: 1.05;
+        }
+
+        .calculator-buttons button:active {
+            scale: 0.95;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="close">X</button>
+    <div id="select-container">
+        <div id="select">
+            <h2>Select date and time</h3>
+                <div id="form">
+                    <div class="form-item">
+                        <p>From</p>
+                        <input id="datetime-from" type="datetime-local">
+                    </div>
+                    <div class="form-item">
+                        <p>To</p>
+                        <input id="datetime-to" type="datetime-local">
+                    </div>
+                    <div class="form-item">
+                        <button id="submit">Submit</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div id="grid">
+        <div class="tile" id="progress" style="grid-column: 1 / -1;">
+            <div id="progress-bar">
+                <div id="progress-bar-bar"></div>
+            </div>
+            <div id="progress-times">
+                <p id="from-text">Loading...</p>
+                <p id="to-text">Loading...</p>
+            </div>
+            <p id="progress-text" class="tile-text">Loading...</p>
+        </div>
+        <div class="tile" id="countdown" style="grid-column: span 2;">
+            <p class="tile-text" id="countdown-text">Loading...</p>
+        </div>
+        <div class="tile" id="passed">
+            <h3 class="tile-title">Right now have passed...</h3>
+            <p id="passed-text" class="tile-text">Loading...</p>
+        </div>
+        <div class="tile" id="to-go">
+            <h3 class="tile-title">You still have to go...</h3>
+            <p id="to-go-text" class="tile-text">Loading...</p>
+        </div>
+        <div class="tile" id="onetimethispercent">
+            <p id="onetimethispercent-text" class="tile-text"> Loading...</p>
+        </div>
+        <div class="tile" id="onepercentequals">
+            <h3 class="tile-title">1% equals...</h3>
+            <p id="onepercentequals-text" class="tile-text"> Loading...</p>
+        </div>
+        <div class="tile" id="milestones">
+            <h3 class="tile-title">Milestones are:</h3>
+            <p id="milestones-text" class="tile-text">Loading...</p>
+        </div>
+        <div class="tile" id="passed-since-open">
+            <h3 class="tile-title">Since you opened this page, this time has passed...</h3>
+            <p id="passed-since-open-text" class="tile-text">Loading...</p>
+        </div>
+        <div class="tile" id="previous-checks">
+            <h3 class="tile-title">Previous checks</h3>
+            <p id="previous-checks-text" class="tile-text">This is your first check!</p>
+        </div>
+        <div class="tile" id="percentage-calculator">
+            <h3 class="tile-title">Percentage calculator</h3>
+            <div class="calculator-screen">
+                <p class="calculate-text" id="percentage-calculate-text">0%</p>
+                <p class="answer-text" id="percentage-answer-text">Calculating...</p>
+            </div>
+            <div class="calculator-buttons" id="percentage-calculator-buttons">
+                <button style="grid-column: span 2;">C</button>
+                <button style="grid-column: span 2;">Current %</button>
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button class="material-symbols-outlined">backspace</button>
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button style="grid-row: span 2;">+</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button style="grid-column: span 2;">0</button>
+                <button>.</button>
+                <button>-</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /*
+        Tile ideas:
+        - Calculators
+        - Share
+        */
+
+        const selectContainer = document.getElementById("select-container");
+        const dateTimeFrom = document.getElementById("datetime-from");
+        const dateTimeTo = document.getElementById("datetime-to");
+        const submit = document.getElementById("submit");
+        const closeButton = document.getElementById("close");
+        const grid = document.getElementById("grid");
+        const progressBarBar = document.getElementById("progress-bar-bar");
+        const fromText = document.getElementById("from-text");
+        const toText = document.getElementById("to-text");
+        const progressText = document.getElementById("progress-text");
+        const countdownText = document.getElementById("countdown-text");
+        const passedText = document.getElementById("passed-text");
+        const toGoText = document.getElementById("to-go-text");
+        const oneTimeThisPercentText = document.getElementById("onetimethispercent-text");
+        const onePercentEqualsText = document.getElementById("onepercentequals-text");
+        const milestonesText = document.getElementById("milestones-text");
+        const passedSinceOpenText = document.getElementById("passed-since-open-text");
+        const previousChecksText = document.getElementById("previous-checks-text");
+
+        const percentageCalculateText = document.getElementById("percentage-calculate-text");
+        const percentageAnswerText = document.getElementById("percentage-answer-text");
+        const percentageCalculatorButtons = document.getElementById("percentage-calculator-buttons");
+
+        const convertSeconds = 1000;
+        const convertMinutes = 60000;
+        const convertHours = 3600000;
+        const convertDays = 86400000;
+        const convertWeeks = 604800000;
+        const convertMonths = 2592000000;
+        const converts = [convertSeconds, convertMinutes, convertHours,
+            convertDays, convertWeeks, convertMonths];
+        const units = {
+            seconds: 1000,
+            minutes: 60000,
+            hours: 3600000,
+            days: 86400000,
+            weeks: 604800000,
+            months: 2592000000
+        }
+
+        var now = Date.now();
+        var openTime = now;
+        var fromTime;
+        var toTime;
+        var timeBetween;
+        var timePassed;
+        var timeToGo;
+        var timePassedSinceOpen;
+
+        var previousChecks = [];
+
+        var percentageCalculation = [
+            {
+                type: "number",
+                value: 0
+            }
+        ]
+
+        function dateToString(date) {
+            return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}
+            ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes(2, '0')).padStart(2, '0')}`;
+        }
+
+        function editProgress() {
+            progressBarBar.style.width = `${timePassed / timeBetween * 100}%`;
+            progressText.innerText = `You're at ${(timePassed / timeBetween * 100).toFixed(2)}%!`;
+        }
+
+        function editCountdown() {
+            let days = Math.floor(timeToGo / convertDays);
+            let hours = Math.floor(timeToGo % convertDays / convertHours);
+            let minutes = Math.floor(timeToGo % convertDays % convertHours / convertMinutes);
+            let seconds = Math.floor(timeToGo % convertDays % convertHours % convertMinutes / convertSeconds);
+            days = String(days).length < 2 ? 0 + String(days) : days;
+            hours = String(hours).length < 2 ? 0 + String(hours) : hours;
+            minutes = String(minutes).length < 2 ? 0 + String(minutes) : minutes;
+            seconds = String(seconds).length < 2 ? 0 + String(seconds) : seconds;
+            countdownText.innerText = `${days}:${hours}:${minutes}:${seconds}`;
+        }
+
+        function editPassed() {
+            let seconds = Math.round(timePassed / convertSeconds);
+            let minutes = (timePassed / convertMinutes).toFixed(2);
+            let hours = (timePassed / convertHours).toFixed(2);
+            let days = (timePassed / convertDays).toFixed(2);
+            let weeks = (timePassed / convertWeeks).toFixed(2);
+            let months = (timePassed / convertMonths).toFixed(2);
+            passedText.innerHTML = `<b>${seconds} seconds,</b><br>
+            <b>${minutes}</b> minutes,<br>
+            <b>${hours}</b> hours,<br>
+            <b>${days}</b> days,<br>
+            <b>${weeks}</b> weeks or<br>
+            <b>${months}</b> months<br>
+            `;
+        }
+
+        function editToGo() {
+            let seconds = Math.round(timeToGo / convertSeconds);
+            let minutes = (timeToGo / convertMinutes).toFixed(2);
+            let hours = (timeToGo / convertHours).toFixed(2);
+            let days = (timeToGo / convertDays).toFixed(2);
+            let weeks = (timeToGo / convertWeeks).toFixed(2);
+            let months = (timeToGo / convertMonths).toFixed(2);
+            toGoText.innerHTML = `<b>${seconds} seconds</b>,<br>
+            <b>${minutes}</b> minutes,<br>
+            <b>${hours}</b> hours,<br>
+            <b>${days}</b> days,<br>
+            <b>${weeks}</b> weeks or<br>
+            <b>${months}</b> months<br>
+            `;
+        }
+
+        function editOneTimeThisPercent() {
+            let second = (convertSeconds / timeBetween * 100).toFixed(10);
+            let minute = (convertMinutes / timeBetween * 100).toFixed(6);
+            let hour = (convertHours / timeBetween * 100).toFixed(5);
+            let day = (convertDays / timeBetween * 100).toFixed(4);
+            let week = (convertWeeks / timeBetween * 100).toFixed(3);
+            let month = (convertMonths / timeBetween * 100).toFixed(2);
+            oneTimeThisPercentText.innerHTML = `1 second = <b>${second}%</b>,<br>
+            1 minute = <b>${minute}%</b>,<br>
+            1 hour = <b>${hour}%</b>,<br>
+            1 day = <b>${day}%</b>,<br>
+            1 week = <b>${week}%</b> and<br>
+            1 month = <b>${month}%</b><br>
+            `;
+        }
+
+        function editOnePercentEquals() {
+            let seconds = (timeBetween / 100 / convertSeconds).toFixed(2);
+            let minutes = (timeBetween / 100 / convertMinutes).toFixed(2);
+            let hours = (timeBetween / 100 / convertHours).toFixed(3);
+            let days = (timeBetween / 100 / convertDays).toFixed(4);
+            let weeks = (timeBetween / 100 / convertWeeks).toFixed(5);
+            let months = (timeBetween / 100 / convertMonths).toFixed(6);
+            onePercentEqualsText.innerHTML = `<b>${seconds}</b> seconds,<br>
+            <b>${minutes}</b> minutes,<br>
+            <b>${hours}</b> hours,<br>
+            <b>${days}</b> days,<br>
+            <b>${weeks}</b> weeks or<br>
+            <b>${months}</b> months<br>
+            `;
+        }
+
+        function editMilestones() {
+            let milestones = [10, 20, 25, 30, 50, 75, 90];
+            let text = "";
+            for (i = 0; i < milestones.length; i++) {
+                const milestoneTime = timeBetween * milestones[i] / 100;
+                const milestoneDifference = milestoneTime - timePassed;
+                if (milestoneDifference > 0) {
+                    const bestUnit = converts.findLast(convert => milestoneDifference / convert > 1)
+                    text += `${milestones[i]}%: in <b>${(milestoneDifference / bestUnit).toFixed(2)}</b> ${Object.keys(units).find(u => units[u] == bestUnit)}<br>`;
+                } else {
+                    const bestUnit = converts.findLast(convert => milestoneDifference / convert < -1)
+                    text += `${milestones[i]}%: <b>${(Math.abs(milestoneDifference / bestUnit).toFixed(2))}</b> ${Object.keys(units).find(u => units[u] == bestUnit)} ago<br>`;
+                }
+            }
+
+            milestonesText.innerHTML = text;
+        }
+
+        function editPassedSinceOpen() {
+            let seconds = Math.round(timePassedSinceOpen / convertSeconds);
+            let minutes = (timePassedSinceOpen / convertMinutes).toFixed(2);
+            let hours = (timePassedSinceOpen / convertHours).toFixed(2);
+            let days = (timePassedSinceOpen / convertDays).toFixed(2);
+            let weeks = (timePassedSinceOpen / convertWeeks).toFixed(2);
+            let months = (timePassedSinceOpen / convertMonths).toFixed(2);
+            passedSinceOpenText.innerHTML = `<b>${seconds} seconds,</b><br>
+            <b>${minutes}</b> minutes,<br>
+            <b>${hours}</b> hours,<br>
+            <b>${days}</b> days,<br>
+            <b>${weeks}</b> weeks or<br>
+            <b>${months}</b> months<br>
+            `;
+        }
+
+        function editPreviousChecks() {
+            if (previousChecks.length > 0) {
+                previousChecks[previousChecks.length - 1].to = timePassed / timeBetween * 100;
+            } else {
+                previousChecks = [
+                    {
+                        from: timePassed / timeBetween * 100,
+                        to: timePassed / timeBetween * 100
+                    }
+                ]
+            }
+            localStorage.setItem("solong-previouschecks", JSON.stringify(previousChecks));
+
+            if (previousChecks.length > 1) {
+                previousChecksText.innerHTML = previousChecks
+                    .slice(0, -1)
+                    .map(check => `<b>${check.from.toFixed(2)}%</b>-<b>${check.to.toFixed(2)}%</b>`)
+                    .join(",<br>");
+            }
+        }
+
+        function mainLoop() {
+            now = Date.now();
+            timePassed = now - fromTime;
+            timeToGo = toTime - now;
+            timePassedSinceOpen = now - openTime
+            editProgress();
+            editCountdown();
+            editPassed();
+            editToGo();
+            editOneTimeThisPercent();
+            editOnePercentEquals();
+            editMilestones();
+            editPassedSinceOpen();
+            editPreviousChecks();
+        }
+
+        percentageCalculatorButtons.addEventListener("click", (e) => {
+            if (e.target.tagName == "BUTTON") {
+                let button = e.target.innerHTML;
+                if (!isNaN(Number(button))) {
+                    if (percentageCalculation[percentageCalculation.length - 1].type != "action") {
+                        let newValue = Number(
+                            percentageCalculation[percentageCalculation.length - 1].value + button);
+                        percentageCalculation[percentageCalculation.length - 1].value = newValue;
+                    } else {
+                        percentageCalculation.push(
+                            {
+                                type: "number",
+                                value: button
+                            }
+                        );
+                    }
+                } else {
+                    if (button == "C") {
+                        percentageCalculation = [
+                            {
+                                type: "number",
+                                value: 0
+                            }
+                        ];
+                    } else if (button == "backspace") {
+                        let editingBlock = percentageCalculation[percentageCalculation.length - 1];
+                        if (editingBlock.type == "number" && String(editingBlock.value).length > 1) {
+                            editingBlock.value = String(editingBlock.value).slice(0, -1)
+                        } else if (percentageCalculation.length > 1) percentageCalculation.pop();
+                        else {
+                            percentageCalculation = [
+                                {
+                                    type: "number",
+                                    value: 0
+                                }
+                            ];
+                        }
+                    } else if ((button == "+" || button == "-") &&
+                        percentageCalculation[percentageCalculation.length - 1].type == "number"
+                    ) {
+                        percentageCalculation.push(
+                            {
+                                type: "action",
+                                value: button
+                            }
+                        )
+                    } else if (button == "Current %") {
+                        editingBlock = percentageCalculation[percentageCalculation.length - 1];
+                        if (editingBlock.type == "number") editingBlock.value = (timePassed / timeBetween * 100).toFixed(2);
+                        else {
+                            percentageCalculation.push(
+                                {
+                                    type: "number",
+                                    value: (timePassed / timeBetween * 100).toFixed(2)
+                                }
+                            )
+                        }
+                    } else if (button == ".") {
+                        editingBlock = percentageCalculation[percentageCalculation.length - 1];
+                        if (editingBlock.type == "number") editingBlock.value += ".";
+                        else {
+                            percentageCalculation.push(
+                                {
+                                    type: "number",
+                                    value: "0."
+                                }
+                            )
+                        }
+                    }
+                }
+                let text = percentageCalculation
+                    .map(block => block.type == "number" ? block.value + "%" : block.value)
+                    .join(" ");
+                percentageCalculateText.innerText = text;
+
+                let outputTime = 0;
+                let lastAction = "+";
+                for (block of percentageCalculation) {
+                    if (block.type == "number") {
+                        if (lastAction == "+") outputTime += timeBetween * block.value / 100;
+                        else outputTime -= timeBetween * block.value / 100;
+                    } else lastAction = block.value;
+                }
+                percentageAnswerText.innerHTML = dateToString(new Date(fromTime + outputTime));
+            }
+        })
+
+        if (localStorage.getItem("solong-fromtime")) {
+            fromTime = Number(localStorage.getItem("solong-fromtime"));
+            toTime = Number(localStorage.getItem("solong-totime"));
+            timePassed = now - fromTime;
+            timeBetween = toTime - fromTime;
+            fromText.innerHTML = dateToString(new Date(fromTime));
+            toText.innerHTML = dateToString(new Date(toTime));
+            percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
+            previousChecks = JSON.parse(localStorage.getItem("solong-previouschecks"));
+            if (previousChecks[previousChecks.length - 1].to.toFixed(2) != (timePassed / timeBetween * 100).toFixed(2)) {
+                previousChecks.push({
+                    from: timePassed / timeBetween * 100,
+                    to: timePassed / timeBetween * 100
+                });
+            }
+            document.body.style.height = "180%";
+            closeButton.style.display = "block";
+            grid.style.display = "grid";
+            mainLoop();
+            setInterval(mainLoop, 1000);
+        } else {
+            selectContainer.style.display = "flex";
+
+            const nowString = new Date();
+            nowString.setMinutes(nowString.getMinutes() - nowString.getTimezoneOffset());
+            dateTimeFrom.value = nowString.toISOString().slice(0, 16);
+
+            submit.addEventListener("click", () => {
+                fromTime = Date.parse(dateTimeFrom.value);
+                toTime = Date.parse(dateTimeTo.value);
+                timeBetween = toTime - fromTime;
+                if (fromTime < toTime) {
+                    document.body.style.height = "180%";
+                    selectContainer.style.display = "none";
+                    closeButton.style.display = "block";
+                    grid.style.display = "grid";
+                    localStorage.setItem("solong-fromtime", fromTime);
+                    localStorage.setItem("solong-totime", toTime);
+                    fromText.innerHTML = dateToString(new Date(fromTime));
+                    toText.innerHTML = dateToString(new Date(toTime));
+                    percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
+
+                    mainLoop();
+                    setInterval(mainLoop, 1000);
+                }
+            })
+        }
+
+        closeButton.addEventListener("click", () => {
+            localStorage.removeItem("solong-fromtime");
+            localStorage.removeItem("solong-totime");
+            localStorage.removeItem("solong-previouschecks");
+            window.location.reload();
+        })
+    </script>
+</body>
+
+</html>
