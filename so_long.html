@@ -29,17 +29,24 @@
 
         :root {
             --border: black;
+            --progress-background: #eef3f3;
+            --progress-gradient: linear-gradient(to right, #9adea5, #97c0c0);
+            --from-gradient: linear-gradient(to right, #b3ebba, #e8efe8);
+            --to-gradient: linear-gradient(to left, #bbcdd5, #e8efe8);
+            --almost-bg: #e3eded;
+            --light-green: #b3ebba;
             --green: #97da97;
             --green-shadow: #bbe7bb;
             --blue-shadow: #9bc6da;
-            --passed-shadow: #9bc6da;
-            --progress-shadow: #9bdac0;
+            --progress-shadow: #9bdad0;
             --countdown-shadow: #9bdac8;
+            --passed-shadow: #9bc6da;
+            --total-time-shadow: #9bb0da;
             --to-go-shadow: #ab9bda;
             --onetimethispercent-shadow: #faf2b6;
             --onepercentequals-shadow: #da9bd3;
             --milestones-shadow: #d09beb;
-            --passed-since-open-shadow: #daa89b;
+            --passed-since-open-shadow: #f5c881;
             --previous-checks-shadow: #9bd9da;
             --percentage-calculator-shadow: #9bdac3;
             --share-shadow: #9bb9da;
@@ -48,7 +55,13 @@
         @media (prefers-color-scheme: dark) {
             :root {
                 --border: white;
-                --green: #488c48;
+                --progress-background: #3f4244;
+                --progress-gradient: linear-gradient(to right, #45794f, #708c8c);
+                --from-gradient: linear-gradient(to right, #3b6f42, #333733);
+                --to-gradient: linear-gradient(to left, #486f80, #333733);
+                --light-green: #409148;
+                --green: #167616;
+                --almost-bg: #2c2929;
             }
         }
 
@@ -85,7 +98,7 @@
         #submit {
             background-color: var(--green);
             box-shadow: 5px 5px 5px var(--green-shadow);
-            border: 2px solid black;
+            border: 2px solid var(--border);
             border-radius: 5px;
             cursor: pointer;
             transition: 100ms;
@@ -109,7 +122,7 @@
             width: 50px;
             height: 50px;
             border-bottom-left-radius: 1000px;
-            border: 2px solid black;
+            border: 2px solid var(--border);
             font-size: x-large;
             padding-left: 10px;
             padding-bottom: 10px;
@@ -118,7 +131,7 @@
 
         #grid {
             display: none;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, 2fr);
             gap: 15px;
         }
 
@@ -128,14 +141,28 @@
             }
         }
 
+        @media (min-width: 1300px) {
+            #grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            #countdown-text {
+                font-size: 600% !important;
+            }
+        }
+
         @media (max-width: 350px) {
             #grid {
                 gap: 10px;
             }
+
+            #share {
+                margin-top: 10px;
+            }
         }
 
         .tile {
-            border: 2px solid black;
+            border: 2px solid var(--border);
             border-radius: 20px;
         }
 
@@ -147,7 +174,7 @@
         }
 
         #progress-bar {
-            background-color: #eef3f3;
+            background-color: var(--progress-background);
             border-radius: 7px;
             position: relative;
             width: 90%;
@@ -157,7 +184,7 @@
         }
 
         #progress-bar-bar {
-            background: linear-gradient(to right, #9adea5, #97c0c0);
+            background: var(--progress-gradient);
             height: 100%;
             border-top-left-radius: 7px;
             border-bottom-left-radius: 7px;
@@ -177,16 +204,22 @@
         }
 
         #from-text {
-            background: linear-gradient(to right, #b3ebba, #e8efe8);
+            background: var(--from-gradient);
         }
 
         #to-text {
-            background: linear-gradient(to left, #bbcdd5, #e8efef);
+            background: var(--to-gradient);
         }
 
         #countdown-text {
             font-size: 700%;
             font-weight: bold;
+        }
+
+        @media (min-width: 1600px) {
+            #countdown-text {
+                font-size: 700%;
+            }
         }
 
         @media (max-width: 1200px) {
@@ -207,13 +240,19 @@
             }
         }
 
+        @media (max-width: 550px) {
+            #percentage-calculator {
+                grid-column: span 2;
+            }
+        }
+
         #percentage-calculator button {
             box-shadow: 2px 2px 2px var(--percentage-calculator-shadow);
         }
 
         .calculator-screen {
             position: relative;
-            background-color: #e3eded;
+            background-color: var(--almost-bg);
             border-radius: 10px;
             width: 90%;
             height: 50px;
@@ -242,26 +281,9 @@
             padding-top: 0;
         }
 
-        @media (max-width: 350px) {
-            .calculator-screen {
-                height: 65px;
-            }
-            .answer-text {
-                font-size: unset;
-            }
-
-            .calculator-buttons {
-                gap: 5px;
-            }
-
-            .calculator-buttons button {
-                padding: 5px;
-            }
-        }
-
         .calculator-buttons button {
-            background-color: #b3ebba;
-            border: 2px solid black;
+            background-color: var(--light-green);
+            border: 2px solid var(--border);
             border-radius: 5px;
             padding-top: 10px;
             padding-bottom: 10px;
@@ -286,6 +308,7 @@
             width: 38px;
             height: 50px;
             padding-left: 13px;
+            margin-top: 15px;
             display: flex;
             gap: 5px;
             justify-content: left;
@@ -325,9 +348,12 @@
         }
 
         #end {
+            display: none;
+        }
+
+        #foot {
             position: relative;
             height: 25px;
-            grid-column: span 2;
         }
     </style>
 </head>
@@ -372,6 +398,10 @@
             box-shadow: 10px 10px 10px var(--passed-shadow);">
             <h3 class="tile-title">Right now have passed...</h3>
             <p id="passed-text" class="tile-text">Loading...</p>
+        </div>
+        <div class="tile" id="total-time" style="box-shadow: 10px 10px 10px var(--total-time-shadow);">
+            <h3 class="tile-title">Total time:</h3>
+            <p id="total-time-text" class="tile-text">Loading...</p>
         </div>
         <div class="tile" id="to-go" style="box-shadow: 10px 10px 10px var(--to-go-shadow);">
             <h3 class="tile-title">You still have to go...</h3>
@@ -422,17 +452,19 @@
                 <button>-</button>
             </div>
         </div>
+    </div>
+    <div id="end">
         <div class="tile" id="share" style="box-shadow: 5px 5px 5px var(--share-shadow);">
             <p class="material-symbols-outlined">share</p>
             <p id="share-text">Click again to copy link</p>
         </div>
-        <div id="end"></div>
+        <div id="foot"></div>
     </div>
 
     <script>
         /*
         Tile ideas:
-            -
+            - 
         */
 
         const selectContainer = document.getElementById("select-container");
@@ -447,12 +479,14 @@
         const progressText = document.getElementById("progress-text");
         const countdownText = document.getElementById("countdown-text");
         const passedText = document.getElementById("passed-text");
+        const totalTimeText = document.getElementById("total-time-text");
         const toGoText = document.getElementById("to-go-text");
         const oneTimeThisPercentText = document.getElementById("onetimethispercent-text");
         const onePercentEqualsText = document.getElementById("onepercentequals-text");
         const milestonesText = document.getElementById("milestones-text");
         const passedSinceOpenText = document.getElementById("passed-since-open-text");
         const previousChecksText = document.getElementById("previous-checks-text");
+        const end = document.getElementById("end");
         const share = document.getElementById("share");
 
         const percentageCalculateText = document.getElementById("percentage-calculate-text");
@@ -500,6 +534,15 @@
             ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes(2, '0')).padStart(2, '0')}`;
         }
 
+        function editTotalTimeText() {
+            let days = Math.floor(timeBetween / convertDays);
+            let hours = Math.floor(timeBetween % convertDays / convertHours);
+            let minutes = Math.floor(timeBetween % convertDays % convertHours / convertMinutes);
+            let seconds = Math.floor(timeBetween % convertDays % convertHours % convertMinutes / convertSeconds);
+            totalTimeText.innerHTML = `Days: <b>${days}</b>,<br>Hours: <b>${hours}</b>,<br>
+            Minutes: <b>${minutes}</b>, <br>Seconds: <b>${seconds}</b>`;
+        }
+
         function editProgress() {
             if (percentage < 100) {
                 progressBarBar.style.width = `${percentage}%`;
@@ -530,7 +573,7 @@
             let days = (timePassed / convertDays).toFixed(2);
             let weeks = (timePassed / convertWeeks).toFixed(2);
             let months = (timePassed / convertMonths).toFixed(2);
-            passedText.innerHTML = `<b>${seconds} seconds,</b><br>
+            passedText.innerHTML = `<b>${seconds}</b> seconds,<br>
             <b>${minutes}</b> minutes,<br>
             <b>${hours}</b> hours,<br>
             <b>${days}</b> days,<br>
@@ -774,9 +817,11 @@
             localStorage.setItem("solong-totime", toTime);
             fromText.innerHTML = dateToString(new Date(fromTime));
             toText.innerHTML = dateToString(new Date(toTime));
+            editTotalTimeText();
             percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
             closeButton.style.display = "block";
             grid.style.display = "grid";
+            end.style.display = "block";
             mainLoop();
             setInterval(mainLoop, 1000);
         } else if (localStorage.getItem("solong-fromtime")) {
@@ -794,9 +839,11 @@
             }
             fromText.innerHTML = dateToString(new Date(fromTime));
             toText.innerHTML = dateToString(new Date(toTime));
+            editTotalTimeText();
             percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
             closeButton.style.display = "block";
             grid.style.display = "grid";
+            end.style.display = "block";
             mainLoop();
             setInterval(mainLoop, 1000);
         } else {
@@ -813,11 +860,13 @@
                 if (fromTime < toTime) {
                     selectContainer.style.display = "none";
                     closeButton.style.display = "block";
+                    end.style.display = "block";
                     grid.style.display = "grid";
                     localStorage.setItem("solong-fromtime", fromTime);
                     localStorage.setItem("solong-totime", toTime);
                     fromText.innerHTML = dateToString(new Date(fromTime));
                     toText.innerHTML = dateToString(new Date(toTime));
+                    editTotalTimeText();
                     percentageAnswerText.innerHTML = dateToString(new Date(fromTime));
 
                     mainLoop();
