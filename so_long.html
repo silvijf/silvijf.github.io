@@ -247,6 +247,10 @@
             }
         }
 
+        #percentage-calculator {
+            min-width: 0;
+        }
+
         #percentage-calculator button {
             box-shadow: 2px 2px 2px var(--percentage-calculator-shadow);
         }
@@ -263,8 +267,11 @@
 
         .calculate-text {
             margin-left: 10px;
+            margin-right: 10px;
             margin-top: 1px;
             margin-bottom: 0px;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         .answer-text {
@@ -799,6 +806,7 @@
                     } else lastAction = block.value;
                 }
                 percentageAnswerText.innerHTML = dateToString(new Date(fromTime + outputTime));
+                percentageCalculateText.scrollLeft = percentageCalculateText.scrollWidth;
             }
         })
 
