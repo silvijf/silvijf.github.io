@@ -25,4 +25,4 @@ When there are more machines:
 - [ ] Offline earnings
 
 Machine plan:
-Blue, purple, green, camouflage, bright purple with yellow dots
+Green, camouflage, bright purple with yellow dots
