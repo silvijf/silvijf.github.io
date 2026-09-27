@@ -758,7 +758,7 @@
             moneyWidth = moneyEl.getBoundingClientRect().width;
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
             pets = JSON.parse(localStorage.getItem("laundryPets"));
-            if (pets == null) pets = {}; 
+            if (pets == null) pets = {};
             for (let i = 0; i < machines.length; i++) {
                 if (i > 0) {
                     machineContainer.insertAdjacentHTML("beforeend", machineTypes[machines[i].type].code);
@@ -1125,14 +1125,16 @@
         }
 
         function checkDeleteMenu(e) {
-            if (((e.target == document.body || e.target == document.documentElement) ||
-                (!e.target.classList.contains("pet-menu") &&
-                    !e.target.parentElement.classList.contains("pet-menu") &&
-                    !e.target.parentElement.parentElement.classList.contains("pet-menu") &&
-                    !e.target.classList.contains("pet"))) && document.querySelector(".pet-menu")) {
-                document.querySelector(".pet-menu").remove();
-                displayedPetMenu = null;
-            }
+            try {
+                if (((e.target == document.body || e.target == document.documentElement) ||
+                    (!e.target.classList.contains("pet-menu") &&
+                        !e.target.parentElement.classList.contains("pet-menu") &&
+                        !e.target.parentElement.parentElement.classList.contains("pet-menu") &&
+                        !e.target.classList.contains("pet"))) && document.querySelector(".pet-menu")) {
+                    document.querySelector(".pet-menu").remove();
+                    displayedPetMenu = null;
+                }
+            } catch { }
         }
 
         function updatePets() {
