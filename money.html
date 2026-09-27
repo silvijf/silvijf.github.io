@@ -758,6 +758,7 @@
             moneyWidth = moneyEl.getBoundingClientRect().width;
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
             pets = JSON.parse(localStorage.getItem("laundryPets"));
+            if (pets == null) pets = {}; 
             for (let i = 0; i < machines.length; i++) {
                 if (i > 0) {
                     machineContainer.insertAdjacentHTML("beforeend", machineTypes[machines[i].type].code);
