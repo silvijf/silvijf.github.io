@@ -1113,7 +1113,7 @@
 
         function setPetMoney() {
             const input = document.querySelector(".pet-money input");
-            if (input.value) {
+            if (input.value && input.value <= 10 && input.value >= 1) {
                 pets[displayedPetMenu].money = Number(document.querySelector(".pet-money input").value);
                 document.querySelector(".pet-menu").remove();
                 if (pets[displayedPetMenu].machine) pets[displayedPetMenu].state = "gettingDetergent";
