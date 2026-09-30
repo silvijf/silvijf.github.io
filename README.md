@@ -17,7 +17,7 @@ This is my site.
 - [x] Bankruptcy helper
 - [x] More detergent types
 - [x] Tutorial
-- [ ] Let pets not move while dragging
+- [x] Let pets not move while dragging
 - [ ] Offline earnings
 
 When there are more machines:

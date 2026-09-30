@@ -1137,16 +1137,14 @@
                 pets[displayedPetMenu].money = Number(document.querySelector(".pet-money input").value);
                 document.querySelector(".pet-menu").remove();
                 if (pets[displayedPetMenu].machine != undefined) pets[displayedPetMenu].state = "gettingDetergent";
-                let moneyPetClone = Object.entries(document.getElementsByClassName("money-pet-clone"))
-                    .find(([key, value]) => Number(value.dataset.pet) == displayedPetMenu);
                 try {
                     Object.entries(document.getElementsByClassName("money-pet-clone"))
-                        .find(([key, value]) => Number(value.dataset.pet) == displayedPetMenu)
+                        .find(([key, value]) => Number(value.dataset.pet) == displayedPetMenu)[1]
                         .remove();
                 } catch { }
                 try {
                     Object.entries(document.getElementsByClassName("detergent-pet-clone"))
-                        .find(([key, value]) => Number(value.dataset.pet) == i)
+                        .find(([key, value]) => Number(value.dataset.pet) == displayedPetMenu)[1]
                         .remove();
                 } catch { }
                 displayedPetMenu = null;
@@ -1186,9 +1184,12 @@
                     const bodyRect = document.body.getBoundingClientRect();
                     const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft)
                     const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft)
-                    petEls[i].style.top = `${newTop}px`;
-                    petEls[i].style.left = `${newLeft}px`;
-                    petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    if (petEls[i] != grabbingPetEl) {
+                        petEls[i].style.top = `${newTop}px`;
+                        petEls[i].style.left = `${newLeft}px`;
+                        petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    }
+
                     pets[i].walkTimeLeft--;
                     if (pets[i].walkTimeLeft <= 0) {
                         const clone = detergents[selectedDetergent].cloneNode(true);
@@ -1216,11 +1217,13 @@
                         detergentPetClone.dataset.pet = i;
                         document.body.appendChild(detergentPetClone);
                     }
-                    const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft)
-                    const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft)
-                    petEls[i].style.top = `${newTop}px`;
-                    petEls[i].style.left = `${newLeft}px`;
-                    petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft);
+                    const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft);
+                    if (petEls[i] != grabbingPetEl) {
+                        petEls[i].style.top = `${newTop}px`;
+                        petEls[i].style.left = `${newLeft}px`;
+                        petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    }
                     detergentPetClone.style.top = petEls[i].style.top;
                     detergentPetClone.style.left = petEls[i].style.left;
                     pets[i].walkTimeLeft--;
@@ -1230,26 +1233,30 @@
                         selectedMachine.children[0].classList.add("open");
                         setTimeout(() => {
                             if (!selectedMachine.children[1].classList.contains("washing")) {
-                                detergentPetClone.remove();
-                                if (!selectedMachine.children[0].classList.contains("deterged")) {
-                                    detergentCount[pets[i].detergent] -= 1;
-                                }
-                                selectedMachine.children[0].classList.add("deterged");
-                                machines[pets[i].machine].deterged = true;
-                                const detergentCountLength = Object.values(detergentCount).filter(d => d > 0).length;
-                                if (detergentCount[pets[i].detergent] == 0 && detergentCountLength > 0) {
-                                    document.querySelector(`.detergent-image[data-detergenttype=${pets[i].detergent}]`).remove();
-                                    document.querySelector(`.detergent-count[data-detergenttype=${pets[i].detergent}]`).remove();
-                                    const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
-                                    detergentContainer.style.setProperty("--len", len);
+                                if (detergentCount[pets[i].detergent] > 0) {
+                                    detergentPetClone.remove();
+                                    if (!selectedMachine.children[0].classList.contains("deterged")) {
+                                        detergentCount[pets[i].detergent] -= 1;
+                                    }
+                                    selectedMachine.children[0].classList.add("deterged");
+                                    machines[pets[i].machine].deterged = true;
+                                    const detergentCountLength = Object.values(detergentCount).filter(d => d > 0).length;
+                                    if (detergentCount[pets[i].detergent] == 0 && detergentCountLength > 0) {
+                                        document.querySelector(`.detergent-image[data-detergenttype=${pets[i].detergent}]`).remove();
+                                        document.querySelector(`.detergent-count[data-detergenttype=${pets[i].detergent}]`).remove();
+                                        const len = `${25 + (detergentContainer.children.length / 2) * 40}px`;
+                                        detergentContainer.style.setProperty("--len", len);
+                                    } else {
+                                        document.querySelector(`.detergent-count[data-detergenttype=${pets[i].detergent}]`).innerText = detergentCount[pets[i].detergent];
+                                    }
+                                    setTimeout(() => {
+                                        selectedMachine.children[0].classList.remove("open");
+                                        pets[i].state = "gettingMoney";
+                                        pets[i].walkTimeLeft = 100;
+                                    }, 1000)
                                 } else {
-                                    document.querySelector(`.detergent-count[data-detergenttype=${pets[i].detergent}]`).innerText = detergentCount[pets[i].detergent];
+                                    resetPet(i);
                                 }
-                                setTimeout(() => {
-                                    selectedMachine.children[0].classList.remove("open");
-                                    pets[i].state = "gettingMoney";
-                                    pets[i].walkTimeLeft = 100;
-                                }, 1000)
                             }
                         }, 1000);
                         save();
@@ -1257,11 +1264,13 @@
                 } else if (pets[i].state == "gettingMoney") {
                     const rect = moneyEl.getBoundingClientRect();
                     const bodyRect = document.body.getBoundingClientRect();
-                    const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft)
-                    const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft)
-                    petEls[i].style.top = `${newTop}px`;
-                    petEls[i].style.left = `${newLeft}px`;
-                    petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft);
+                    const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft);
+                    if (petEls[i] != grabbingPetEl) {
+                        petEls[i].style.top = `${newTop}px`;
+                        petEls[i].style.left = `${newLeft}px`;
+                        petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    }
                     pets[i].walkTimeLeft--;
                     if (pets[i].walkTimeLeft <= 0) {
                         const clone = moneyEl.cloneNode(true);
@@ -1288,11 +1297,13 @@
                         moneyPetClone.dataset.pet = i;
                         document.body.appendChild(moneyPetClone);
                     }
-                    const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft)
-                    const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft)
-                    petEls[i].style.top = `${newTop}px`;
-                    petEls[i].style.left = `${newLeft}px`;
-                    petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft);
+                    const newLeft = left + ((rect.left - bodyRect.left - left) / pets[i].walkTimeLeft);
+                    if (petEls[i] != grabbingPetEl) {
+                        petEls[i].style.top = `${newTop}px`;
+                        petEls[i].style.left = `${newLeft}px`;
+                        petEls[i].style.transform = `rotate(${Math.atan2(newTop - top, newLeft - left) + 0.5 * Math.PI}rad)`;
+                    }
                     moneyPetClone.style.top = petEls[i].style.top;
                     moneyPetClone.style.left = petEls[i].style.left;
                     pets[i].walkTimeLeft--;
@@ -1316,7 +1327,7 @@
         }
 
         function resetPet(index) {
-            if (typeof (index != Number)) index = displayedPetMenu;
+            if (typeof index != "number") index = displayedPetMenu;
             pets[index] = {
                 type: pets[index].type,
                 money: null,
@@ -1329,6 +1340,16 @@
                 document.querySelector(".pet-menu").remove();
                 displayedPetMenu = null;
             }
+            try {
+                Object.entries(document.getElementsByClassName("money-pet-clone"))
+                    .find(([key, value]) => Number(value.dataset.pet) == index)[1]
+                    .remove();
+            } catch { }
+            try {
+                Object.entries(document.getElementsByClassName("detergent-pet-clone"))
+                    .find(([key, value]) => Number(value.dataset.pet) == index)[1]
+                    .remove();
+            } catch { }
             save();
         }
 
@@ -1532,6 +1553,7 @@
                         }
                     }
                 }
+                grabbingPetEl = null;
             }
         }
 
