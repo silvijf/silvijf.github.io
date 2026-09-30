@@ -778,6 +778,8 @@
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
             detergentCount = JSON.parse(localStorage.getItem("laundryDetergent"));
             pets = JSON.parse(localStorage.getItem("laundryPets"));
+            const lastTime = Number(localStorage.getItem("laundryTime"));
+            const nowTime = new Date().getTime();
             if (pets == null) pets = {};
             for (let i = 0; i < machines.length; i++) {
                 if (i > 0) {
@@ -791,6 +793,9 @@
                 }
                 if (machines[i].deterged == true) {
                     compartment.classList.add("deterged");
+                }
+                if (machines[i].type == "animals") {
+                    machines[i].timer -= Math.round((nowTime - lastTime) / 1000);
                 }
             }
             if (typeof detergentCount != "object" || detergentCount == null) detergentCount = { yellow: 6, pink: 0 };
@@ -935,6 +940,8 @@
             localStorage.setItem("laundryMachines", JSON.stringify(machines));
             localStorage.setItem("laundryDetergent", JSON.stringify(detergentCount));
             localStorage.setItem("laundryPets", JSON.stringify(pets));
+            const time = new Date().getTime();
+            localStorage.setItem("laundryTime", time);
         }
 
         function changeMoney(count) {
@@ -966,7 +973,7 @@
         function timer(machine, machineIndex, timerEl) {
             machines[machineIndex].timer -= 1;
             timerEl.innerText = machines[machineIndex].timer;
-            if (machines[machineIndex].timer == 0) finishLaundry(machine, machineIndex);
+            if (machines[machineIndex].timer <= 0) finishLaundry(machine, machineIndex);
             save();
         }
 
