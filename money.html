@@ -589,7 +589,7 @@
         <div class="shop-item">
             <p>Purple machine</p>
             <p>1.8x profit, 5 sec, max $10</p>
-            <p class="price">$200</p>
+            <p class="price">$170</p>
             <div class="machine-example purple">
                 <div class="compartment-example"></div>
                 <div class="circle-example purple"></div>
@@ -598,7 +598,7 @@
         </div>
         <div class="shop-item">
             <p>Animal machine</p>
-            <p>New animal, 1 hour, $1000-1500</p>
+            <p>New animal, 1 hour, $500-1000</p>
             <p class="price">$500</p>
             <div class="machine-example animals">
                 <div class="compartment-example"></div>
@@ -711,7 +711,7 @@
                     <button class="sell">Sell</button>
                 </div>
                 `,
-                cost: 200,
+                cost: 170,
                 profit: 1.8,
                 time: 5,
                 max: 10
@@ -727,8 +727,8 @@
                 cost: 500,
                 profit: "pet",
                 time: 3600,
-                min: 1000,
-                max: 1500
+                min: 500,
+                max: 1000
             }
         };
 
@@ -947,12 +947,17 @@
                 const machineIndex = [].slice.call(machineEls).indexOf(machine);
                 const type = machines[machineIndex].type;
                 const max = machineTypes[type].max;
+                const min = machineTypes[type].min;
                 if (max > money) {
                     el.max = money;
                     el.placeholder = money;
                 } else {
                     el.max = max;
                     el.placeholder = max;
+                }
+                if (!isNaN(min)) {
+                    el.min = min;
+                    el.placeholder = min;
                 }
             })
             save();
