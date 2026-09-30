@@ -299,6 +299,10 @@
             transition: transform 100ms;
         }
 
+        #detergent-pet-clone {
+            transition: left 100ms linear, top 100ms linear;
+        }
+
         .detergent-count {
             position: absolute;
             color: black;
@@ -454,6 +458,10 @@
             transition: transform 100ms;
         }
 
+        #money-pet-clone {
+            transition: left 100ms linear, top 100ms linear;
+        }
+
         .pet {
             position: absolute;
             width: 100px;
@@ -461,7 +469,7 @@
             z-index: 4;
             cursor: pointer;
             transform-origin: 50% 5px;
-            transition: transform 100ms, left 110ms, top 110ms;
+            transition: transform 100ms, left 100ms linear, top 100ms linear;
         }
 
         .pet.grabbing {
@@ -986,7 +994,8 @@
             if (compartment.classList.contains("deterged")) {
                 if (moneyInserted == '') {
                     if (!hasMin) moneyInserted = (money > max) ? max : money;
-                    else return false;
+                    else if (handleType == "pet") return false;
+                    else el.children[1].innerText = "Type an amount!";
                 }
                 if (moneyInserted == 0) return false;
                 if (moneyInserted <= money) {
