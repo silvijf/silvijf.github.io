@@ -286,7 +286,7 @@
         }
 
         #detergent-clone,
-        #detergent-pet-clone {
+        .detergent-pet-clone {
             position: absolute;
             width: 50px;
             background-color: #b3e3e1;
@@ -299,7 +299,7 @@
             transition: transform 100ms;
         }
 
-        #detergent-pet-clone {
+        .detergent-pet-clone {
             transition: left 100ms linear, top 100ms linear;
         }
 
@@ -446,7 +446,7 @@
         }
 
         #money-clone,
-        #money-pet-clone {
+        .money-pet-clone {
             position: absolute;
             margin: 0px;
             border-radius: 10px;
@@ -458,7 +458,7 @@
             transition: transform 100ms;
         }
 
-        #money-pet-clone {
+        .money-pet-clone {
             transition: left 100ms linear, top 100ms linear;
         }
 
@@ -1137,8 +1137,18 @@
                 pets[displayedPetMenu].money = Number(document.querySelector(".pet-money input").value);
                 document.querySelector(".pet-menu").remove();
                 if (pets[displayedPetMenu].machine != undefined) pets[displayedPetMenu].state = "gettingDetergent";
-                if (document.getElementById("money-pet-clone")) document.getElementById("money-pet-clone").remove();
-                if (document.getElementById("detergent-pet-clone")) document.getElementById("detergent-pet-clone").remove();
+                let moneyPetClone = Object.entries(document.getElementsByClassName("money-pet-clone"))
+                    .find(([key, value]) => Number(value.dataset.pet) == displayedPetMenu);
+                try {
+                    Object.entries(document.getElementsByClassName("money-pet-clone"))
+                        .find(([key, value]) => Number(value.dataset.pet) == displayedPetMenu)
+                        .remove();
+                } catch { }
+                try {
+                    Object.entries(document.getElementsByClassName("detergent-pet-clone"))
+                        .find(([key, value]) => Number(value.dataset.pet) == i)
+                        .remove();
+                } catch { }
                 displayedPetMenu = null;
                 save();
             }
@@ -1182,7 +1192,8 @@
                     pets[i].walkTimeLeft--;
                     if (pets[i].walkTimeLeft <= 0) {
                         const clone = detergents[selectedDetergent].cloneNode(true);
-                        clone.id = "detergent-pet-clone";
+                        clone.classList.add("detergent-pet-clone");
+                        clone.dataset.pet = i;
                         clone.style.top = petEls[i].style.top;
                         clone.style.left = petEls[i].style.left;
                         document.body.appendChild(clone);
@@ -1194,11 +1205,15 @@
                     const selectedMachine = machineEls[pets[i].machine];
                     const rect = selectedMachine.children[0].getBoundingClientRect();
                     const bodyRect = document.body.getBoundingClientRect();
-                    let detergentPetClone = document.getElementById("detergent-pet-clone")
-                    if (!detergentPetClone) {
+                    let detergentPetClone;
+                    try {
+                        detergentPetClone = Object.entries(document.getElementsByClassName("detergent-pet-clone"))
+                            .find(([key, value]) => Number(value.dataset.pet) == i)[1];
+                    } catch {
                         const selectedDetergent = Object.keys(detergents).find((key) => detergents[key].dataset.detergenttype == pets[i].detergent);
                         detergentPetClone = detergents[selectedDetergent].cloneNode(true);
-                        detergentPetClone.id = "detergent-pet-clone";
+                        detergentPetClone.classList.add("detergent-pet-clone");
+                        detergentPetClone.dataset.pet = i;
                         document.body.appendChild(detergentPetClone);
                     }
                     const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft)
@@ -1237,6 +1252,7 @@
                                 }, 1000)
                             }
                         }, 1000);
+                        save();
                     }
                 } else if (pets[i].state == "gettingMoney") {
                     const rect = moneyEl.getBoundingClientRect();
@@ -1249,7 +1265,8 @@
                     pets[i].walkTimeLeft--;
                     if (pets[i].walkTimeLeft <= 0) {
                         const clone = moneyEl.cloneNode(true);
-                        clone.id = "money-pet-clone";
+                        clone.classList.add("money-pet-clone");
+                        clone.dataset.pet = i;
                         clone.style.top = petEls[i].style.top;
                         clone.style.left = petEls[i].style.left;
                         document.body.appendChild(clone);
@@ -1261,10 +1278,14 @@
                     const selectedMachine = machineEls[pets[i].machine];
                     const rect = selectedMachine.children[1].getBoundingClientRect();
                     const bodyRect = document.body.getBoundingClientRect();
-                    let moneyPetClone = document.getElementById("money-pet-clone")
-                    if (!moneyPetClone) {
+                    let moneyPetClone;
+                    try {
+                        moneyPetClone = Object.entries(document.getElementsByClassName("money-pet-clone"))
+                            .find(([key, value]) => Number(value.dataset.pet) == i)[1];
+                    } catch {
                         moneyPetClone = moneyEl.cloneNode(true);
-                        moneyPetClone.id = "money-pet-clone";
+                        moneyPetClone.classList.add("money-pet-clone");
+                        moneyPetClone.dataset.pet = i;
                         document.body.appendChild(moneyPetClone);
                     }
                     const newTop = top + ((rect.top - bodyRect.top - top) / pets[i].walkTimeLeft)
@@ -1286,10 +1307,9 @@
                             input.remove();
                         }
                         selectedMachine.children[0].classList.remove("open");
-                        if (document.getElementById("money-pet-clone")) document.getElementById("money-pet-clone").remove();
-                        if (document.getElementById("detergent-pet-clone")) document.getElementById("detergent-pet-clone").remove();
                         pets[i].state = "gettingDetergent";
                         pets[i].walkTimeLeft = 100;
+                        save();
                     }
                 }
             }

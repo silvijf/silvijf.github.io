@@ -17,12 +17,11 @@ This is my site.
 - [x] Bankruptcy helper
 - [x] More detergent types
 - [x] Tutorial
-- [ ] Slots
-- [ ] Pets shop
+- [ ] Let pets not move while dragging
+- [ ] Offline earnings
 
 When there are more machines:
 - [ ] Balancing
-- [ ] Offline earnings
 
 Machine plan:
 Green, camouflage, bright purple with yellow dots
