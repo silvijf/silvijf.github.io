@@ -25,6 +25,7 @@
         :root {
             --body-background: #fff;
             --border: black;
+            --text: black;
             --light-bg: #ddf0ea;
             --very-light-gray: #efefef;
             --light-gray: #dddddd;
@@ -35,6 +36,7 @@
             :root {
                 --body-background: #191919;
                 --border: #969e9d;
+                --text: white;
                 --light-bg: #41474d;
                 --light-gray: #333333;
                 --very-light-gray: #010101;
@@ -195,6 +197,10 @@
             border: 2px solid var(--border);
             padding: 5px;
             margin: 5px;
+        }
+
+        .circle.animals p {
+            color: var(--text);
         }
 
         .circle.washing {
@@ -455,7 +461,12 @@
             z-index: 4;
             cursor: pointer;
             transform-origin: 50% 5px;
+            transition: transform 100ms, left 110ms, top 110ms;
+        }
+
+        .pet.grabbing {
             transition: transform 100ms;
+            cursor: grabbing;
         }
 
         .pet-menu {
@@ -757,6 +768,7 @@
             moneyEl.innerText = `$${money}`;
             moneyWidth = moneyEl.getBoundingClientRect().width;
             machines = JSON.parse(localStorage.getItem("laundryMachines"));
+            detergentCount = JSON.parse(localStorage.getItem("laundryDetergent"));
             pets = JSON.parse(localStorage.getItem("laundryPets"));
             if (pets == null) pets = {};
             for (let i = 0; i < machines.length; i++) {
@@ -773,7 +785,6 @@
                     compartment.classList.add("deterged");
                 }
             }
-            detergentCount = JSON.parse(localStorage.getItem("laundryDetergent"))
             if (typeof detergentCount != "object" || detergentCount == null) detergentCount = { yellow: 6, pink: 0 };
             for (let i = 0; i < Object.values(detergentCount).length; i++) {
                 const detergentType = Object.keys(detergentCount)[i];
@@ -1116,7 +1127,7 @@
             if (input.value && input.value <= 10 && input.value >= 1) {
                 pets[displayedPetMenu].money = Number(document.querySelector(".pet-money input").value);
                 document.querySelector(".pet-menu").remove();
-                if (pets[displayedPetMenu].machine) pets[displayedPetMenu].state = "gettingDetergent";
+                if (pets[displayedPetMenu].machine != undefined) pets[displayedPetMenu].state = "gettingDetergent";
                 if (document.getElementById("money-pet-clone")) document.getElementById("money-pet-clone").remove();
                 if (document.getElementById("detergent-pet-clone")) document.getElementById("detergent-pet-clone").remove();
                 displayedPetMenu = null;
@@ -1377,7 +1388,7 @@
             clickingPet = true;
             grabbingPet = true;
             grabbingPetEl = e.target;
-            grabbingPetEl.style.cursor = "grabbing";
+            grabbingPetEl.classList.add("grabbing");
             let touch = (type == "mouse") ? e : e.touches[0];
             e.target.style.left = `${touch.clientX - 35}px`;
             e.target.style.top = `${touch.clientY + window.scrollY - 10}px`;
@@ -1472,7 +1483,7 @@
                 }
             } else if (grabbingPet) {
                 grabbingPet = false;
-                grabbingPetEl.style.cursor = "pointer";
+                grabbingPetEl.classList.remove("grabbing");
                 if (!clickingPet) {
                     for (let i = 0; i < machineEls.length; i++) {
                         const rect = machineEls[i].getBoundingClientRect();
