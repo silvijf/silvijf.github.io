@@ -460,8 +460,6 @@ function petClick(petEl) {
         menu.classList.add("pet-menu");
         const left = petEl.style.left;
         const top = petEl.style.top;
-        const width = petEl.style.width;
-        const height = petEl.style.height;
         let menuLeft = Number(left.substring(0, left.length - 2)) + 50
         let menuTop = Number(top.substring(0, top.length - 2)) + 50
         if (menuLeft > document.body.getBoundingClientRect().width - 305) {
@@ -733,7 +731,7 @@ function resetPet(index) {
 setInterval(updatePets, 100);
 
 document.addEventListener("scroll", () => {
-    moneyContainer.style.bottom = `-${window.scrollY}px`;
+    moneyContainer.style.bottom = `${-window.scrollY}px`;
     detergentTopContainer.style.top = `${window.scrollY}px`;
 })
 
