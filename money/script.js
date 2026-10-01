@@ -731,7 +731,8 @@ function resetPet(index) {
 setInterval(updatePets, 100);
 
 document.addEventListener("scroll", () => {
-    moneyContainer.style.bottom = `${-window.scrollY}px`;
+    const viewport = window.visualViewport;
+    moneyContainer.style.bottom = `${-window.scrollY - (viewport.height * (1 / viewport.scale) - viewport.height)}px`;
     detergentTopContainer.style.top = `${window.scrollY}px`;
 })
 
