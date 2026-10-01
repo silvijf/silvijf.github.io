@@ -18,7 +18,7 @@ This is my site.
 - [x] More detergent types
 - [x] Tutorial
 - [x] Let pets not move while dragging
-- [ ] Offline earnings
+- [x] Offline earnings
 
 When there are more machines:
 - [ ] Balancing
