@@ -444,7 +444,6 @@ function addPet(pet, isNew) {
     petEl.classList.add("pet");
     petEl.dataset.pettype = pet;
     petEl.draggable = false;
-    petEl.addEventListener("click", (e) => { petClick(e.target) });
     petEl.style.left = `${Math.random() * (document.body.getBoundingClientRect().width - 100)}px`
     petEl.style.top = `${Math.random() * (document.body.getBoundingClientRect().height - 100)}px`
     petEl.addEventListener("mousedown", (e) => { grabPetStart(e, "mouse") });
@@ -453,7 +452,7 @@ function addPet(pet, isNew) {
 }
 
 function petClick(petEl) {
-    if (!document.querySelector(".pet-menu") && clickingPet) {
+    if (!document.querySelector(".pet-menu")) {
         const petEls = document.querySelectorAll(".pet");
         const petIndex = [].slice.call(petEls).indexOf(petEl);
         displayedPetMenu = petIndex;
@@ -912,7 +911,8 @@ function drop(e, type) {
     } else if (grabbingPet) {
         grabbingPet = false;
         grabbingPetEl.classList.remove("grabbing");
-        if (!clickingPet) {
+        if (clickingPet) petClick(grabbingPetEl);
+        else {
             for (let i = 0; i < machineEls.length; i++) {
                 const rect = machineEls[i].getBoundingClientRect();
                 if (rect.left < touch.clientX && rect.top < touch.clientY &&
