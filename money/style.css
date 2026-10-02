@@ -183,10 +183,6 @@ button:active {
     margin: 5px;
 }
 
-.circle.animals p {
-    color: black;
-}
-
 .circle.washing {
     animation: spin 1s infinite linear;
 }
@@ -198,6 +194,10 @@ button:active {
     top: 90px;
     width: 200px;
     text-align: center;
+}
+
+.machine.animals .timer {
+    color: black;
 }
 
 .circle img {
