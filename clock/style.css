@@ -16,13 +16,19 @@ body {
     font-family: 'Montserrat';
     height: 100%;
     margin: 0px;
+    background-color: white;
+    color: black;
+}
+
+.material-symbols-outlined {
+    color: black;
 }
 
 #header {
     display: flex;
     position: absolute;
     right: 0px;
-    gap: 10px;
+    gap: 15px;
     margin: 15px;
 }
 
