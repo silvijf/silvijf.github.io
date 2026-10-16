@@ -1,12 +1,20 @@
 const title = document.getElementsByTagName("title")[0];
+const timeContainer = document.getElementById("time-container");
 const digital = document.getElementById("digital");
+const dateEl = document.getElementById("date");
+const header = document.getElementById("header");
 const darkModeButton = document.getElementById("dark-mode");
+const settingsButton = document.getElementById("settings");
 const fullscreenButton = document.getElementById("fullscreen");
+const settingsMenu = document.getElementById("settings-menu");
+const closes = document.getElementsByClassName("close");
+const showDate = document.getElementById("show-date");
 const buttons = document.getElementsByTagName("button");
 
 let darkModeOS = window.matchMedia("(prefers-color-scheme: dark)").matches;
 let settings = {
-    darkMode: true
+    darkMode: true,
+    showDate: false
 }
 
 function save() {
@@ -16,6 +24,8 @@ function save() {
 function load() {
     settings = JSON.parse(localStorage.getItem("clockSettings"));
     if (!settings.darkMode) changeDarkMode();
+    dateEl.style.display = settings.showDate ? "block" : "none";
+    showDate.checked = settings.showDate;
 }
 
 function changeTime() {
@@ -26,6 +36,9 @@ function changeTime() {
         }:${String(date.getSeconds()).padStart(2, '0')}`;
     digital.innerHTML = string;
     title.innerText = `${string} | Clock`;
+    dateEl.innerHTML =  `
+        ${String(date.getDay()).padStart(2, '0')
+        }-${String(date.getMonth() + 1).padStart(2, '0')}`;
     checkFullscreen();
 }
 
@@ -57,6 +70,26 @@ document.addEventListener("keydown", (e) => {
         e.preventDefault();
         toggleFullscreen();
     }
+})
+
+settingsButton.addEventListener("click", () => {
+    settingsMenu.style.right = "0px";
+    timeContainer.classList.add("darkened");
+    header.style.right = "-200px";
+})
+
+for (close of closes) {
+    close.addEventListener("click", (e) => {
+        e.target.parentElement.style.right = "-550px";
+        timeContainer.classList.remove("darkened");
+        header.style.right = "0px";
+    })
+}
+
+showDate.addEventListener("change", () => {
+    dateEl.style.display = showDate.checked ? "block" : "none";
+    settings.showDate = showDate.checked;
+    save();
 })
 
 if (localStorage.getItem("clockSettings")) load();

@@ -1,23 +1,31 @@
 :root {
+    --background: white;
+    --background-secondary: #edf0f5;
+    --background-slider: #d9dde4;
+    --background-slider-hover: #c7cfdd;
     --color: black;
 }
 
-.dark-mode, .dark-mode .material-symbols-outlined {
-    background-color: #171719;
-    color: white;
+.dark-mode,
+.dark-mode .material-symbols-outlined {
+    --background: #171719;
+    --background-secondary: #26262c;
+    --background-slider: #26262c;
+    --background-slider-hover: #393943;
     --color: white;
+    color: white;
 }
 
 html {
-    height: calc(100% - 10px);
+    height: 100%;
 }
 
 body {
     font-family: 'Montserrat';
     height: 100%;
     margin: 0px;
-    background-color: white;
     color: black;
+    overflow: hidden;
 }
 
 .material-symbols-outlined {
@@ -30,10 +38,13 @@ body {
     right: 0px;
     gap: 15px;
     margin: 15px;
+    transition: color 500ms, background-color 500ms, border 500ms, right 500ms;
+    z-index: 1;
 }
 
-#header button {
-    background: none;
+#header button,
+.menu button {
+    background: var(--background-secondary);
     border: 2px solid var(--color);
     width: 50px;
     height: 50px;
@@ -41,21 +52,64 @@ body {
     cursor: pointer;
 }
 
-#header button:hover {
+#header button:hover,
+.menu button:hover {
     scale: 1.1;
 }
 
-#header button:active {
+#header button:active,
+.menu button:active {
     scale: 0.95;
+}
+
+.menu {
+    position: absolute;
+    right: -550px;
+    width: 500px;
+    height: 100%;
+    transition: right 500ms;
+    background-color: var(--background);
+    z-index: 2;
+    padding: 20px;
+    padding-top: 80px;
+}
+
+.menu-content {
+    display: grid;
+    grid-template-columns: auto 50px;
+    font-size: large;
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background-color: var(--background-secondary) !important;
 }
 
 #time-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
+    background-color: var(--background);
+}
+
+#time-container {
+    transition: filter 500ms;
+}
+
+.darkened {
+    filter: brightness(0.6);
 }
 
 #digital {
     font-size: clamp(3rem, 12vw, 15rem);
+    margin: 20px;
+}
+
+#date {
+    font-size: clamp(1rem, 4vw, 5rem);
+    margin: 0;
 }

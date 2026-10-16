@@ -10,17 +10,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=dark_mode,fullscreen,fullscreen_exit,light_mode" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=close,dark_mode,fullscreen,fullscreen_exit,light_mode,settings" />
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="slider.css">
 </head>
 
 <body class="dark-mode">
     <div id="header">
         <button id="dark-mode" class="material-symbols-outlined">dark_mode</button>
+        <button id="settings" class="material-symbols-outlined">settings</button>
         <button id="fullscreen" class="material-symbols-outlined">fullscreen</button>
+    </div>
+    <div id="settings-menu" class="menu">
+        <button class="close material-symbols-outlined">close</button>
+        <div class="menu-content">
+            <label for="show-date" class="label-text">Show date</label>
+            <label class="switch">
+                <input type="checkbox" id="show-date">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
     <div id="time-container">
         <h1 id="digital"></h1>
+        <h3 id="date"></h3>
     </div>
     <script src="script.js"></script>
 </body>

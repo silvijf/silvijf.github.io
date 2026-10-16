@@ -1,0 +1,46 @@
+.switch {
+    position: relative;
+    display: block;
+    width: 50px;
+}
+
+.switch input {
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: var(--background-slider);
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 25px;
+    transition: 200ms;
+    border-radius: 50px;
+}
+
+.slider:hover {
+    background-color: var(--background-slider-hover);
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 17px;
+    width: 17px;
+    left: 4px;
+    top: 4px;
+    background-color: white;
+    transition: 200ms;
+    border-radius: 50px;
+}
+
+input:checked ~ .slider {
+    background-color: #3c5286;
+}
+
+input:checked ~ .slider:before {
+    left: 29px;
+}
