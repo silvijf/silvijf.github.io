@@ -38,10 +38,13 @@ darkModeButton.addEventListener("click", () => {
 if (localStorage.getItem("clockSettings")) load();
 else if (!darkModeOS) changeDarkMode();
 
-document.body.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
-for (let button of buttons) {
-    button.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
-}
+setTimeout(() => {
+    document.body.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
+    for (let button of buttons) {
+        button.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
+    }
+}, 100)
+
 
 changeTime();
 setInterval(changeTime, 1000);
