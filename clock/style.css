@@ -1,0 +1,55 @@
+:root {
+    --color: black;
+}
+
+.dark-mode, .dark-mode .material-symbols-outlined {
+    background-color: #171719;
+    color: white;
+    --color: white;
+}
+
+html {
+    height: calc(100% - 10px);
+}
+
+body {
+    font-family: 'Montserrat';
+    height: 100%;
+    margin: 0px;
+}
+
+#header {
+    display: flex;
+    position: absolute;
+    right: 0px;
+    gap: 10px;
+    margin: 15px;
+}
+
+#header button {
+    background: none;
+    border: 2px solid var(--color);
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+#header button:hover {
+    scale: 1.1;
+}
+
+#header button:active {
+    scale: 0.95;
+}
+
+#time-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#digital {
+    font-size: clamp(3rem, 12vw, 15rem);
+}
