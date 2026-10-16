@@ -1,5 +1,6 @@
 const digital = document.getElementById("digital");
 const darkModeButton = document.getElementById("dark-mode");
+const fullscreenButton = document.getElementById("fullscreen");
 const buttons = document.getElementsByTagName("button");
 
 let darkModeOS = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -22,6 +23,7 @@ function changeTime() {
         ${String(date.getHours()).padStart(2, '0')
         }:${String(date.getMinutes()).padStart(2, '0')
         }:${String(date.getSeconds()).padStart(2, '0')}`;
+    checkFullscreen();
 }
 
 function changeDarkMode() {
@@ -30,10 +32,29 @@ function changeDarkMode() {
     save();
 }
 
+function toggleFullscreen() {
+    if (document.fullscreenElement) document.exitFullscreen().then(checkFullscreen);
+    else {
+        document.documentElement.requestFullscreen().then(checkFullscreen);
+    }
+}
+
+function checkFullscreen() {
+    fullscreenButton.innerText = document.fullscreenElement ? "fullscreen_exit" : "fullscreen";
+}
+
 darkModeButton.addEventListener("click", () => {
     settings.darkMode = !settings.darkMode;
     changeDarkMode();
 });
+
+fullscreenButton.addEventListener("click", toggleFullscreen);
+document.addEventListener("keydown", (e) => {
+    if (e.key == "F11") {
+        e.preventDefault();
+        toggleFullscreen();
+    }
+})
 
 if (localStorage.getItem("clockSettings")) load();
 else if (!darkModeOS) changeDarkMode();
