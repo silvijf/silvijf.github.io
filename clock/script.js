@@ -1,3 +1,4 @@
+const title = document.getElementsByTagName("title")[0];
 const digital = document.getElementById("digital");
 const darkModeButton = document.getElementById("dark-mode");
 const fullscreenButton = document.getElementById("fullscreen");
@@ -19,10 +20,12 @@ function load() {
 
 function changeTime() {
     const date = new Date();
-    digital.innerHTML = `
+    const string = `
         ${String(date.getHours()).padStart(2, '0')
         }:${String(date.getMinutes()).padStart(2, '0')
         }:${String(date.getSeconds()).padStart(2, '0')}`;
+    digital.innerHTML = string;
+    title.innerText = `${string} | Clock`;
     checkFullscreen();
 }
 
