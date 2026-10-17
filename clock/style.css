@@ -95,9 +95,16 @@ body {
     }
 }
 
-.menu-content {
+#settings-content {
     display: grid;
     grid-template-columns: auto 50px;
+    font-size: large;
+}
+
+#theme-content {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 15px;
     font-size: large;
 }
 
@@ -106,6 +113,26 @@ body {
     right: 15px;
     top: 15px;
     background-color: var(--background-secondary) !important;
+}
+
+.theme-example {
+    border: 2px solid var(--color);
+    border-radius: 5px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: scale 100ms;
+    background-size: cover;
+}
+
+.theme-example:hover {
+    scale: 1.05;
+}
+
+.theme-example:active {
+    scale: 0.975;
 }
 
 #time-container {
@@ -119,6 +146,7 @@ body {
 
 #time-container {
     transition: filter 500ms;
+    background-size: cover;
 }
 
 .darkened {

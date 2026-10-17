@@ -4,17 +4,21 @@ const digital = document.getElementById("digital");
 const dateEl = document.getElementById("date");
 const header = document.getElementById("header");
 const darkModeButton = document.getElementById("dark-mode");
+const themeButton = document.getElementById("theme");
 const settingsButton = document.getElementById("settings");
 const fullscreenButton = document.getElementById("fullscreen");
 const settingsMenu = document.getElementById("settings-menu");
+const themeMenu = document.getElementById("theme-menu");
+const themeContent = document.getElementById("theme-content");
 const closes = document.getElementsByClassName("close");
 const showDate = document.getElementById("show-date");
 const buttons = document.getElementsByTagName("button");
 
 let darkModeOS = window.matchMedia("(prefers-color-scheme: dark)").matches;
 let settings = {
-    darkMode: true,
-    showDate: false
+    theme: "dark",
+    showDate: false,
+    url: null
 }
 
 function save() {
@@ -23,7 +27,8 @@ function save() {
 
 function load() {
     settings = JSON.parse(localStorage.getItem("clockSettings"));
-    if (!settings.darkMode) changeDarkMode();
+    if (settings.theme == "light") changeDarkMode();
+    if (settings.url) timeContainer.style.backgroundImage = `url(${settings.url})`;
     dateEl.style.display = settings.showDate ? "block" : "none";
     showDate.checked = settings.showDate;
 }
@@ -36,7 +41,7 @@ function changeTime() {
         }:${String(date.getSeconds()).padStart(2, '0')}`;
     digital.innerHTML = string;
     title.innerText = `${string} | Clock`;
-    dateEl.innerHTML =  `
+    dateEl.innerHTML = `
         ${String(date.getDay()).padStart(2, '0')
         }-${String(date.getMonth() + 1).padStart(2, '0')}`;
     checkFullscreen();
@@ -44,7 +49,7 @@ function changeTime() {
 
 function changeDarkMode() {
     document.body.classList.toggle("dark-mode");
-    darkModeButton.innerText = settings.darkMode ? "dark_mode" : "light_mode";
+    darkModeButton.innerText = settings.theme == "dark" ? "dark_mode" : "light_mode";
     save();
 }
 
@@ -60,7 +65,7 @@ function checkFullscreen() {
 }
 
 darkModeButton.addEventListener("click", () => {
-    settings.darkMode = !settings.darkMode;
+    settings.theme = settings.theme == "dark" ? "light" : "dark";
     changeDarkMode();
 });
 
@@ -78,6 +83,12 @@ settingsButton.addEventListener("click", () => {
     header.style.right = "-200px";
 })
 
+themeButton.addEventListener("click", () => {
+    themeMenu.style.right = "0px";
+    timeContainer.classList.add("darkened");
+    header.style.right = "-200px";
+})
+
 for (close of closes) {
     close.addEventListener("click", (e) => {
         e.target.parentElement.style.right = "-550px";
@@ -89,6 +100,23 @@ for (close of closes) {
 showDate.addEventListener("change", () => {
     dateEl.style.display = showDate.checked ? "block" : "none";
     settings.showDate = showDate.checked;
+    save();
+})
+
+themeContent.addEventListener("click", (e) => {
+    let target = e.target;
+    if (!target.classList.contains("theme-example")) {
+        if (target.parentElement.classList.contains("theme-example")) target = target.parentElement;
+        else return;
+    }
+    if (target.dataset.theme == "dark") document.body.classList.add("dark-mode");
+    else document.body.classList.remove("dark-mode");
+    if (target.dataset.url) {
+        timeContainer.style.backgroundImage = `url(${target.dataset.url})`;
+        settings.url = target.dataset.url;
+    }
+    else timeContainer.style.backgroundImage = "";
+    settings.theme = target.dataset.theme;
     save();
 })
 
