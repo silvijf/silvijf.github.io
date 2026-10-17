@@ -17,19 +17,23 @@
 </head>
 
 <body class="dark-mode">
-    <div id="header">
-        <button id="dark-mode" class="material-symbols-outlined">dark_mode</button>
-        <button id="settings" class="material-symbols-outlined">settings</button>
-        <button id="fullscreen" class="material-symbols-outlined">fullscreen</button>
+    <div id="header-wrapper">
+        <div id="header">
+            <button id="dark-mode" class="material-symbols-outlined">dark_mode</button>
+            <button id="settings" class="material-symbols-outlined">settings</button>
+            <button id="fullscreen" class="material-symbols-outlined">fullscreen</button>
+        </div>
     </div>
-    <div id="settings-menu" class="menu">
-        <button class="close material-symbols-outlined">close</button>
-        <div class="menu-content">
-            <label for="show-date" class="label-text">Show date</label>
-            <label class="switch">
-                <input type="checkbox" id="show-date">
-                <span class="slider"></span>
-            </label>
+    <div id="menu-wrapper">
+        <div id="settings-menu" class="menu">
+            <button class="close material-symbols-outlined">close</button>
+            <div class="menu-content">
+                <label for="show-date" class="label-text">Show date</label>
+                <label class="switch">
+                    <input type="checkbox" id="show-date">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     </div>
     <div id="time-container">
