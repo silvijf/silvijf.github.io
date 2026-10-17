@@ -166,8 +166,6 @@ function addTheme(url) {
             const index = [].slice.call(themeContent.children).indexOf(e.target.parentElement) - 1;
             customThemes.splice(index, 1);
             e.target.parentElement.remove();
-            settings.url = null;
-            timeContainer.style.backgroundImage = null;
             save();
         })
         addInput.value = "";
