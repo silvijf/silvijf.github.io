@@ -13,6 +13,9 @@ const themeMenu = document.getElementById("theme-menu");
 const themeContent = document.getElementById("theme-content");
 const closes = document.getElementsByClassName("close");
 const showDate = document.getElementById("show-date");
+const plus = document.getElementById("plus");
+const addText = document.getElementById("add-text");
+const addInput = document.getElementById("add-input");
 const clockType = document.getElementById("clock-type");
 const buttons = document.getElementsByTagName("button");
 
@@ -27,13 +30,16 @@ let settings = {
     url: null,
     clockType: "digital"
 }
+let customThemes = []
 
 function save() {
     localStorage.setItem("clockSettings", JSON.stringify(settings));
+    localStorage.setItem("clockThemes", JSON.stringify(customThemes));
 }
 
 function load() {
     settings = JSON.parse(localStorage.getItem("clockSettings"));
+    customThemes = JSON.parse(localStorage.getItem("clockThemes"));
     if (settings.theme == "light") changeDarkMode();
     if (settings.url) timeContainer.style.backgroundImage = `url(${settings.url})`;
     dateEl.style.display = settings.showDate ? "block" : "none";
@@ -43,11 +49,12 @@ function load() {
     } else if (settings.clockType == "both") {
         digital.style.display = "block";
         analog.style.display = "block";
-    } else if (settings.clockType == "analog"){
+    } else if (settings.clockType == "analog") {
         digital.style.display = "none";
         analog.style.display = "block";
     }
     showDate.checked = settings.showDate;
+    for (theme of customThemes) addTheme(theme);
 }
 
 function changeTime() {
@@ -65,8 +72,6 @@ function changeTime() {
     hourHand.style.transform = `rotate(${date.getHours() * 30 + date.getMinutes() * 0.5}deg)`;
     minuteHand.style.transform = `rotate(${date.getMinutes() * 6 + date.getSeconds() * 0.1}deg)`;
     secondHand.style.transform = `rotate(${date.getSeconds() * 6}deg)`;
-
-    checkFullscreen();
 }
 
 function changeDarkMode() {
@@ -76,14 +81,10 @@ function changeDarkMode() {
 }
 
 function toggleFullscreen() {
-    if (document.fullscreenElement) document.exitFullscreen().then(checkFullscreen);
+    if (document.fullscreenElement) document.exitFullscreen();
     else {
-        document.documentElement.requestFullscreen().then(checkFullscreen);
+        document.documentElement.requestFullscreen();
     }
-}
-
-function checkFullscreen() {
-    fullscreenButton.innerText = document.fullscreenElement ? "fullscreen_exit" : "fullscreen";
 }
 
 darkModeButton.addEventListener("click", () => {
@@ -98,6 +99,10 @@ document.addEventListener("keydown", (e) => {
         toggleFullscreen();
     }
 })
+
+document.addEventListener("fullscreenchange", () => {
+    fullscreenButton.innerText = document.fullscreenElement ? "fullscreen_exit" : "fullscreen";
+});
 
 settingsButton.addEventListener("click", () => {
     settingsMenu.style.right = "0px";
@@ -121,8 +126,8 @@ for (close of closes) {
 
 document.addEventListener("click", (e) => {
     if (e.target.closest(".menu") &&
-        !e.target.closest(".theme-example")) return;
-    if (e.target.parentElement.id != "header") {
+        !e.target.closest(".theme-example") && !e.target.closest(".clock-type-example")) return;
+    if (e.target.parentElement.id != "header" && !e.target.classList.contains("delete-theme")) {
         themeMenu.style.right = "-550px";
         settingsMenu.style.right = "-550px";
         timeContainer.classList.remove("darkened");
@@ -135,6 +140,43 @@ showDate.addEventListener("change", () => {
     settings.showDate = showDate.checked;
     save();
 })
+
+function addTheme(url) {
+    let value = addInput.value;
+    let isNew = true;
+    if (typeof(url) == "string") {
+        value = url;
+        isNew = false;
+    }
+    if (value.startsWith("http")) {
+        if (isNew) customThemes.push(value);
+        plus.style.display = "block";
+        addText.style.display = "none";
+        addInput.style.display = "none";
+        themeContent.insertAdjacentHTML("afterbegin", `
+            <div class="theme-example"
+                style="background-image: url('${value}');"
+                data-theme="dark"
+                data-url="${value}">
+                <button class="delete-theme material-symbols-outlined">delete</button>
+                <h1 class="time-example">14:55:03</h1>
+            </div>
+            `)
+        themeContent.querySelector(".delete-theme").addEventListener("click", (e) => {
+            const index = [].slice.call(themeContent.children).indexOf(e.target.parentElement) - 1;
+            customThemes.splice(index, 1);
+            e.target.parentElement.remove();
+            settings.url = null;
+            timeContainer.style.backgroundImage = null;
+            save();
+        })
+        addInput.value = "";
+        save();
+    }
+}
+
+addInput.addEventListener("change", addTheme);
+addInput.addEventListener("keyup", addTheme);
 
 clockType.addEventListener("click", (e) => {
     if (e.target.closest(".clock-type-example")) {
@@ -155,17 +197,24 @@ clockType.addEventListener("click", (e) => {
 })
 
 themeContent.addEventListener("click", (e) => {
-    let target = e.target.closest(".theme-example");
-    if (target.dataset.theme == "dark") document.body.classList.add("dark-mode");
-    else document.body.classList.remove("dark-mode");
-    if (target.dataset.url) {
-        timeContainer.style.backgroundImage = `url(${target.dataset.url})`;
-        settings.url = target.dataset.url;
-    } else {
-        timeContainer.style.backgroundImage = "";
-        settings.url = null;
+    if (e.target.closest(".theme-example") && !e.target.classList.contains("delete-theme")) {
+        let target = e.target.closest(".theme-example");
+        if (target.dataset.theme == "dark") document.body.classList.add("dark-mode");
+        else document.body.classList.remove("dark-mode");
+        if (target.dataset.url) {
+            timeContainer.style.backgroundImage = `url(${target.dataset.url})`;
+            settings.url = target.dataset.url;
+        } else {
+            timeContainer.style.backgroundImage = "";
+            settings.url = null;
+        }
+        settings.theme = target.dataset.theme;
+    } else if (e.target.closest(".theme-example-custom")) {
+        plus.style.display = "none";
+        addText.style.display = "block";
+        addInput.style.display = "block";
     }
-    settings.theme = target.dataset.theme;
+
     save();
 })
 

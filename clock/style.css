@@ -119,14 +119,15 @@ body {
     overflow-y: auto;
 }
 
-.close {
+.close, .delete-theme {
     position: absolute;
     right: 15px;
     top: 15px;
     background-color: var(--background-secondary) !important;
 }
 
-.theme-example, .clock-type-example {
+.theme-example, .theme-example-custom, .clock-type-example {
+    position: relative;
     border: 2px solid var(--color);
     border-radius: 5px;
     height: 150px;
@@ -138,12 +139,28 @@ body {
     background-size: cover;
 }
 
-.theme-example:hover {
+.theme-example:hover, .theme-example-custom:hover, .clock-type-example:hover{
     scale: 1.05;
 }
 
-.theme-example:active {
+.theme-example:active, .theme-example-custom:active:not(:has(input)), .clock-type-example:active {
     scale: 0.975;
+}
+
+.theme-example-custom {
+    position: relative;
+}
+
+#add-text {
+    display: none;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+#add-input {
+    display: none;
+    position: absolute;
 }
 
 #clock-type {
@@ -156,14 +173,6 @@ body {
     margin: 5%;
     display: flex;
     gap: 15px;
-}
-
-.clock-type-example:hover {
-    scale: 1.05;
-}
-
-.clock-type-example:active {
-    scale: 0.975;
 }
 
 .analog-example {
@@ -235,9 +244,13 @@ body {
     width: 6.5ch;
     text-align: center;
     margin: 0;
+    text-shadow: -1px -1px var(--background), 1px 1px var(--background), 
+        -1px 1px var(--background), 1px -1px var(--background);
 }
 
 #date {
     font-size: clamp(1rem, 4vw, 5rem);
     margin-top: 0;
+    text-shadow: -1px -1px var(--background), 1px 1px var(--background), 
+        -1px 1px var(--background), 1px -1px var(--background);
 }
