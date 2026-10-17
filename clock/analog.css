@@ -1,0 +1,114 @@
+#analog {
+    position: relative;
+    height: 300px;
+    width: 300px;
+    background-color: var(--background-secondary);
+    border: 20px solid var(--background-tertiary);
+    border-radius: 100%;
+    box-shadow: 10px 10px 20px 5px #000000aa;
+    display: none;
+}
+
+@media (max-width: 470px), (max-height: 450px) {
+    #analog {
+        zoom: 0.6;
+    }
+
+    #clocks {
+        max-height: 250px;
+    }
+}
+
+#clocks:not(:has(#digital)) #analog {
+    margin-top: -5px;
+}
+
+#analog-dot {
+    background-color: var(--background-tertiary);
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: calc(50% - 7.5px);
+    top: calc(50% - 7.5px);
+    border-radius: 100%;
+    box-shadow: 1px 1px 4px 2px #000000aa;
+    z-index: 1;
+}
+
+#hour-hand {
+    position: absolute;
+    height: 80px;
+    top: 70px;
+    width: 7px;
+    left: 146.5px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background-color: var(--hour-hand);
+    transform-origin: 50% 100%;
+}
+
+#minute-hand {
+    position: absolute;
+    height: 130px;
+    top: 20px;
+    width: 5px;
+    left: 147.5px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background-color: var(--hour-hand);
+    transform-origin: 50% 100%;
+}
+
+#second-hand {
+    position: absolute;
+    height: 130px;
+    top: 20px;
+    width: 3px;
+    left: 148.5px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background-color: #d6232c;
+    transform-origin: 50% 100%;
+}
+
+.analog-number {
+    position: absolute;
+    font-size: xx-large;
+}
+
+#h12 {
+    left: 137px;
+    top: 25px;
+    margin: 0;
+}
+
+#h3 {
+    left: 250px;
+    top: 100px;
+}
+
+#h6 {
+    left: 140px;
+    bottom: 25px;
+    margin: 0;
+}
+
+#h9 {
+    left: 35px;
+    top: 100px;
+}
+
+.dialline {
+    position: absolute;
+    width: 3px;
+    height: 15px;
+    background-color: #666666;
+    left: 50%;
+    margin-left: -1px;
+    transform-origin: 50% 150px;
+}
+
+.dialline:nth-child(5n) {
+    width: 5px;
+    height: 25px;
+}

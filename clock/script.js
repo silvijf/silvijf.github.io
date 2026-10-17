@@ -1,6 +1,7 @@
 const title = document.getElementsByTagName("title")[0];
 const timeContainer = document.getElementById("time-container");
 const digital = document.getElementById("digital");
+const analog = document.getElementById("analog");
 const dateEl = document.getElementById("date");
 const header = document.getElementById("header");
 const darkModeButton = document.getElementById("dark-mode");
@@ -12,13 +13,19 @@ const themeMenu = document.getElementById("theme-menu");
 const themeContent = document.getElementById("theme-content");
 const closes = document.getElementsByClassName("close");
 const showDate = document.getElementById("show-date");
+const clockType = document.getElementById("clock-type");
 const buttons = document.getElementsByTagName("button");
+
+const hourHand = document.getElementById("hour-hand");
+const minuteHand = document.getElementById("minute-hand");
+const secondHand = document.getElementById("second-hand");
 
 let darkModeOS = window.matchMedia("(prefers-color-scheme: dark)").matches;
 let settings = {
     theme: "dark",
     showDate: false,
-    url: null
+    url: null,
+    clockType: "digital"
 }
 
 function save() {
@@ -30,6 +37,16 @@ function load() {
     if (settings.theme == "light") changeDarkMode();
     if (settings.url) timeContainer.style.backgroundImage = `url(${settings.url})`;
     dateEl.style.display = settings.showDate ? "block" : "none";
+    if (settings.clockType == "digital") {
+        digital.style.display = "block";
+        analog.style.display = "none";
+    } else if (settings.clockType == "both") {
+        digital.style.display = "block";
+        analog.style.display = "block";
+    } else if (settings.clockType == "analog"){
+        digital.style.display = "none";
+        analog.style.display = "block";
+    }
     showDate.checked = settings.showDate;
 }
 
@@ -44,6 +61,11 @@ function changeTime() {
     dateEl.innerHTML = `
         ${String(date.getDay()).padStart(2, '0')
         }-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+    hourHand.style.transform = `rotate(${date.getHours() * 30 + date.getMinutes() * 0.5}deg)`;
+    minuteHand.style.transform = `rotate(${date.getMinutes() * 6 + date.getSeconds() * 0.1}deg)`;
+    secondHand.style.transform = `rotate(${date.getSeconds() * 6}deg)`;
+
     checkFullscreen();
 }
 
@@ -114,6 +136,24 @@ showDate.addEventListener("change", () => {
     save();
 })
 
+clockType.addEventListener("click", (e) => {
+    if (e.target.closest(".clock-type-example")) {
+        const type = e.target.closest(".clock-type-example").dataset.type;
+        if (type == "digital") {
+            digital.style.display = "block";
+            analog.style.display = "none";
+        } else if (type == "both") {
+            digital.style.display = "block";
+            analog.style.display = "block";
+        } else {
+            digital.style.display = "none";
+            analog.style.display = "block";
+        }
+        settings.clockType = type;
+    }
+    save();
+})
+
 themeContent.addEventListener("click", (e) => {
     let target = e.target.closest(".theme-example");
     if (target.dataset.theme == "dark") document.body.classList.add("dark-mode");
@@ -139,6 +179,12 @@ setTimeout(() => {
     }
 }, 100)
 
+for (i = 0; i < 60; i++) {
+    const dialline = document.createElement("div");
+    dialline.classList.add("dialline");
+    dialline.style.transform = `rotate(${i * 6 - 6}deg)`;
+    analog.appendChild(dialline);
+}
 
 changeTime();
 setInterval(changeTime, 1000);

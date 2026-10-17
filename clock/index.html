@@ -14,6 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=close,dark_mode,fullscreen,fullscreen_exit,light_mode,settings,wallpaper" />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="slider.css">
+    <link rel="stylesheet" href="analog.css">
 </head>
 
 <body class="dark-mode">
@@ -34,6 +35,24 @@
                     <input type="checkbox" id="show-date">
                     <span class="slider"></span>
                 </label>
+                <div id="clock-type">
+                    <div class="clock-type-example" data-type="digital">
+                        <h1 class="time-example">14:55:03</h1>
+                    </div>
+                    <div class="clock-type-example" data-type="both">
+                        <h1 class="time-example">14:55:03</h1>
+                        <div class="analog-example">
+                            <div class="hour-hand-example"></div>
+                            <div class="minute-hand-example"></div>
+                        </div>
+                    </div>
+                    <div class="clock-type-example" data-type="analog">
+                        <div class="analog-example">
+                            <div class="hour-hand-example"></div>
+                            <div class="minute-hand-example"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="theme-menu" class="menu">
@@ -73,7 +92,19 @@
         </div>
     </div>
     <div id="time-container">
-        <h1 id="digital"></h1>
+        <div id="clocks">
+            <h1 id="digital"></h1>
+            <div id="analog">
+                <div id="analog-dot"></div>
+                <div id="hour-hand"></div>
+                <div id="minute-hand"></div>
+                <div id="second-hand"></div>
+                <p class="analog-number" id="h12">12</p>
+                <p class="analog-number" id="h3">3</p>
+                <p class="analog-number" id="h6">6</p>
+                <p class="analog-number" id="h9">9</p>
+            </div>
+        </div>
         <h3 id="date"></h3>
     </div>
     <script src="script.js"></script>

@@ -22,7 +22,7 @@
 }
 
 .slider:hover {
-    background-color: var(--background-slider-hover);
+    background-color: var(--background-tertiary);
 }
 
 .slider:before {
@@ -44,3 +44,4 @@ input:checked ~ .slider {
 input:checked ~ .slider:before {
     left: 29px;
 }
+
