@@ -147,6 +147,7 @@ body {
 #time-container {
     transition: filter 500ms;
     background-size: cover;
+    background-position: center;
 }
 
 .darkened {
