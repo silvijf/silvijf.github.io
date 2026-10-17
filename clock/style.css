@@ -74,6 +74,12 @@ body {
     padding-top: 80px;
 }
 
+@media (max-width: 550px) {
+    .menu {
+        width: calc(100% - 40px);
+    }
+}
+
 .menu-content {
     display: grid;
     grid-template-columns: auto 50px;
