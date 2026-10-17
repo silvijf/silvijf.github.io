@@ -224,6 +224,9 @@ setTimeout(() => {
     for (let button of buttons) {
         button.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
     }
+    analog.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
+    hourHand.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
+    minuteHand.style.transition = "color 500ms, background-color 500ms, border 500ms, scale 100ms";
 }, 100)
 
 for (i = 0; i < 60; i++) {
