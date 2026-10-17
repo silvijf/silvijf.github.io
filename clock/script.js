@@ -97,6 +97,17 @@ for (close of closes) {
     })
 }
 
+document.addEventListener("click", (e) => {
+    if (e.target.closest(".menu") &&
+        !e.target.closest(".theme-example")) return;
+    if (e.target.parentElement.id != "header") {
+        themeMenu.style.right = "-550px";
+        settingsMenu.style.right = "-550px";
+        timeContainer.classList.remove("darkened");
+        header.style.right = "0px";
+    }
+})
+
 showDate.addEventListener("change", () => {
     dateEl.style.display = showDate.checked ? "block" : "none";
     settings.showDate = showDate.checked;
@@ -104,18 +115,16 @@ showDate.addEventListener("change", () => {
 })
 
 themeContent.addEventListener("click", (e) => {
-    let target = e.target;
-    if (!target.classList.contains("theme-example")) {
-        if (target.parentElement.classList.contains("theme-example")) target = target.parentElement;
-        else return;
-    }
+    let target = e.target.closest(".theme-example");
     if (target.dataset.theme == "dark") document.body.classList.add("dark-mode");
     else document.body.classList.remove("dark-mode");
     if (target.dataset.url) {
         timeContainer.style.backgroundImage = `url(${target.dataset.url})`;
         settings.url = target.dataset.url;
+    } else {
+        timeContainer.style.backgroundImage = "";
+        settings.url = null;
     }
-    else timeContainer.style.backgroundImage = "";
     settings.theme = target.dataset.theme;
     save();
 })
