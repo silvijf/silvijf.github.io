@@ -31,6 +31,7 @@ body {
     margin: 0px;
     color: black;
     overflow: hidden;
+    user-select: none;
 }
 
 .material-symbols-outlined {
@@ -54,7 +55,9 @@ body {
 }
 
 #header button,
-.menu button {
+.menu button,
+#start-timer,
+.close-tool {
     background: var(--background-secondary);
     border: 2px solid var(--color);
     width: 50px;
@@ -64,12 +67,16 @@ body {
 }
 
 #header button:hover,
-.menu button:hover {
+.menu button:hover,
+#start-timer:hover,
+.close-tool:hover {
     scale: 1.1;
 }
 
 #header button:active,
-.menu button:active {
+.menu button:active,
+#start-timer:active,
+.close-tool:active {
     scale: 0.95;
 }
 
@@ -119,14 +126,19 @@ body {
     overflow-y: auto;
 }
 
-.close, .delete-theme {
+.close,
+.delete-theme,
+.close-tool {
     position: absolute;
     right: 15px;
     top: 15px;
     background-color: var(--background-secondary) !important;
+    cursor: pointer;
 }
 
-.theme-example, .theme-example-custom, .clock-type-example {
+.theme-example,
+.theme-example-custom,
+.clock-type-example {
     position: relative;
     border: 2px solid var(--color);
     border-radius: 5px;
@@ -139,16 +151,24 @@ body {
     background-size: cover;
 }
 
-.theme-example:hover, .theme-example-custom:hover, .clock-type-example:hover{
+.theme-example:hover,
+.theme-example-custom:hover,
+.clock-type-example:hover {
     scale: 1.05;
 }
 
-.theme-example:active, .theme-example-custom:active:not(:has(input)), .clock-type-example:active {
+.theme-example:active,
+.theme-example-custom:active:not(:has(input)),
+.clock-type-example:active {
     scale: 0.975;
 }
 
 .theme-example-custom {
     position: relative;
+}
+
+.delete-theme {
+    transition: scale 100ms;
 }
 
 #add-text {
@@ -245,13 +265,84 @@ body {
     width: 6.75ch;
     text-align: center;
     margin: 0;
-    text-shadow: -1px -1px var(--background), 1px 1px var(--background), 
+    text-shadow: -1px -1px var(--background), 1px 1px var(--background),
         -1px 1px var(--background), 1px -1px var(--background);
 }
 
 #date {
     font-size: clamp(1rem, 4vw, 5rem);
     margin-top: 0;
-    text-shadow: -1px -1px var(--background), 1px 1px var(--background), 
+    text-shadow: -1px -1px var(--background), 1px 1px var(--background),
         -1px 1px var(--background), 1px -1px var(--background);
+}
+
+#toolbar {
+    background-color: var(--background);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-top-left-radius: 20px;
+}
+
+#toolbar div {
+    font-size: 40px;
+    cursor: grab;
+}
+
+.tool {
+    background-color: var(--background);
+    border: 2px solid var(--background-tertiary);
+    border-radius: 10px;
+    position: absolute;
+    display: none;
+}
+
+.tool h3 {
+    text-align: center;
+}
+
+.tool.grabbing,
+.tool.grabbing * {
+    cursor: grabbing
+}
+
+#timer {
+    width: 350px;
+    height: 200px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: color 500ms, background-color 500ms, border 500ms, filter 500ms;
+}
+
+#timer-inputs {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+#timer-inputs input,
+#timer-inputs span {
+    width: 50px;
+    height: 40px;
+    font-size: larger;
+    background-color: var(--background-secondary);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    color: var(--color);
+}
+
+#timer-inputs span {
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#timer-inputs p {
+    margin: 0;
+    font-size: larger;
 }

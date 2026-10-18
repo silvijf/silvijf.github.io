@@ -19,6 +19,13 @@ const addInput = document.getElementById("add-input");
 const clockType = document.getElementById("clock-type");
 const buttons = document.getElementsByTagName("button");
 
+const toolbar = document.getElementById("toolbar");
+const tools = document.getElementsByClassName("tool");
+const timer = document.getElementById("timer");
+const closeTimer = document.getElementById("close-timer");
+const timerInputs = document.getElementById("timer-inputs");
+const startTimer = document.getElementById("start-timer");
+
 const hourHand = document.getElementById("hour-hand");
 const minuteHand = document.getElementById("minute-hand");
 const secondHand = document.getElementById("second-hand");
@@ -29,8 +36,16 @@ let settings = {
     showDate: false,
     url: null,
     clockType: "digital"
-}
-let customThemes = []
+};
+let customThemes = [];
+let dragging;
+let draggingPos = [null, null];
+
+let currentTimer = [null, null, null];
+let timerInterval;
+
+const timerRingtone = document.createElement("audio");
+timerRingtone.src = "./assets/ringtone.wav";
 
 function save() {
     localStorage.setItem("clockSettings", JSON.stringify(settings));
@@ -109,12 +124,18 @@ document.addEventListener("fullscreenchange", () => {
 settingsButton.addEventListener("click", () => {
     settingsMenu.style.right = "0px";
     timeContainer.classList.add("darkened");
+    for (let tool of tools) {
+        tool.classList.add("darkened");
+    }
     header.style.right = "-200px";
 })
 
 themeButton.addEventListener("click", () => {
     themeMenu.style.right = "0px";
     timeContainer.classList.add("darkened");
+    for (let tool of tools) {
+        tool.classList.add("darkened");
+    }
     header.style.right = "-200px";
 })
 
@@ -122,6 +143,9 @@ for (close of closes) {
     close.addEventListener("click", (e) => {
         e.target.parentElement.style.right = "-550px";
         timeContainer.classList.remove("darkened");
+        for (let tool of tools) {
+            tool.classList.remove("darkened");
+        }
         header.style.right = "0px";
     })
 }
@@ -133,6 +157,9 @@ document.addEventListener("click", (e) => {
         themeMenu.style.right = "-550px";
         settingsMenu.style.right = "-550px";
         timeContainer.classList.remove("darkened");
+        for (let tool of tools) {
+            tool.classList.remove("darkened");
+        }
         header.style.right = "0px";
     }
 })
@@ -146,7 +173,7 @@ showDate.addEventListener("change", () => {
 function addTheme(url) {
     let value = addInput.value;
     let isNew = true;
-    if (typeof(url) == "string") {
+    if (typeof (url) == "string") {
         value = url;
         isNew = false;
     }
@@ -216,6 +243,143 @@ themeContent.addEventListener("click", (e) => {
     }
 
     save();
+})
+
+function toolbarDragStart(e) {
+    if (e.type == "touchstart") e.preventDefault();
+    let event = e.type == "mousedown" ? e : e.changedTouches[0];
+    if (event.target.id == "timer-draggable") {
+        dragging = "timer";
+        timer.style.display = "flex";
+        timer.classList.add("grabbing");
+        const rect = document.body.getBoundingClientRect();
+        timer.style.left = `${rect.width - 350}px`;
+        timer.style.top = `${rect.height - 200}px`;
+        draggingPos = [175, 100];
+    }
+}
+
+function toolDragStart(e) {
+    let event = e.type == "mousedown" ? e : e.changedTouches[0];
+    if (e.type == "touchmove" && (event.target.classList.contains("tool") ||
+        event.target.tagName == "H3")) e.preventDefault()
+    if (event.target.id == "timer" ||
+        (event.target.closest("#timer") && event.target.tagName == "H3")) {
+        dragging = "timer";
+        timer.classList.add("grabbing");
+        const rect = timer.getBoundingClientRect();
+        draggingPos = [event.clientX - rect.left, event.clientY - rect.top];
+    }
+}
+
+function dragMove(e) {
+    if (e.type == "touchmove") e.preventDefault();
+    let event = e.type == "mousemove" ? e : e.changedTouches[0];
+    if (dragging == "timer") {
+        const rect = document.body.getBoundingClientRect();
+        if (event.clientX + 350 - draggingPos[0] > rect.width) {
+            timer.style.left = `${rect.width - 350}px`;
+        } else if (event.clientX - draggingPos[0] < 0) {
+            timer.style.left = "0px";
+        } else timer.style.left = `${event.clientX - draggingPos[0]}px`;
+        if (event.clientY + 200 - draggingPos[1] > rect.height) {
+            timer.style.top = `${rect.height - 200}px`;
+        } else if (event.clientY - draggingPos[1] < 0) {
+            timer.style.top = "0px";
+        } else timer.style.top = `${event.clientY - draggingPos[1]}px`;
+    }
+}
+
+function dragStop() {
+    dragging = null;
+    timer.classList.remove("grabbing");
+}
+
+toolbar.addEventListener("mousedown", toolbarDragStart);
+toolbar.addEventListener("touchstart", toolbarDragStart);
+
+document.addEventListener("mousemove", dragMove);
+document.addEventListener("touchmove", dragMove);
+
+document.addEventListener("mouseup", dragStop);
+document.addEventListener("touchend", dragStop);
+
+for (let tool of tools) {
+    tool.addEventListener("mousedown", toolDragStart);
+    tool.addEventListener("touchstart", toolDragStart);
+}
+
+startTimer.addEventListener("click", () => {
+    const children = timerInputs.children;
+    if (currentTimer[0] != null) {
+        clearInterval(timerInterval);
+        currentTimer = [null, null, null];
+        for (i = 0; i < 8; i++) {
+            if (i % 3 == 0) {
+                children[i].style.display = "block";
+                children[i].value = children[i + 1].children[0].innerText;
+            } else if ((i - 1) % 3 == 0) children[i].style.display = "none";
+        }
+        startTimer.innerText = "play_arrow";
+    } else {
+        if (Number(children[0].value) >= 0 && Number(children[0].value) <= 23 &&
+            Number(children[3].value) >= 0 && Number(children[3].value) <= 59 &&
+            Number(children[6].value) >= 0 && Number(children[6].value) <= 59 &&
+            Number(children[0].value) + Number(children[3].value) + Number(children[6].value) > 0
+        ) {
+            currentTimer = [Number(children[0].value),
+            Number(children[3].value), Number(children[6].value)];
+            for (i = 0; i < 8; i++) {
+                if (i % 3 == 0) children[i].style.display = "none";
+                else if ((i - 1) % 3 == 0) {
+                    children[i].children[0].innerText = children[i - 1].value;
+                    children[i].style.display = "flex";
+                }
+            }
+            startTimer.innerText = "pause";
+            timerInterval = setInterval(() => {
+                currentTimer[2] -= 1;
+                if (currentTimer[2] == -1) {
+                    currentTimer[1] -= 1;
+                    currentTimer[2] = 59;
+                }
+                if (currentTimer[1] == -1) {
+                    currentTimer[0] -= 1;
+                    currentTimer[1] = 59;
+                }
+                timerInputs.children[1].children[0].innerText = currentTimer[0];
+                timerInputs.children[4].children[0].innerText = currentTimer[1];
+                timerInputs.children[7].children[0].innerText = currentTimer[2];
+                if (currentTimer[0] == 0 && currentTimer[1] == 0 && currentTimer[2] == 0) {
+                    timerRingtone.play();
+                    clearInterval(timerInterval);
+                    currentTimer = [null, null, null];
+                    for (i = 0; i < 8; i++) {
+                        if (i % 3 == 0) children[i].style.display = "block";
+                        else if ((i - 1) % 3 == 0) children[i].style.display = "none";
+                    }
+                    startTimer.innerText = "play_arrow";
+                    timer.style.backgroundColor = "#c53c3a";
+                    setTimeout(() => {
+                        timer.style.backgroundColor = "var(--background)";
+                    }, 500);
+                }
+            }, 1000)
+        }
+    }
+})
+
+closeTimer.addEventListener("click", () => {
+    timer.style.display = "none";
+    clearInterval(timerInterval);
+    currentTimer = [null, null, null];
+    for (i = 0; i < 8; i++) {
+        if (i % 3 == 0) {
+            children[i].style.display = "block";
+            children[i].value = children[i + 1].children[0].innerText;
+        } else if ((i - 1) % 3 == 0) children[i].style.display = "none";
+    }
+    startTimer.innerText = "play_arrow";
 })
 
 if (localStorage.getItem("clockSettings")) load();

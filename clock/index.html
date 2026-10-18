@@ -6,12 +6,13 @@
     <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clock</title>
+    <link rel="icon" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_circle,close,dark_mode,delete,fullscreen,fullscreen_exit,light_mode,settings,wallpaper" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_circle,close,dark_mode,delete,fullscreen,fullscreen_exit,light_mode,pause,play_arrow,settings,timer,wallpaper" />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="slider.css">
     <link rel="stylesheet" href="analog.css">
@@ -123,6 +124,24 @@
             </div>
         </div>
         <h3 id="date"></h3>
+    </div>
+    <div id="toolbar">
+        <div id="timer-draggable" class="drag material-symbols-outlined">timer</div>
+    </div>
+    <div id="timer" class="tool">
+        <button id="close-timer" class="close-tool material-symbols-outlined">close</button>
+        <h3>Timer</h3>
+        <div id="timer-inputs">
+            <input type="number" min="0" max="23" value="0">
+            <span><h4></h4></span>
+            <p>:</p>
+            <input type="number" min="0" max="59" value="0">
+            <span><h4></h4></span>
+            <p>:</p>
+            <input type="number" min="0" max="59" value="0">
+            <span><h4></h4></span>
+        </div>
+        <button id="start-timer" class="material-symbols-outlined">play_arrow</button>
     </div>
     <script src="script.js"></script>
 </body>
