@@ -38,8 +38,10 @@ function save() {
 }
 
 function load() {
-    settings = JSON.parse(localStorage.getItem("clockSettings"));
-    customThemes = JSON.parse(localStorage.getItem("clockThemes"));
+    const loadedSettings = JSON.parse(localStorage.getItem("clockSettings"));
+    if (loadedSettings) settings = loadedSettings;
+    const loadedThemes = JSON.parse(localStorage.getItem("clockThemes"));
+    if (loadedThemes) customThemes = loadedThemes;
     if (settings.theme == "light") changeDarkMode();
     if (settings.url) timeContainer.style.backgroundImage = `url(${settings.url})`;
     dateEl.style.display = settings.showDate ? "block" : "none";
@@ -66,7 +68,7 @@ function changeTime() {
     digital.innerHTML = string;
     title.innerText = `${string} | Clock`;
     dateEl.innerHTML = `
-        ${String(date.getDay()).padStart(2, '0')
+        ${String(date.getDate()).padStart(2, '0')
         }-${String(date.getMonth() + 1).padStart(2, '0')}`;
 
     hourHand.style.transform = `rotate(${date.getHours() * 30 + date.getMinutes() * 0.5}deg)`;
