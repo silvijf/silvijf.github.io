@@ -161,6 +161,7 @@ body {
 #add-input {
     display: none;
     position: absolute;
+    width: 78%;
 }
 
 #clock-type {
