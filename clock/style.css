@@ -242,7 +242,7 @@ body {
 
 #digital {
     font-size: clamp(2rem, 12vw, 15rem);
-    width: 6.5ch;
+    width: 6.75ch;
     text-align: center;
     margin: 0;
     text-shadow: -1px -1px var(--background), 1px 1px var(--background), 
