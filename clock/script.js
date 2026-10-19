@@ -373,6 +373,7 @@ closeTimer.addEventListener("click", () => {
     timer.style.display = "none";
     clearInterval(timerInterval);
     currentTimer = [null, null, null];
+    const children = timerInputs.children;
     for (i = 0; i < 8; i++) {
         if (i % 3 == 0) {
             children[i].style.display = "block";
